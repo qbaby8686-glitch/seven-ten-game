@@ -1,0 +1,2431 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>7-10 seven ten｜創業第一天</title>
+<style>
+  * {
+  box-sizing: border-box;
+  touch-action: none;
+}
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #101820;
+  color: #fff;
+  font-family: system-ui, sans-serif;
+}
+canvas { display: block; }
+button {
+  border: 0;
+  border-radius: 10px;
+  background: #f2dfb5;
+  color: #142c46;
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.hud {
+  position: fixed;
+  z-index: 2;
+  background: #10263bd9;
+  border: 1px solid #ffffff25;
+  border-radius: 12px;
+  padding: 10px 14px;
+  backdrop-filter: blur(8px);
+}
+#top {
+  left: 12px;
+  top: 10px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+.brand {
+  font-size: 21px;
+  color: #f2dfb5;
+  font-weight: 900;
+}
+#mission {
+  left: 12px;
+  top: 78px;
+  max-width: 390px;
+  font-size: 13px;
+  white-space: pre-line;
+  pointer-events: none;
+}
+#hint {
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 13px;
+  max-width: 45%;
+  pointer-events: none;
+}
+#actions {
+  position: fixed;
+  z-index: 3;
+  right: 20px;
+  bottom: 24px;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+#stick {
+  position: fixed;
+  z-index: 3;
+  left: 34px;
+  bottom: 30px;
+  width: 114px;
+  height: 114px;
+  background: #ffffff20;
+  border: 2px solid #ffffff70;
+  border-radius: 50%;
+}
+#knob {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  left: 31px;
+  top: 31px;
+  border-radius: 50%;
+  background: #f2dfb5b0;
+  pointer-events: none;
+}
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  background: #081424eb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+.box {
+  max-width: 730px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: auto;
+  touch-action: pan-y;
+  padding: 24px;
+  border: 1px solid #b6c6d44d;
+  border-radius: 18px;
+  background: #112c43;
+}
+.box p {
+  line-height: 1.7;
+  color: #c6d3de;
+}
+.box h1 {
+  color: #f2dfb5;
+  margin: 0 0 12px;
+}
+#introText {
+  font-size: clamp(18px, 3vw, 29px);
+  line-height: 1.65;
+}
+.hidden { display: none !important; }
+#catalog .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid #ffffff20;
+  padding: 12px 0;
+  font-size: 14px;
+}
+#catalog .row small {
+  display: block;
+  color: #b7cad8;
+  margin-top: 4px;
+}
+#shop, #shop *, #catalog {
+  touch-action: pan-y;
+}
+#shop .box {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+input {
+  touch-action: auto;
+  user-select: text;
+}
+#toast {
+  position: fixed;
+  z-index: 12;
+  top: 44%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #f2dfb5;
+  color: #172e43;
+  padding: 14px 22px;
+  border-radius: 12px;
+  pointer-events: none;
+  text-align: center;
+}
+#rotate {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ad6c21;
+  z-index: 15;
+  text-align: center;
+  padding: 8px;
+  font-size: 12px;
+}
+@media (orientation: portrait) {
+  #rotate { display: block; }
+  #mission {
+    max-width: 80%;
+    top: 105px;
+  }
+  #top { flex-wrap: wrap; }
+  #hint {
+    bottom: 165px;
+    max-width: 80%;
+    width: 80%;
+  }
+}
+@media (max-height: 480px) {
+  #mission {
+    top: 67px;
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+  .box { padding: 16px; }
+  #stick {
+    width: 100px;
+    height: 100px;
+    bottom: 18px;
+  }
+  #knob {
+    left: 24px;
+    top: 24px;
+  }
+  #actions { bottom: 18px; }
+}
+  </style>
+</head>
+<body>
+
+<div id="top" class="hud">
+  <span class="brand">7-10 <small>seven ten</small></span>
+  <span id="stats">載入場景中…</span>
+  <button id="openShop">商品／進貨</button>
+</div>
+
+<div id="mission" class="hud">
+  創業第一天：把第一瓶水放上貨架。
+</div>
+
+<div id="hint" class="hud">
+  左側搖桿移動 · 右側空白處拖動視角
+</div>
+
+<div id="stick">
+  <div id="knob"></div>
+</div>
+
+<div id="actions">
+  <button id="interact">互動／補貨</button>
+  <button id="cameraBtn">重設視角</button>
+</div>
+
+<div id="naming" class="overlay" style="z-index:10">
+  <form id="nameForm" class="box">
+    <h1>歡迎來到 seven ten</h1>
+    <p>
+      創業之前，你想取什麼名字？
+      這是老闆的名字，店名仍是 7-10 seven ten。
+    </p>
+    <input
+      id="playerName"
+      maxlength="20"
+      autocomplete="nickname"
+      placeholder="輸入老闆名字"
+      aria-label="老闆名字"
+      required
+      style="width:100%;font-size:20px;padding:14px;border-radius:10px;border:1px solid #adbfce;margin-bottom:16px"
+    >
+    <button type="submit">確認名字，開始創業</button>
+  </form>
+</div>
+
+<script>
+document.getElementById('nameForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const input = document.getElementById('playerName');
+  const name = input.value.trim();
+
+  if (!name) {
+    input.setCustomValidity('請輸入名字');
+    input.reportValidity();
+    return;
+  }
+
+  window.sevenTenPlayerName = name;
+
+  try {
+    localStorage.setItem('seven-ten-player-name', name);
+  } catch (e) {}
+
+  document.getElementById('naming').classList.add('hidden');
+  input.blur();
+});
+
+document.getElementById('playerName').addEventListener('input', function() {
+  this.setCustomValidity('');
+});
+
+try {
+  document.getElementById('playerName').value =
+    localStorage.getItem('seven-ten-player-name') || '';
+} catch (e) {}
+</script>
+
+<div id="intro" class="overlay">
+  <div class="box">
+    <div class="brand">7-10 seven ten</div>
+
+    <p id="introText">
+      從親手把第一瓶水放上貨架，到讓自己的商品出現在全台門市，打造屬於你的 7-10 seven ten 集團。
+    </p>
+
+    <p id="introNote">
+      互動原型 · 台灣巷口便利店<br>
+      按下播放後，會以瀏覽器語音朗讀開場文字（視裝置支援）。
+    </p>
+
+    <button id="start">播放開場</button>
+    <button id="skip">略過，開始營業</button>
+
+    <p style="font-size:12px">
+      需連網載入 Three.js。
+      此版本採程式化 3D 場景，非最終寫實美術；
+      尚未包含完整集團玩法。
+    </p>
+  </div>
+</div>
+
+<div id="shop" class="overlay hidden">
+  <div class="box">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h1 style="font-size:23px">商品圖鑑與訂貨</h1>
+      <button id="closeShop">返回</button>
+    </div>
+
+    <p>
+      進貨後會存入後方貨箱，靠近中央貨架按「補貨」上架。
+      新品逐件解鎖。此面板開啟時暫停營業。
+    </p>
+
+    <div id="catalog"></div>
+    <button id="reset">清除進度，重新開始</button>
+  </div>
+</div>
+
+<div id="toast" class="hidden"></div>
+<div id="rotate">建議將手機橫放遊玩</div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
+
+const $ = id => document.getElementById(id);
+const AUTO_KEY = 'seven-ten-v1';
+const MANUAL_KEY = 'seven-ten-manual-v1';
+
+const products = [
+  {name:'礦泉水',cost:8,price:20,color:0x80d7ed},
+  {name:'罐裝紅茶',cost:12,price:25,color:0xb86538},
+  {name:'袋裝泡麵',cost:15,price:30,color:0xe8bc45},
+  {name:'洋芋片',cost:18,price:35,color:0xc94a45},
+  {name:'包裝吐司',cost:20,price:40,color:0xe9ce97},
+  {name:'蘇打餅乾',cost:16,price:32,color:0x84b78b,goal:5,fee:40},
+  {name:'可樂',cost:15,price:30,color:0xa72b39,goal:12,fee:60},
+  {name:'杯麵',cost:22,price:45,color:0xd97e38,goal:22,fee:80},
+  {name:'豆漿',cost:16,price:35,color:0xf3e6ba,goal:35,fee:100},
+  {name:'鮮奶',cost:25,price:50,color:0xdce9f1,goal:50,fee:120}
+];
+
+const extraNames = [
+  '茶葉蛋','烤地瓜','肉包','美式咖啡','拿鐵','熱奶茶',
+  '鮪魚飯糰','雞肉三明治','排骨便當','雞腿便當',
+  '冰棒','冰淇淋','冷凍水餃','衛生紙','電池','雨傘','洗衣精',
+  'seven ten 瓶裝水','seven ten 洋芋片','seven ten 咖啡豆',
+  '滷肉便當','健康餐盒','鳳梨酥','太陽餅','進口巧克力',
+  '草莓甜點','聯名便當','中秋禮盒','限定水果茶','週年慶禮盒'
+];
+
+extraNames.forEach((name,j) => products.push({
+  name,
+  cost:18+j,
+  price:42+j*2,
+  color:[0xc79450,0x91b779,0xdaa1a8,0x7babc5,0xdfd0a0][j%5],
+  goal:55+j*5,
+  fee:60+j*4
+}));
+
+function freshState() {
+  return {
+    cash:600,
+    sales:0,
+    rep:0,
+    unlocked:5,
+    chapter:0,
+    branches:1,
+    staff:false,
+    auto:false,
+    logistics:false,
+    brand:false,
+    departments:false,
+    branchTimer:0,
+    stock:Array(products.length).fill(0),
+    back:products.map((_,i) => i<5 ? 5 : 0),
+    started:false,
+    day:1,
+    seconds:0,
+    playTime:0,
+    chapterStart:0,
+    tasksDone:0,
+    manualRestock:0,
+    regularDone:0,
+    friends:[0,0,0,0],
+    furniture:[],
+    campaignUntil:0,
+    training:0,
+    research:0,
+    quality:0,
+    plan:0,
+    history:[]
+  };
+}
+
+function usableSave(s) {
+  return s &&
+    Number.isFinite(s.cash) &&
+    Number.isFinite(s.sales) &&
+    Array.isArray(s.stock) &&
+    Array.isArray(s.back);
+}
+
+let state = freshState();
+try {
+  const saved = JSON.parse(localStorage.getItem(AUTO_KEY));
+  if (usableSave(saved)) state = {...state,...saved};
+} catch(e) {}
+
+state.stock = products.map((_,i) =>
+  Math.max(0,Number(state.stock[i])||0)
+);
+state.back = products.map((_,i) =>
+  Math.max(0,Number(state.back[i])||0)
+);
+state.chapter = Math.max(0,Math.min(10,Math.floor(state.chapter)||0));
+state.unlocked = Math.max(5,Math.min(40,Math.floor(state.unlocked)||5));
+state.playTime = Math.max(0,Number(state.playTime)||0);
+state.chapterStart = Math.min(
+  state.playTime,
+  Math.max(0,Number(state.chapterStart)||0)
+);
+state.furniture = Array.isArray(state.furniture) ? state.furniture : [];
+state.history = Array.isArray(state.history) ? state.history : [];
+state.friends = Array.isArray(state.friends) ? state.friends : [0,0,0,0];
+
+let loadingSave = false;
+let saveElapsed = 0;
+let saveWarningShown = false;
+let active = false;
+let introAnimating = false;
+let introTime = 0;
+let cinematic = null;
+let floorNow = 0;
+let returnPosition = null;
+let yaw = 0;
+let pitch = 0.74;
+let spawnClock = 3;
+let operationClock = 0;
+let lastAnnouncement = -1;
+let taskNotice = false;
+const keys = {};
+const joy = {x:0,y:0};
+
+function save() {
+  if (loadingSave) return;
+  try {
+    localStorage.setItem(AUTO_KEY,JSON.stringify(state));
+  } catch(e) {
+    if (!saveWarningShown && active) {
+      saveWarningShown = true;
+      toast('無法自動存檔：瀏覽器可能限制本機儲存。');
+    }
+  }
+}
+
+let toastTimer;
+function toast(text) {
+  $('toast').textContent = text;
+  $('toast').classList.remove('hidden');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    $('toast').classList.add('hidden');
+  },2800);
+}
+
+const uiStyle = document.createElement('style');
+uiStyle.textContent = `
+  .gamePanel,.gamePanel * { touch-action:pan-y; }
+  .gamePanel .box {
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+  }
+  .gamePanel p { white-space:pre-line; }
+  .gamePanel button { margin:4px;font-size:13px; }
+  button:disabled { opacity:.45;cursor:default; }
+  #actions {
+    z-index:5;
+    right:12px;
+    bottom:18px;
+    width:214px;
+    max-width:38vw;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:6px;
+  }
+  #actions button { padding:10px 8px;font-size:12px; }
+  #mission {
+    left:12px;
+    right:240px;
+    top:76px;
+    max-width:390px;
+    font-size:11px;
+    max-height:27vh;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  #mission.folded {
+    max-height:30px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    padding:7px 10px;
+  }
+  #objectiveToggle {
+    position:fixed;
+    z-index:5;
+    left:12px;
+    top:42%;
+    padding:7px 10px;
+    font-size:12px;
+    background:#17324f;
+    color:#f2dfb5;
+    border:1px solid #f2dfb566;
+  }
+  #worldInfo {
+    position:fixed;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:2px;
+    z-index:3;
+    background:#142b41bb;
+    padding:4px 8px;
+    font-size:10px;
+    max-width:70%;
+    text-align:center;
+    pointer-events:none;
+  }
+  #storyChoices button { display:block;width:100%;margin:10px 0; }
+  #chapterOverlay { white-space:pre-line;pointer-events:none; }
+  @media(max-height:480px) {
+    #top {font-size:11px;padding:6px 10px;}
+    #top button {padding:8px;}
+    #top .brand {font-size:17px;}
+    #mission {top:60px;max-height:25vh;right:235px;}
+    #objectiveToggle {top:38%;}
+    #actions button {padding:8px 6px;font-size:11px;}
+    #hint {bottom:28px;font-size:11px;max-width:35%;}
+  }
+`;
+document.head.append(uiStyle);
+
+function createPanel(id,html) {
+  const div = document.createElement('div');
+  div.id = id;
+  div.className = 'overlay gamePanel hidden';
+  div.innerHTML = '<div class="box">'+html+'</div>';
+  document.body.append(div);
+  return div;
+}
+
+const story = createPanel('story',`
+  <h1 id="storyTitle"></h1>
+  <p id="storyText"></p>
+  <div id="storyChoices"></div>
+  <p id="storyLog"></p>
+  <button id="storyClose">返回經營</button>
+`);
+
+const panel = createPanel('management',`
+  <h1>經營中心</h1>
+  <div id="manageTabs"></div>
+  <div id="manageBody"></div>
+  <button id="manageClose">返回遊戲</button>
+`);
+
+const savePanel = createPanel('savePanel',`
+  <h1>本機存檔</h1>
+  <p id="saveStatus"></p>
+  <button id="manualSave">手動存檔</button>
+  <button id="manualLoad">讀取手動存檔</button>
+  <button id="saveClose">返回</button>
+  <p>自動存檔每數秒執行。手動存檔獨立保留，不會被自動存檔覆蓋。
+僅限同一瀏覽器與網站環境；清除瀏覽器資料可能遺失。</p>
+`);
+savePanel.style.zIndex = '12';
+
+const worldInfo = document.createElement('div');
+worldInfo.id = 'worldInfo';
+document.body.append(worldInfo);
+
+const chapterOverlay = document.createElement('div');
+chapterOverlay.id = 'chapterOverlay';
+chapterOverlay.className = 'hud hidden';
+chapterOverlay.style.cssText =
+  'left:15%;right:15%;bottom:26px;text-align:center;z-index:14';
+document.body.append(chapterOverlay);
+
+function actionButton(text,handler) {
+  const b = document.createElement('button');
+  b.textContent = text;
+  b.onclick = handler;
+  $('actions').prepend(b);
+  return b;
+}
+
+const storyButton = actionButton('劇情／晉級',() => showStory());
+const managementButton = actionButton('經營中心',() => {
+  if (!active || cinematic) return;
+  stopMovement();
+  panel.classList.remove('hidden');
+  renderManage();
+});
+const saveButton = actionButton('存檔／讀檔',() => {
+  if (!active || cinematic) return;
+  stopMovement();
+  savePanel.classList.remove('hidden');
+  showSaveStatus();
+});
+
+const objectiveToggle = document.createElement('button');
+objectiveToggle.id = 'objectiveToggle';
+objectiveToggle.textContent = '展開目標';
+$('mission').classList.add('folded');
+document.body.append(objectiveToggle);
+objectiveToggle.onclick = () => {
+  const folded = $('mission').classList.toggle('folded');
+  objectiveToggle.textContent = folded ? '展開目標' : '收合目標';
+};
+
+$('storyClose').onclick = () => story.classList.add('hidden');
+$('manageClose').onclick = () => panel.classList.add('hidden');
+$('saveClose').onclick = () => savePanel.classList.add('hidden');
+
+function menusOpen() {
+  return !$('shop').classList.contains('hidden') ||
+    !story.classList.contains('hidden') ||
+    !panel.classList.contains('hidden') ||
+    !savePanel.classList.contains('hidden');
+}
+
+function stopMovement() {
+  joy.x = 0;
+  joy.y = 0;
+  for (const k in keys) keys[k] = false;
+  $('knob').style.transform = '';
+}
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x9cafba);
+scene.fog = new THREE.Fog(0x9cafba,28,65);
+
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));
+renderer.setSize(innerWidth,innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+document.body.prepend(renderer.domElement);
+
+const camera = new THREE.PerspectiveCamera(
+  49,innerWidth/innerHeight,0.1,220
+);
+camera.position.set(0,12,17);
+
+scene.add(new THREE.HemisphereLight(0xe8f3ff,0x6a6857,2.1));
+const sun = new THREE.DirectionalLight(0xffeed7,2.8);
+sun.position.set(-9,18,9);
+sun.castShadow = true;
+sun.shadow.mapSize.set(1024,1024);
+sun.shadow.camera.left = -18;
+sun.shadow.camera.right = 18;
+sun.shadow.camera.top = 18;
+sun.shadow.camera.bottom = -18;
+scene.add(sun);
+
+function box(w,h,d,color,x,y,z,parent=scene) {
+  const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(w,h,d),
+    new THREE.MeshStandardMaterial({color,roughness:0.72})
+  );
+  mesh.position.set(x,y,z);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  parent.add(mesh);
+  return mesh;
+}
+
+function label(text,w,h,x,y,z,bg='#17324f',fg='#f5e8cb') {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1024;
+  canvas.height = 256;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0,0,1024,256);
+  ctx.fillStyle = fg;
+  ctx.font = 'bold 86px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text,512,128,980);
+  const mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(w,h),
+    new THREE.MeshBasicMaterial({
+      map:new THREE.CanvasTexture(canvas),
+      side:THREE.DoubleSide
+    })
+  );
+  mesh.position.set(x,y,z);
+  scene.add(mesh);
+  return mesh;
+}
+
+function human(color) {
+  const g = new THREE.Group();
+  box(.5,.68,.3,color,0,1.02,0,g);
+  const head = new THREE.Mesh(
+    new THREE.SphereGeometry(.22,12,10),
+    new THREE.MeshStandardMaterial({color:0xcda47f})
+  );
+  head.position.y = 1.63;
+  g.add(head);
+  box(.4,.12,.35,0x34302b,0,1.8,0,g);
+  g.legs = [
+    box(.17,.6,.22,0x303e49,-.14,.4,0,g),
+    box(.17,.6,.22,0x303e49,.14,.4,0,g)
+  ];
+  box(.14,.6,.17,color,-.34,1.01,0,g);
+  box(.14,.6,.17,color,.34,1.01,0,g);
+  scene.add(g);
+  return g;
+}
+
+function disposeObject(g) {
+  g.traverse(o => {
+    if (o.isMesh) {
+      o.geometry.dispose();
+      if (Array.isArray(o.material)) {
+        o.material.forEach(m => m.dispose());
+      } else {
+        o.material.dispose();
+      }
+    }
+  });
+}
+
+box(150,.12,85,0x697474,-20,-.3,0);
+box(70,.2,65,0x697474,0,-.2,0);
+box(25,.18,15,0xb3b2a8,0,-.06,2);
+box(13,.15,11,0xddd9c9,0,.04,0);
+
+for (let x=-6;x<=6;x++) {
+  box(.018,.008,11,0xc5c2b7,x,.122,0);
+}
+for (let z=-5;z<=5;z++) {
+  box(13,.008,.018,0xc5c2b7,0,.122,z);
+}
+
+box(13,3.6,.18,0xe0ded3,0,1.9,-5.5);
+box(.18,3.6,11,0xd0d3cb,-6.5,1.9,0);
+
+/* 保留側牆，只留下通往擴建區的門洞。 */
+box(.18,3.6,7.5,0xd0d3cb,6.5,1.9,-1.75);
+box(.18,3.6,1.5,0xd0d3cb,6.5,1.9,4.75);
+box(.18,.7,2,0xd0d3cb,6.5,3.35,3);
+
+box(4.7,2.5,.14,0x17324f,-4.15,1.4,5.5);
+box(4.7,2.5,.14,0x17324f,4.15,1.4,5.5);
+box(13,.65,.25,0x17324f,0,3.4,5.5);
+
+label('7-10 seven ten',7,.85,0,3.4,5.65);
+label('7-10 創始店',5,.7,0,2.8,-5.38);
+label('新鮮・便利・每一天',3,.5,-4.1,1.7,5.59);
+label('24H 巷口好鄰居',3,.5,4.1,1.7,5.59);
+
+const glassMat = new THREE.MeshStandardMaterial({
+  color:0xc2e5ed,
+  transparent:true,
+  opacity:.28,
+  roughness:.12,
+  metalness:.15
+});
+
+const doors = [];
+for (const side of [-1,1]) {
+  const g = new THREE.Group();
+  g.position.set(side*.85,0,5.5);
+  scene.add(g);
+  const glass = new THREE.Mesh(
+    new THREE.BoxGeometry(1.65,2.7,.07),
+    glassMat
+  );
+  glass.position.y = 1.45;
+  g.add(glass);
+  box(.05,2.8,.1,0x9cabb0,side*.8,1.45,0,g);
+  box(1.65,.06,.1,0x9cabb0,0,2.8,0,g);
+  box(1.65,.09,.1,0xe5d4a9,0,1.3,.04,g);
+  doors.push(g);
+}
+
+let doorOpen = 0;
+let doorHold = 0;
+let lastChime = 0;
+
+box(3,1.1,1.3,0x17324f,-4.5,.7,3);
+box(3.2,.12,1.4,0xe9dfc8,-4.5,1.3,3);
+box(.65,.4,.5,0x28363c,-4.5,1.55,3);
+label('收銀 CHECKOUT',2.6,.42,-4.5,1.1,3.72);
+
+box(2.5,2.5,.8,0xb1bec3,4.7,1.4,-4.8);
+label('冷藏飲品',2.2,.35,4.7,2.5,-4.35);
+for (let i=0;i<6;i++) {
+  box(.21,.48,.2,0x9ecbdb,3.8+i*.34,1.4,-4.32);
+}
+box(1.6,.75,1.2,0xa77b4e,-4.7,.5,-3.9);
+label('到貨箱',1.4,.4,-4.7,1,-3.2);
+
+const shelves = [];
+const goods = [];
+
+for (let k=0;k<2;k++) {
+  const x = k ? 2 : -1.2;
+  box(1.4,.15,5,0x7b8589,x,.23,-.8);
+  for (const z of [-3.2,1.6]) {
+    box(.08,1.65,.08,0xa6b1b4,x-.65,1,z);
+  }
+  for (let level=0;level<3;level++) {
+    box(1.4,.08,5,0xc9cdd0,x,.65+level*.48,-.8);
+  }
+  shelves.push(x);
+}
+
+for (let i=0;i<10;i++) {
+  goods[i] = [];
+  const x = shelves[i<5 ? 0 : 1];
+  const z = -2.8+(i%5)*.95;
+  for (let j=0;j<6;j++) {
+    const m = box(
+      .27,.3,.27,products[i].color,
+      x+(j%3-1)*.39,
+      .84+Math.floor(j/3)*.48,
+      z
+    );
+    goods[i].push(m);
+  }
+}
+
+function updateGoods() {
+  goods.forEach((arr,i) => {
+    let total = 0;
+    for (let k=i;k<products.length;k+=10) total += state.stock[k];
+    arr.forEach((m,j) => m.visible = total>j);
+  });
+}
+
+for (let i=0;i<5;i++) {
+  box(4,5+i%2,4,0x89979b,-13+i*6,2,-14);
+  label(
+    ['早餐店','機車行','巷口公寓','洗衣店','社區診所'][i],
+    3,.5,-13+i*6,2,-11.95
+  );
+}
+box(80,.02,5,0x424e53,-10,-.08,11);
+for (let x=-45;x<35;x+=5) {
+  box(2,.02,.12,0xe0d8b5,x,-.055,11);
+}
+for (const x of [-8,8]) {
+  box(.1,4,.1,0x55616a,x,2,6.6);
+  box(.8,.12,.5,0xe7ddaa,x,4,6.6);
+}
+
+const player = human(0x24587a);
+player.position.set(0,.15,3.8);
+const npcs = [];
+
+let audio;
+function chime() {
+  try {
+    audio ??= new (window.AudioContext || window.webkitAudioContext)();
+    audio.resume();
+    [660,520].forEach((f,i) => {
+      const oscillator = audio.createOscillator();
+      const gain = audio.createGain();
+      oscillator.frequency.value = f;
+      oscillator.connect(gain);
+      gain.connect(audio.destination);
+      const time = audio.currentTime+i*.16;
+      gain.gain.setValueAtTime(.045,time);
+      gain.gain.exponentialRampToValueAtTime(.001,time+.3);
+      oscillator.start(time);
+      oscillator.stop(time+.32);
+    });
+  } catch(e) {}
+}
+
+const chapterMinutes = [3,5,7,9,11,13,15,17,19,21];
+const chapterSales = [60,160,300,500,760,1080,1460,1900,2400,3000];
+const chapterCash = [400,800,1400,2200,3200,4500,6000,8000,10500,14000];
+
+const chapters = [
+  {
+    title:'第一筆救命收入',
+    text:'首期租金到期。你終於有了第一批客人，現在要選擇如何站穩腳步。',
+    choices:[
+      ['支付租金，穩定開店',1,() => {state.rep+=3;}],
+      ['整理門面並付租金',1.5,() => {state.rep+=8;}]
+    ]
+  },
+  {
+    title:'冰櫃故障危機',
+    text:'冰櫃溫度異常！處理設備後，繼續拓展冷藏商品。',
+    choices:[
+      ['維修冰櫃',1,() => {state.rep+=2;}],
+      ['換成節能冰櫃',1.7,() => {
+        state.efficient=true;
+        state.rep+=5;
+      }]
+    ]
+  },
+  {
+    title:'對街出現競爭店',
+    text:'home mert 我家便利商店推出家庭優惠；helloleave 便利商店以咖啡廣告吸引通勤客。你準備如何回應？',
+    choices:[
+      ['推出社區優惠',1,() => {
+        state.rep+=12;
+        state.strategy='社區優惠';
+      }],
+      ['建立特色商品形象',1.5,() => {
+        state.rep+=7;
+        state.premium=true;
+        state.strategy='特色商品';
+      }]
+    ]
+  },
+  {
+    title:'第一位員工',
+    text:'補貨和收銀已經忙不過來。員工會把貨箱內的庫存自動補上貨架。',
+    choices:[
+      ['聘用補貨員',1,() => {state.staff=true;}],
+      ['聘用資深店員',1.5,() => {
+        state.staff=true;
+        state.fastCheckout=true;
+      }]
+    ]
+  },
+  {
+    title:'第一次企業大訂單',
+    text:'附近辦公室訂購早餐。方案費用包含專案採購，不扣門市庫存；選擇方案後立即交付並結清。',
+    choices:[
+      ['標準訂單：交付收入 $6800',1,() => {
+        state.cash+=6800;
+        state.rep+=5;
+      }],
+      ['加大訂單：交付收入 $7020',280/180,() => {
+        state.cash+=7020;
+        state.rep+=8;
+      }]
+    ]
+  },
+  {
+    title:'第二間店的賭注',
+    text:'新店面空了出來。分店使用經營數值模擬，每20秒結算淨收益，並非額外的獨立3D購物場景。',
+    choices:[
+      ['開住宅分店',1,() => {
+        state.branches++;
+        state.branchRate=45;
+      }],
+      ['開商辦分店',1.5,() => {
+        state.branches++;
+        state.branchRate=65;
+      }]
+    ]
+  },
+  {
+    title:'多店缺貨危機',
+    text:'供應商延遲交貨，你決定建立穩定採購制度。物流會替低庫存商品自動付費訂貨；資金不足就暫停採購。',
+    choices:[
+      ['合作物流配送',1,() => {
+        state.logistics=true;
+        state.auto=true;
+      }],
+      ['設置中央採購倉庫',1.5,() => {
+        state.logistics=true;
+        state.auto=true;
+        state.wholesale=true;
+      }]
+    ]
+  },
+  {
+    title:'自有品牌上市',
+    text:'開始研發 seven ten 商品。完成後解開自有品牌的劇情限制，各商品仍需逐件解鎖。',
+    choices:[
+      ['平價自有品牌',1,() => {
+        state.brand=true;
+        state.wholesale=true;
+      }],
+      ['品質優先品牌',1.4,() => {
+        state.brand=true;
+        state.premium=true;
+        state.rep+=10;
+      }]
+    ]
+  },
+  {
+    title:'跨區擴張與併購',
+    text:'另一區有地方連鎖門市出售。選擇收購整頓，或自己展店，新增分店會持續提供模擬淨收益。',
+    choices:[
+      ['收購並整頓兩間店',1,() => {
+        state.branches+=2;
+        state.rep+=3;
+      }],
+      ['自行建立三間新店',1.5,() => {
+        state.branches+=3;
+        state.rep+=7;
+      }]
+    ]
+  },
+  {
+    title:'集團成立考驗',
+    text:'擴張後遇到資金壓力與食品品質警訊。支付整改費完成批次清查，並建立營運、財務、物流與品管制度。',
+    choices:[
+      ['完成整改與基本部門建置',1,() => {
+        state.departments=true;
+        state.rep+=10;
+      }],
+      ['全面升級品管與管理團隊',850/600,() => {
+        state.departments=true;
+        state.rep+=20;
+        state.branchRate=(state.branchRate||45)+20;
+      }]
+    ]
+  }
+];
+
+chapters.forEach((c,i) => {
+  c.minutes=chapterMinutes[i];
+  c.sales=chapterSales[i];
+  c.cash=chapterCash[i];
+  c.choices=c.choices.map(([name,ratio,effect]) =>
+    [name,Math.round(c.cash*ratio),effect]
+  );
+});
+
+const expansionNames = [
+  '飲料貨架與休息區',
+  '冷藏設備區',
+  '競爭商圈與商品展示區',
+  '員工工作區',
+  '企業訂單出貨區',
+  '連鎖營運辦公區',
+  '物流倉庫與配送車',
+  '自有品牌與研發區',
+  '跨區營運園區',
+  '五層 seven ten 集團總部'
+];
+
+const city = new THREE.Group();
+scene.add(city);
+const buildingStages = [];
+const districtStages = [];
+let stageBuilt = 0;
+let rivalsBuilt = false;
+const rivalDoors = [];
+
+function moveLabelToGroup(m,g) {
+  scene.remove(m);
+  g.add(m);
+  return m;
+}
+
+function makeRivals() {
+  if (rivalsBuilt) return;
+  rivalsBuilt=true;
+
+  for (const [name,x,color] of [
+    ['home mert 我家便利商店',-13,0xca884a],
+    ['helloleave 便利商店',-25,0x4c9c91]
+  ]) {
+    box(9,.2,7,0xd6d5cb,x,.1,19);
+    box(9,3.4,.15,0xced6d4,x,1.8,22);
+    box(.15,3.4,6,0xced6d4,x-4.5,1.8,19);
+    box(.15,3.4,6,0xced6d4,x+4.5,1.8,19);
+
+    for (const side of [-1,1]) {
+      box(3.5,3,.15,0xced6d4,x+side*2.75,1.6,16);
+    }
+    for (const sx of [-2.5,2.5]) {
+      box(1.1,1.3,2.5,color,x+sx,.8,19);
+      for (let j=0;j<4;j++) {
+        box(.25,.35,.3,0xe2c18a,x+sx,1.65,18.2+j*.5);
+      }
+    }
+
+    box(2,1,1,color,x,.7,21);
+    box(9,.7,.25,color,x,3.4,15.9);
+
+    const sign=label(name,8,.65,x,3.4,15.72);
+    sign.rotation.y=Math.PI;
+
+    for (const dx of [-2.7,2.7]) {
+      box(2.5,2,.1,0x7fabb8,x+dx,1.6,15.85);
+    }
+
+    const door=box(1.6,2.5,.12,0x83b5c5,x,1.4,15.8);
+    door.material.transparent=true;
+    door.material.opacity=.35;
+    rivalDoors.push({mesh:door,x,open:0});
+
+    const clerk=human(color);
+    clerk.position.set(x,.15,21.6);
+    clerk.rotation.y=Math.PI;
+  }
+}
+
+function addExpansion(level,animate=false) {
+  if (level<=stageBuilt) return;
+
+  for (let k=stageBuilt+1;k<=level;k++) {
+    const g=new THREE.Group();
+    city.add(g);
+    buildingStages[k]=g;
+    const x=6.5+(k-1)*3;
+
+    box(3,.18,11,0xdad5c4,x+1.5,.04,0,g);
+    box(3,3.4,.14,0xb9c4c8,x+1.5,1.8,-5.5,g);
+    box(3,.25,.2,0x17324f,x+1.5,2.8,5.5,g);
+
+    /* 每個新區都有牆，並保留橫向門洞。 */
+    box(.14,3.4,7.5,0xc7d0cd,x+3,1.8,-1.75,g);
+    box(.14,3.4,1.5,0xc7d0cd,x+3,1.8,4.75,g);
+    box(.14,.6,2,0xc7d0cd,x+3,3.2,3,g);
+    box(3,2.5,.15,0x89a8b1,x+1.5,1.4,5.5,g);
+
+    if (k!==10) {
+      box(1.8,1.1,1.1,k%2?0x41687d:0x9caeae,x+1.5,.72,-3,g);
+      for (let j=0;j<4;j++) {
+        box(
+          .25,.35,.3,
+          [0xe2b66c,0x9cbd79,0xa5cbdb,0xd6947b][j],
+          x+.9+j*.38,1.45,-3,g
+        );
+      }
+      if (k>=4) {
+        box(1.7,.12,.8,0xb68c61,x+1.5,1,-.5,g);
+        box(.5,.4,.1,0x293a49,x+1.5,1.25,-.6,g);
+      }
+    }
+
+    moveLabelToGroup(
+      label(expansionNames[k-1],2.8,.45,x+1.5,2.3,-5.35),g
+    );
+
+    if (k===7) {
+      box(2,1.5,3,0xd9e2e3,x+1.5,.9,7.5,g);
+      box(2,1.2,1,0x244969,x+1.5,.7,9,g);
+    }
+
+    if (k===10) {
+      for (let floor=0;floor<5;floor++) {
+        box(12,.25,10,0xd0d7d9,18,floor*3.3+.3,-18,g);
+        box(12,2.9,.2,0x234763,18,floor*3.3+1.8,-23,g);
+        box(.2,2.9,10,0x718996,12,floor*3.3+1.8,-18,g);
+        box(.2,2.9,10,0x718996,24,floor*3.3+1.8,-18,g);
+        for (let j=0;j<6;j++) {
+          box(1.65,2,.12,0x91b6c9,13+j*2,floor*3.3+1.8,-12.95,g);
+        }
+        moveLabelToGroup(label(
+          ['1F 旗艦門市','2F 營運與人才','3F 商品研發',
+           '4F 物流與品管','5F 集團管理'][floor],
+          9,.6,18,floor*3.3+2.3,-12.8
+        ),g);
+      }
+      moveLabelToGroup(
+        label('7-10 seven ten 集團總部',13,1,18,17.4,-12.8),g
+      );
+    }
+
+    const district=new THREE.Group();
+    city.add(district);
+    districtStages[k]=district;
+    box(9,.12,18,0x9caaa6,-10-k*5,-.08,-2,district);
+    for (let j=0;j<2;j++) {
+      box(3,3+j*2,4,0x7d919b,-10-k*5,1.5+j,-5+j*10,district);
+    }
+
+    g.scale.y=animate&&k===level ? .01 : 1;
+  }
+
+  stageBuilt=level;
+  scene.fog.near=28+level*3;
+  scene.fog.far=65+level*8;
+  if (level>=2) makeRivals();
+}
+
+addExpansion(state.chapter);
+
+function readyForChapter(c) {
+  return state.playTime-state.chapterStart>=c.minutes*60 &&
+    state.sales>=c.sales &&
+    state.cash>=c.cash;
+}
+
+function showStory() {
+  if (!active || cinematic) return;
+  stopMovement();
+  const c=chapters[state.chapter];
+  $('storyTitle').textContent=c
+    ? `第 ${state.chapter+1} 章・${c.title}`
+    : 'seven ten 集團成立';
+  $('storyChoices').replaceChildren();
+
+  if (!c) {
+    $('storyText').textContent=
+      '十個創業轉折已完成！可繼續解鎖40種商品、做小任務、經營分店，並從經營中心進入五層總部。總部與集團玩法目前是簡化版本。';
+  } else {
+    const remaining=Math.max(
+      0,Math.ceil((c.minutes*60-state.playTime+state.chapterStart)/60)
+    );
+    $('storyText').textContent=
+      c.text+
+      `\n本章需營業 ${c.minutes} 分鐘，還需約 ${remaining} 分鐘。`+
+      `\n銷量 ${state.sales}/${c.sales} 件。`+
+      `\n完成後擴建：${expansionNames[state.chapter]}。`;
+
+    c.choices.forEach(([name,cost,effect]) => {
+      const b=document.createElement('button');
+      b.textContent=`${name}｜支付 $${cost}`;
+      b.disabled=!readyForChapter(c)||state.cash<cost;
+
+      b.onclick=() => {
+        if (!readyForChapter(c)||state.cash<cost) return;
+        state.cash-=cost;
+        effect();
+        state.history.push(c.title+'：'+name);
+        state.chapter++;
+        state.chapterStart=state.playTime;
+        state.rep=Math.min(100,state.rep);
+
+        addExpansion(state.chapter,true);
+        cinematic={
+          elapsed:0,
+          level:state.chapter,
+          title:c.title
+        };
+
+        story.classList.add('hidden');
+        chapterOverlay.classList.remove('hidden');
+        stopMovement();
+        save();
+      };
+      $('storyChoices').append(b);
+    });
+  }
+
+  $('storyLog').textContent=
+    `累計銷售 ${state.sales} 件｜資金 $${state.cash}\n`+
+    state.history.join(' → ');
+  story.classList.remove('hidden');
+}
+
+function storyHUD() {
+  const c=chapters[state.chapter];
+  let text=`長期經營｜章節 ${state.chapter}/10｜商品 ${state.unlocked}/40\n`;
+
+  if (!state.started) {
+    text+='先靠近中央貨架，按「互動／補貨」。\n';
+  }
+
+  if (c) {
+    text+=`下一章：${c.title}\n`+
+      `營業 ${Math.floor((state.playTime-state.chapterStart)/60)}/${c.minutes} 分鐘`+
+      `・銷量 ${state.sales}/${c.sales}\n`+
+      `資金 $${state.cash}/$${c.cash}\n`+
+      (readyForChapter(c)
+        ? '✓ 可以晉級，按「劇情／晉級」。'
+        : '選單、動畫、總部內不累積章節時間。');
+  } else {
+    text+='🏆 五層總部完工！十章通關。';
+  }
+
+  if (state.chapter>=2) {
+    text+='\n對手正在分走部分客流，提高口碑可減輕影響。';
+  }
+
+  $('mission').textContent=text;
+}
+
+function hud() {
+  $('stats').textContent=
+    `${window.sevenTenPlayerName||'老闆'}｜第 ${state.day} 天`+
+    `｜$${state.cash}｜銷售 ${state.sales}｜口碑 ${Math.floor(state.rep)}`;
+  updateGoods();
+  storyHUD();
+}
+
+function gate(i) {
+  return i>=27?8:i>=20?6:i>=16?5:i>=13?4:i>=10?3:0;
+}
+
+function orderCost(i) {
+  return Math.ceil(
+    products[i].cost*5*
+    (state.wholesale?.85:1)*
+    (1-(state.research||0)*.03)
+  );
+}
+
+function renderCatalog() {
+  $('catalog').innerHTML=products.map((p,i) => {
+    const unlocked=i<state.unlocked;
+    const next=i===state.unlocked;
+    return `
+      <div class="row">
+        <div>
+          <b>${unlocked?'':'🔒 '}${p.name}</b>
+          <small>${
+            unlocked
+            ? `售價 $${p.price}・架上 ${state.stock[i]}・貨箱 ${state.back[i]}`
+            : `售出 ${p.goal} 件・解鎖費 $${p.fee}・劇情 ${gate(i)} 章`+
+              (next?'':'・先解鎖上一項')
+          }</small>
+        </div>
+        <button data-i="${i}" ${!unlocked&&!next?'disabled':''}>
+          ${unlocked?`進貨5件 $${orderCost(i)}`:'解鎖'}
+        </button>
+      </div>
+    `;
+  }).join('');
+
+  $('catalog').querySelectorAll('button').forEach(b => {
+    b.onclick=() => {
+      const i=Number(b.dataset.i);
+      const p=products[i];
+
+      if (i<state.unlocked) {
+        const cost=orderCost(i);
+        if (state.cash<cost) return toast('資金不足，先販售現有商品。');
+        state.cash-=cost;
+        state.back[i]+=5;
+        toast('已送到貨箱，記得補貨。');
+      } else {
+        if (state.chapter<gate(i)) {
+          return toast(`請先完成第 ${gate(i)} 章劇情。`);
+        }
+        if (i!==state.unlocked||state.sales<p.goal) {
+          return toast(`需要先售出 ${p.goal} 件商品。`);
+        }
+        if (state.cash<p.fee) return toast('解鎖資金不足。');
+        state.cash-=p.fee;
+        state.unlocked++;
+        toast(`新品解鎖：${p.name}！現在可以進貨。`);
+      }
+
+      save();
+      hud();
+      renderCatalog();
+    };
+  });
+}
+
+$('openShop').onclick=() => {
+  if (!active||cinematic) return;
+  stopMovement();
+  $('shop').classList.remove('hidden');
+  renderCatalog();
+};
+$('closeShop').onclick=() => $('shop').classList.add('hidden');
+
+$('reset').onclick=() => {
+  if (!confirm('清除目前自動進度並重新開始？獨立手動存檔仍會保留。')) return;
+  try {
+    loadingSave=true;
+    localStorage.removeItem(AUTO_KEY);
+    location.reload();
+  } catch(e) {
+    loadingSave=false;
+    toast('無法清除本機進度。');
+  }
+};
+
+function interact() {
+  if (!active||cinematic||menusOpen()) return;
+  if (floorNow) {
+    tab='總部';
+    panel.classList.remove('hidden');
+    stopMovement();
+    renderManage();
+    return;
+  }
+
+  const p=player.position;
+
+  if (state.chapter>=2) {
+    for (const [x,name] of [
+      [-13,'home mert 我家便利商店'],
+      [-25,'helloleave 便利商店']
+    ]) {
+      if (Math.abs(p.x-x)<4.1&&p.z>16.2&&p.z<21.6) {
+        return toast(`${name}：可參觀陳列；目前尚未開放購物。`);
+      }
+    }
+  }
+
+  if (Math.abs(p.x)<3.8&&p.z<3.3&&p.z>-4.5) {
+    let count=0;
+    for (let i=0;i<state.unlocked;i++) {
+      const take=Math.max(0,Math.min(state.back[i],15-state.stock[i]));
+      state.back[i]-=take;
+      state.stock[i]+=take;
+      count+=take;
+    }
+    if (count) {
+      state.manualRestock+=count;
+      state.started=true;
+      toast(`已補上 ${count} 件商品！`);
+      save();
+      hud();
+    } else {
+      toast('沒有可補的商品。先進貨，或等貨架空出。');
+    }
+  } else if (p.distanceTo(new THREE.Vector3(-4.5,.15,2.6))<2) {
+    toast('顧客會自動結帳，收入直接入帳。');
+  } else {
+    toast('請靠近中央貨架補貨。');
+  }
+}
+$('interact').onclick=interact;
+$('cameraBtn').onclick=() => {yaw=0;pitch=.74;};
+
+function begin() {
+  try {speechSynthesis.cancel();} catch(e) {}
+  introAnimating=false;
+  active=true;
+  $('intro').classList.add('hidden');
+  hud();
+  toast(state.started
+    ? '歡迎回到 seven ten！'
+    : '走到中央貨架，按「互動／補貨」。');
+}
+
+$('skip').onclick=begin;
+$('start').onclick=() => {
+  if (introAnimating) return begin();
+  introAnimating=true;
+  introTime=0;
+  $('start').textContent='進入便利店';
+  $('intro').style.background='#08142480';
+  $('introNote').textContent='而現在，從這間小店開始。';
+  try {
+    const speech=new SpeechSynthesisUtterance(
+      $('introText').textContent.trim()
+    );
+    speech.lang='zh-TW';
+    speech.rate=.9;
+    speechSynthesis.speak(speech);
+  } catch(e) {}
+};
+
+window.addEventListener('keydown',e => {
+  if (e.target instanceof HTMLInputElement||!active||menusOpen()) return;
+  keys[e.code]=true;
+  if (e.code==='KeyE') interact();
+  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code)) {
+    e.preventDefault();
+  }
+});
+window.addEventListener('keyup',e => {keys[e.code]=false;});
+window.addEventListener('blur',() => {stopMovement();save();});
+document.addEventListener('visibilitychange',() => {
+  if (document.hidden) {stopMovement();save();}
+});
+
+let stickPointer=null;
+let lookPointer=null;
+let lastX=0;
+let lastY=0;
+
+function moveStick(e) {
+  const r=$('stick').getBoundingClientRect();
+  let x=e.clientX-r.left-r.width/2;
+  let y=e.clientY-r.top-r.height/2;
+  const length=Math.hypot(x,y);
+  const max=r.width*.32;
+  if (length>max) {x*=max/length;y*=max/length;}
+  joy.x=x/max;
+  joy.y=y/max;
+  $('knob').style.transform=`translate(${x}px,${y}px)`;
+}
+
+$('stick').addEventListener('pointerdown',e => {
+  stickPointer=e.pointerId;
+  $('stick').setPointerCapture(e.pointerId);
+  moveStick(e);
+});
+$('stick').addEventListener('pointermove',e => {
+  if (e.pointerId===stickPointer) moveStick(e);
+});
+function stopStick() {
+  stickPointer=null;
+  joy.x=0;
+  joy.y=0;
+  $('knob').style.transform='';
+}
+$('stick').addEventListener('pointerup',stopStick);
+$('stick').addEventListener('pointercancel',stopStick);
+
+renderer.domElement.addEventListener('pointerdown',e => {
+  lookPointer=e.pointerId;
+  lastX=e.clientX;
+  lastY=e.clientY;
+  renderer.domElement.setPointerCapture(e.pointerId);
+});
+renderer.domElement.addEventListener('pointermove',e => {
+  if (e.pointerId!==lookPointer) return;
+  yaw-=(e.clientX-lastX)*.007;
+  pitch=THREE.MathUtils.clamp(
+    pitch+(e.clientY-lastY)*.005,.18,1.35
+  );
+  lastX=e.clientX;
+  lastY=e.clientY;
+});
+renderer.domElement.addEventListener('pointerup',() => {lookPointer=null;});
+renderer.domElement.addEventListener('pointercancel',() => {lookPointer=null;});
+
+function walk(n,target,dt) {
+  const direction=target.clone().sub(n.g.position);
+  direction.y=0;
+  const length=direction.length();
+  if (length<.09) return true;
+  direction.normalize();
+  n.g.position.addScaledVector(direction,Math.min(length,dt*1.65));
+  n.g.rotation.y=Math.atan2(direction.x,direction.z);
+  n.walk+=dt*7;
+  n.g.legs[0].rotation.x=Math.sin(n.walk)*.32;
+  n.g.legs[1].rotation.x=-Math.sin(n.walk)*.32;
+  return false;
+}
+
+function spawn() {
+  const g=human(
+    [0xa0644e,0x5b826b,0x797799,0xc39e52][Math.floor(Math.random()*4)]
+  );
+  g.position.set(0,.15,8.3);
+  npcs.push({
+    g,
+    stage:'enter',
+    timer:0,
+    item:-1,
+    target:new THREE.Vector3(0,.15,4.3),
+    walk:0
+  });
+}
+
+function hour() {
+  return Math.floor(state.seconds/180*24)%24;
+}
+function rainy() {
+  return state.day%3===0;
+}
+function eventType() {
+  if (state.chapter<2) return -1;
+  return Math.floor(state.playTime/120)%3;
+}
+function marketFactor() {
+  const h=hour();
+  let f=(h>=6&&h<=9||h>=11&&h<=13) ? .8 : h<5 ? 1.35 : 1;
+  if (eventType()===0||eventType()===1) f*=1.15;
+  if (state.campaignUntil>state.playTime) f*=.8;
+  return f;
+}
+
+function chooseProduct(ids) {
+  const h=hour();
+  const weights=ids.map(i => {
+    let weight=1;
+    if (rainy()&&i===25) weight=5;
+    if (h>=6&&h<10&&[4,8,9,13,14,16,17].includes(i)) weight=3;
+    if (h>=11&&h<14&&[18,19,30,31].includes(i)) weight=3;
+    return weight;
+  });
+
+  let pick=Math.random()*weights.reduce((a,b)=>a+b,0);
+  for (let j=0;j<ids.length;j++) {
+    pick-=weights[j];
+    if (pick<=0) return ids[j];
+  }
+  return ids[0];
+}
+
+function customers(dt) {
+  spawnClock-=dt;
+
+  if (state.started&&spawnClock<=0&&npcs.length<16) {
+    spawn();
+    spawnClock=
+      (Math.max(3,12-state.rep*.16-state.sales*.035)+Math.random()*2)/2*
+      (state.chapter>=2 ? 1.65-state.rep*.003 : 1)*
+      marketFactor();
+  }
+
+  for (let i=npcs.length-1;i>=0;i--) {
+    const n=npcs[i];
+
+    if (n.stage==='enter') {
+      if (n.g.position.z>5.7&&doorOpen<.8) continue;
+      if (walk(n,n.target,dt)) {
+        n.stage='browse';
+        n.target.set(.35,.15,-2+Math.random()*3);
+      }
+    } else if (n.stage==='browse') {
+      if (walk(n,n.target,dt)) {
+        n.timer+=dt;
+        if (n.timer>2) {
+          const available=state.stock
+            .map((value,index)=>value>0?index:-1)
+            .filter(index=>index>=0);
+
+          if (available.length) {
+            n.item=chooseProduct(available);
+            state.stock[n.item]--;
+            n.stage='toCheckout';
+            n.target.set(.35,.15,4.3);
+            hud();
+          } else {
+            n.stage='exit';
+            n.target.set(0,.15,4.5);
+            state.rep=Math.max(0,state.rep-.2);
+          }
+        }
+      }
+    } else if (n.stage==='toCheckout') {
+      if (walk(n,n.target,dt)) {
+        n.stage='queue';
+        n.timer=0;
+      }
+    } else if (n.stage==='queue') {
+      const queue=npcs.filter(a=>a.stage==='queue');
+      const index=queue.indexOf(n);
+      const target=new THREE.Vector3(
+        -4.45+Math.min(index,12)*.55,.15,4.3
+      );
+
+      if (walk(n,target,dt)&&index===0) {
+        n.timer+=dt;
+        if (n.timer>(state.fastCheckout?1:1.3)) {
+          state.cash+=products[n.item].price+(state.premium?3:0);
+          state.sales++;
+          state.rep=Math.min(100,state.rep+.8);
+          n.stage='exit';
+          n.target.set(0,.15,4.5);
+          hud();
+        }
+      }
+    } else if (n.stage==='exit') {
+      if (walk(n,n.target,dt)) {
+        n.stage='outside';
+        n.target.set(0,.15,8.4);
+      }
+    } else if (n.stage==='outside') {
+      if (n.g.position.z<5.4&&n.g.position.z>4.8&&doorOpen<.8) continue;
+      if (walk(n,n.target,dt)) {
+        scene.remove(n.g);
+        disposeObject(n.g);
+        npcs.splice(i,1);
+      }
+    }
+  }
+}
+
+function newTask() {
+  const tier=Math.min(4,Math.floor(state.chapter/2));
+  return {
+    type:state.tasksDone%3,
+    baseSales:state.sales,
+    baseRestock:state.manualRestock,
+    baseOrders:state.regularDone,
+    start:state.playTime,
+    target:18+tier*6,
+    restock:10+tier*5,
+    orders:2,
+    minTime:60+tier*15,
+    reward:100+tier*45
+  };
+}
+state.task ??= newTask();
+
+function taskReady() {
+  const t=state.task;
+  return state.playTime-t.start>=t.minTime &&
+    state.sales-t.baseSales>=t.target &&
+    (t.type!==1||state.manualRestock-t.baseRestock>=t.restock) &&
+    (t.type!==2||state.regularDone-t.baseOrders>=t.orders);
+}
+
+function createOrder() {
+  state.order={
+    person:Math.floor(Math.random()*4),
+    item:Math.floor(Math.random()*state.unlocked),
+    qty:3+Math.min(3,Math.floor(state.chapter/3)),
+    created:state.playTime
+  };
+}
+if (!state.order || !products[state.order.item]) createOrder();
+
+const furnGroup=new THREE.Group();
+scene.add(furnGroup);
+
+function drawFurniture() {
+  while (furnGroup.children.length) {
+    const mesh=furnGroup.children[0];
+    furnGroup.remove(mesh);
+    disposeObject(mesh);
+  }
+  for (const f of state.furniture) {
+    box(
+      1,f.type===0?1.5:.9,1,
+      [0x537a94,0xb68c61,0x9ac1b8][f.type],
+      f.x,f.type===0?.9:.6,f.z,furnGroup
+    );
+  }
+}
+drawFurniture();
+
+const office=new THREE.Group();
+office.visible=false;
+scene.add(office);
+
+box(12,.15,10,0xd7d5c8,90,.05,0,office);
+const officeWall=box(12,3,.15,0x829aa8,90,1.6,-5,office);
+
+for (let j=0;j<3;j++) {
+  box(1.8,.12,1,0xb58a60,86+j*3,1,-2,office);
+  box(.7,.5,.15,0x273e52,86+j*3,1.3,-2,office);
+}
+box(1.6,2.8,.12,0xa3b4bd,94,1.5,-4.8,office);
+moveLabelToGroup(label('集團總部',8,.7,90,2.6,-4.85),office);
+
+const floorNames=[
+  '',
+  '1F 旗艦展示',
+  '2F 營運與人才',
+  '3F 商品研發',
+  '4F 物流與品管',
+  '5F 集團管理'
+];
+const floorSigns=[];
+for (let f=1;f<=5;f++) {
+  const sign=moveLabelToGroup(
+    label(floorNames[f],7,.6,90,2,-4.82),office
+  );
+  sign.visible=false;
+  floorSigns[f]=sign;
+}
+
+function enterFloor(f) {
+  if (f&&state.chapter<10) return;
+
+  if (f&&!floorNow) returnPosition=player.position.clone();
+  floorNow=f;
+  office.visible=Boolean(f);
+  floorSigns.forEach((s,i)=>{if(s)s.visible=i===f;});
+
+  player.position.copy(
+    f ? new THREE.Vector3(90,.15,3)
+      : returnPosition||new THREE.Vector3(0,.15,4)
+  );
+
+  yaw=0;
+  pitch=.74;
+  stopMovement();
+
+  if (f) {
+    officeWall.material.color.setHex(
+      [0,0x527a82,0x788aab,0x79a196,0x9c9383,0x536b82][f]
+    );
+    toast(`已抵達 ${floorNames[f]}，可走動或按互動開啟管理。`);
+  }
+
+  panel.classList.add('hidden');
+  updateEnvironment(0);
+}
+
+let tab='任務';
+
+function renderManage() {
+  const body=$('manageBody');
+  body.replaceChildren();
+  $('manageTabs').replaceChildren();
+
+  for (const name of ['任務','裝潢','競爭','熟客','總部']) {
+    const b=document.createElement('button');
+    b.textContent=name;
+    b.onclick=()=>{tab=name;renderManage();};
+    $('manageTabs').append(b);
+  }
+
+  function text(value) {
+    const p=document.createElement('p');
+    p.textContent=value;
+    body.append(p);
+  }
+
+  function button(title,fn,disabled=false) {
+    const b=document.createElement('button');
+    b.textContent=title;
+    b.disabled=disabled;
+    b.onclick=()=>{
+      fn();
+      save();
+      hud();
+      renderManage();
+    };
+    body.append(b);
+  }
+
+  if (tab==='任務') {
+    const t=state.task;
+    text(
+      `第 ${state.tasksDone+1} 個委託｜獎勵 $${t.reward}\n`+
+      `銷售：${state.sales-t.baseSales}/${t.target} 件\n`+
+      `有效營業：${Math.floor(state.playTime-t.start)}/${t.minTime} 秒`+
+      (t.type===1
+        ? `\n親手補貨：${state.manualRestock-t.baseRestock}/${t.restock} 件`
+        : t.type===2
+          ? `\n熟客訂單：${state.regularDone-t.baseOrders}/${t.orders} 筆`
+          : '\n本次是穩定營業任務。')
+    );
+    text(
+      '無失敗倒數、不扣錢。達標後手動領獎。\n'+
+      '新任務從領獎時重新累積，不能重複使用舊進度。\n'+
+      '親手補貨任務期間，員工暫停自動補貨；完成指定補貨量後恢復。'
+    );
+    button('領取獎勵',()=>{
+      if (!taskReady()) return;
+      state.cash+=t.reward;
+      state.tasksDone++;
+      state.task=newTask();
+      toast('任務完成，獎金已入帳！');
+    },!taskReady());
+  }
+
+  if (tab==='裝潢') {
+    text(
+      '選擇家具放入擴建區安全格位，可以移動或移除。\n'+
+      '目前不支援任意拖曳原有貨架；新增家具採簡化模型。\n'+
+      '購買家具增加少量口碑，移除不退費。'
+    );
+
+    const slots=Math.min(10,state.chapter);
+    for (let i=0;i<slots;i++) {
+      const existing=state.furniture.find(f=>f.slot===i);
+      text(`擴建格 ${i+1}：${
+        existing?['展示貨架','咖啡台','座位'][existing.type]:'空位'
+      }`);
+
+      if (existing) {
+        button('移除（不退費）',()=>{
+          state.furniture=state.furniture.filter(f=>f.slot!==i);
+          drawFurniture();
+        });
+
+        for (let j=0;j<slots;j++) {
+          if (!state.furniture.some(f=>f.slot===j)) {
+            button(`移到格 ${j+1}`,()=>{
+              existing.slot=j;
+              existing.x=8+j*3;
+              drawFurniture();
+            });
+          }
+        }
+      } else {
+        for (let type=0;type<3;type++) {
+          const cost=[100,180,120][type];
+          button(
+            `放置${['展示貨架','咖啡台','座位'][type]} $${cost}`,
+            ()=>{
+              if (state.cash<cost) return;
+              state.cash-=cost;
+              state.furniture.push({
+                slot:i,type,x:8+i*3,z:1
+              });
+              state.rep=Math.min(100,state.rep+2);
+              drawFurniture();
+            },
+            state.cash<cost
+          );
+        }
+      }
+    }
+    if (!slots) text('完成第一章擴建後開放擺設。');
+  }
+
+  if (tab==='競爭') {
+    text(state.chapter<2
+      ? '進入第三章後，兩間競爭門市開始活動。'
+      : [
+        'home mert：家庭會員促銷，客流競爭加劇。',
+        'helloleave：咖啡早餐活動，客流競爭加劇。',
+        '對手促銷休息期。'
+      ][eventType()]
+    );
+
+    text(
+      '市場活動每120秒輪替。\n'+
+      `你的促銷剩餘 ${Math.max(
+        0,Math.ceil(state.campaignUntil-state.playTime)
+      )} 秒。\n策略：備足商品、提高口碑、培養熟客。`
+    );
+
+    button('社區促銷 $120／持續90秒',()=>{
+      if (state.cash<120||state.campaignUntil>state.playTime) return;
+      state.cash-=120;
+      state.campaignUntil=state.playTime+90;
+    },state.cash<120||state.campaignUntil>state.playTime||state.chapter<2);
+  }
+
+  if (tab==='熟客') {
+    const o=state.order;
+    const names=[
+      '早班上班族・小林',
+      '放學學生・阿哲',
+      '夜班護理師・雅婷',
+      '附近居民・陳阿姨'
+    ];
+    const available=state.stock[o.item]+state.back[o.item];
+    const bonus=30+state.friends[o.person]*2;
+
+    text(
+      `${names[o.person]} 想買 ${products[o.item].name} ×${o.qty}\n`+
+      `友好度 ${state.friends[o.person]}｜現有庫存 ${available} 件\n`+
+      `交貨收入 $${products[o.item].price*o.qty}，服務獎金 $${bonus}。`
+    );
+    text(
+      '訂單無期限，備齊商品後才能交貨，交貨會扣庫存。\n'+
+      '下一位熟客在營業60秒後提出新訂單。'
+    );
+
+    button('交付訂單',()=>{
+      if (
+        state.playTime<o.created ||
+        state.stock[o.item]+state.back[o.item]<o.qty
+      ) return;
+
+      let remaining=o.qty;
+      const shelfTake=Math.min(remaining,state.stock[o.item]);
+      state.stock[o.item]-=shelfTake;
+      remaining-=shelfTake;
+      state.back[o.item]-=remaining;
+
+      state.cash+=products[o.item].price*o.qty+bonus;
+      state.sales+=o.qty;
+      state.regularDone++;
+      state.friends[o.person]=Math.min(20,state.friends[o.person]+1);
+      state.rep=Math.min(100,state.rep+1);
+
+      createOrder();
+      state.order.created=state.playTime+60;
+    },state.playTime<o.created||available<o.qty);
+
+    if (state.playTime<o.created) {
+      text(`下一位抵達還需 ${Math.ceil(o.created-state.playTime)} 秒。`);
+    }
+  }
+
+  if (tab==='總部') {
+    text(state.chapter<10
+      ? '第十章完成後開放五層總部。'
+      : '選擇樓層進入簡化3D室內場景。\n各層共用布局，以配色、標示和管理功能區分；不是完整電梯動畫。\n總部內暫停街區營業。'
+    );
+
+    for (let f=1;f<=5;f++) {
+      button(floorNames[f],()=>enterFloor(f),state.chapter<10);
+    }
+
+    if (floorNow) button('離開總部回街區',()=>enterFloor(0));
+    text(`目前樓層：${floorNow||'街區'}`);
+
+    if (floorNow===1) {
+      text('旗艦展示：查看品牌成果。實際顧客購物仍在街區創始店運行。');
+    }
+    if (floorNow===2) {
+      text('每次培訓提高分店每期淨收益 $5。');
+      button(`培訓店長 $500（${state.training}/3）`,()=>{
+        state.cash-=500;
+        state.training++;
+        state.branchRate=(state.branchRate||45)+5;
+      },state.cash<500||state.training>=3);
+    }
+    if (floorNow===3) {
+      text('每次研發效率升級降低基礎訂貨成本3%。');
+      button(`研發效率 $600（${state.research}/3）`,()=>{
+        state.cash-=600;
+        state.research++;
+      },state.cash<600||state.research>=3);
+    }
+    if (floorNow===4) {
+      text('簡化品管升級：每次增加5點口碑。');
+      button(`品管升級 $450（${state.quality}/3）`,()=>{
+        state.cash-=450;
+        state.quality++;
+        state.rep=Math.min(100,state.rep+5);
+      },state.cash<450||state.quality>=3);
+    }
+    if (floorNow===5) {
+      text('每次新增一間提供模擬淨收益的分店。');
+      button(`區域展店 $2000（${state.plan}/3）`,()=>{
+        state.cash-=2000;
+        state.plan++;
+        state.branches++;
+      },state.cash<2000||state.plan>=3);
+    }
+  }
+}
+
+const rainGeo=new THREE.BufferGeometry();
+const rainPos=new Float32Array(180*3);
+
+for (let i=0;i<180;i++) {
+  rainPos[i*3]=Math.random()*65-30;
+  rainPos[i*3+1]=Math.random()*12;
+  rainPos[i*3+2]=Math.random()*20+7;
+}
+rainGeo.setAttribute('position',new THREE.BufferAttribute(rainPos,3));
+
+const rain=new THREE.Points(
+  rainGeo,
+  new THREE.PointsMaterial({
+    color:0xc7e6f2,size:.08,transparent:true,opacity:.65
+  })
+);
+scene.add(rain);
+
+const storeLight=new THREE.PointLight(0xffedcc,35,22);
+storeLight.position.set(0,4,0);
+scene.add(storeLight);
+
+const officeLight=new THREE.PointLight(0xffedcc,35,20);
+officeLight.position.set(90,4,0);
+scene.add(officeLight);
+
+function updateEnvironment(dt) {
+  const h=hour();
+  const night=h<6||h>=19;
+
+  sun.intensity=night?.35:rainy()?1.2:2.8;
+  scene.background.setHex(
+    night?0x192c45:rainy()?0x718690:0x9cafba
+  );
+  scene.fog.color.copy(scene.background);
+  rain.visible=rainy()&&!floorNow;
+
+  if (rain.visible) {
+    for (let i=0;i<180;i++) {
+      rainPos[i*3+1]-=dt*8;
+      if (rainPos[i*3+1]<0) rainPos[i*3+1]=12;
+    }
+    rainGeo.attributes.position.needsUpdate=true;
+  }
+
+  worldInfo.textContent=
+    `${String(h).padStart(2,'0')}:00｜${rainy()?'下雨':night?'夜晚':'晴天'}｜`+
+    (floorNow
+      ? `${floorNames[floorNow]}・街區營業暫停`
+      : taskReady()
+        ? '任務完成：到經營中心領獎'
+        : '經營中心：任務／裝潢／熟客／總部');
+
+  if (taskReady()&&!taskNotice) {
+    taskNotice=true;
+    toast('小任務完成！到經營中心領取獎金。');
+  }
+  if (!taskReady()) taskNotice=false;
+}
+
+function operations(dt) {
+  state.playTime+=dt;
+  state.branchTimer+=dt;
+  operationClock+=dt;
+
+  if (state.branchTimer>=20) {
+    state.branchTimer-=20;
+    if (state.branches>1) {
+      state.cash+=(state.branches-1)*(state.branchRate||45);
+    }
+  }
+
+  if (operationClock>=4) {
+    operationClock=0;
+
+    const manualTaskPending=state.task.type===1 &&
+      state.manualRestock-state.task.baseRestock<state.task.restock;
+
+    for (let i=0;i<state.unlocked;i++) {
+      if (state.auto&&state.stock[i]+state.back[i]<3) {
+        const cost=orderCost(i);
+        if (state.cash>=cost) {
+          state.cash-=cost;
+          state.back[i]+=5;
+        }
+      }
+
+      if (state.staff&&!manualTaskPending) {
+        const count=Math.max(0,Math.min(state.back[i],15-state.stock[i]));
+        state.back[i]-=count;
+        state.stock[i]+=count;
+      }
+    }
+    hud();
+  }
+
+  const c=chapters[state.chapter];
+  if (c&&readyForChapter(c)&&lastAnnouncement!==state.chapter) {
+    lastAnnouncement=state.chapter;
+    toast(`可以進行新劇情：${c.title}！`);
+  }
+
+  storyHUD();
+  updateEnvironment(dt);
+}
+
+function valid(x,z,old) {
+  if (floorNow) {
+    return x>84.5&&x<95.5&&z>-1&&z<4.5;
+  }
+
+  const level=state.chapter;
+  const maxX=6.1+level*3;
+  const minX=level ? -13-level*5 : -6.1;
+  const minZ=level===10 ? -28 : level ? -10 : -5.05;
+  const maxZ=level ? 27 : 8.5;
+
+  if (x<minX||x>maxX||z<minZ||z>maxZ) return false;
+
+  /* 對手門市：從正門進入，不能穿過外牆或貨架。 */
+  if (level>=2) {
+    for (const cx of [-13,-25]) {
+      const nearBuilding=Math.abs(x-cx)<4.9&&z>15.3&&z<22.5;
+
+      if (nearBuilding) {
+        if (Math.abs(x-cx)>4.05||z>21.55) return false;
+        if (z<16.5&&Math.abs(x-cx)>.65) return false;
+        if (z>=16.5&&old.z<16.5&&Math.abs(old.x-cx)>.75) return false;
+        if (z>17.3&&z<20.7&&Math.abs(Math.abs(x-cx)-2.5)<.9) return false;
+        if (z>20.2&&Math.abs(x-cx)<1.3) return false;
+        return true;
+      }
+    }
+  }
+
+  if (level===10&&x>11.6&&x<24.4&&z<-12.5&&z>-23.5) {
+    return false;
+  }
+
+  /* 原門市左牆與後牆。 */
+  if (Math.abs(x+6.5)<.35&&z>-5.8&&z<5.8) return false;
+  if (Math.abs(z+5.5)<.35&&x>-6.8&&x<6.8+level*3) return false;
+
+  /* 擴建區側牆均保留，只能走門洞。 */
+  for (let k=0;k<=level;k++) {
+    const wallX=6.5+k*3;
+    if (
+      Math.abs(x-wallX)<.35&&z>-5.6&&z<5.6&&
+      (z<2.35||z>3.65)
+    ) return false;
+  }
+
+  /* 門市正面：原店正門可進出，擴建區正面不可穿牆。 */
+  if (z>5.12&&z<5.85&&x>-6.8&&x<6.8+level*3) {
+    if (Math.abs(x)>1.25||doorOpen<.75) return false;
+  }
+
+  if ((old.z-5.5)*(z-5.5)<=0&&x>-6.5&&x<6.5) {
+    if (Math.abs(x)>1.25||doorOpen<.75) return false;
+  }
+
+  /* 原店固定設備。 */
+  if (x>-6.5&&x<6.5&&z<5.5&&z>-5.5) {
+    if (z<2&&z>-3.6&&shelves.some(s=>Math.abs(x-s)<.98)) return false;
+    if (x<-2.7&&z>2&&z<3.95) return false;
+    if (x<-3.7&&z<-3.1) return false;
+    if (x>3.2&&z<-4) return false;
+  }
+
+  if (x>6.5&&x<6.5+level*3&&z<5.5&&z>-5.5) {
+    if (z<-2.2) return false;
+    for (let k=4;k<=level;k++) {
+      if (Math.abs(x-(8+(k-1)*3))<1.05&&Math.abs(z+.5)<.7) return false;
+    }
+  }
+
+  if (state.furniture.some(f=>
+    Math.abs(x-f.x)<.8&&Math.abs(z-f.z)<.8
+  )) return false;
+
+  return true;
+}
+
+function showSaveStatus() {
+  try {
+    const s=JSON.parse(localStorage.getItem(MANUAL_KEY));
+    $('saveStatus').textContent=s&&usableSave(s.state)
+      ? `上次手動存檔：${s.time}\n章節 ${s.state.chapter}/10｜資金 $${s.state.cash}`
+      : '尚無有效的手動存檔。';
+  } catch(e) {
+    $('saveStatus').textContent='無法讀取本機存檔，瀏覽器可能限制儲存。';
+  }
+}
+
+$('manualSave').onclick=()=>{
+  try {
+    localStorage.setItem(MANUAL_KEY,JSON.stringify({
+      version:1,
+      time:new Date().toLocaleString('zh-TW'),
+      name:window.sevenTenPlayerName,
+      state
+    }));
+    showSaveStatus();
+    toast('手動存檔成功。');
+  } catch(e) {
+    toast('存檔失敗：空間不足或瀏覽器禁止儲存。');
+  }
+};
+
+$('manualLoad').onclick=()=>{
+  try {
+    const raw=localStorage.getItem(MANUAL_KEY);
+    if (!raw) return toast('沒有手動存檔。');
+    const saved=JSON.parse(raw);
+    if (!usableSave(saved.state)) throw new Error('Invalid save');
+    if (!confirm('讀檔會取代目前進度，確定繼續？')) return;
+
+    loadingSave=true;
+    localStorage.setItem(AUTO_KEY,JSON.stringify(saved.state));
+    if (saved.name) {
+      localStorage.setItem('seven-ten-player-name',saved.name);
+    }
+    location.reload();
+  } catch(e) {
+    loadingSave=false;
+    toast('讀檔失敗，請檢查瀏覽器儲存權限。');
+  }
+};
+
+let last=performance.now();
+let walkTime=0;
+
+function frame(now) {
+  requestAnimationFrame(frame);
+
+  const dt=Math.min((now-last)/1000,.05);
+  last=now;
+
+  const paused=!active||menusOpen()||Boolean(cinematic)||document.hidden;
+
+  if (!paused) {
+    if (!floorNow) operations(dt);
+
+    let mx=joy.x+
+      (keys.KeyD||keys.ArrowRight?1:0)-
+      (keys.KeyA||keys.ArrowLeft?1:0);
+
+    let mz=joy.y+
+      (keys.KeyS||keys.ArrowDown?1:0)-
+      (keys.KeyW||keys.ArrowUp?1:0);
+
+    const length=Math.hypot(mx,mz);
+    if (length>1) {mx/=length;mz/=length;}
+
+    const dx=(mx*Math.cos(yaw)+mz*Math.sin(yaw))*dt*3.4;
+    const dz=(-mx*Math.sin(yaw)+mz*Math.cos(yaw))*dt*3.4;
+    const p=player.position;
+
+    if (valid(p.x+dx,p.z,p)) p.x+=dx;
+    if (valid(p.x,p.z+dz,p)) p.z+=dz;
+
+    if (length>.05) {
+      player.rotation.y=Math.atan2(dx,dz);
+      walkTime+=dt*10;
+      player.legs[0].rotation.x=Math.sin(walkTime)*.4;
+      player.legs[1].rotation.x=-Math.sin(walkTime)*.4;
+    } else {
+      player.legs.forEach(leg=>leg.rotation.x=0);
+    }
+
+    if (!floorNow) {
+      customers(dt);
+      state.seconds+=dt;
+    }
+
+    if (state.seconds>=180) {
+      state.seconds-=180;
+      state.day++;
+
+      const fee=Math.min(
+        state.cash,
+        (state.efficient?30:50)+(state.staff?20:0)
+      );
+      state.cash-=fee;
+      toast(`第 ${state.day} 天：營運費 $${fee}（原型不計欠款）。`);
+      hud();
+    }
+
+    saveElapsed+=dt;
+    if (saveElapsed>4) {
+      saveElapsed=0;
+      save();
+    }
+  }
+
+  /* 感應門動畫。 */
+  const nearDoor=[player,...npcs.map(n=>n.g)].some(g=>
+    Math.abs(g.position.x)<2&&Math.abs(g.position.z-5.5)<2.3
+  );
+
+  if (nearDoor) doorHold=1.3;
+  else if (!paused) doorHold=Math.max(0,doorHold-dt);
+
+  const target=doorHold>0?1:0;
+
+  if (target&&doorOpen<.05&&now-lastChime>3500&&active) {
+    chime();
+    lastChime=now;
+  }
+
+  doorOpen=THREE.MathUtils.damp(doorOpen,target,5,dt);
+  doors.forEach((g,i)=>{
+    g.position.x=(i?1:-1)*(.85+doorOpen*1.5);
+  });
+
+  rivalDoors.forEach(d=>{
+    const near=
+      Math.abs(player.position.x-d.x)<2&&
+      Math.abs(player.position.z-16)<2.5;
+    d.open=THREE.MathUtils.damp(d.open,near?1:0,6,dt);
+    d.mesh.position.x=d.x+d.open*1.7;
+  });
+
+  /* 每章擴建動畫。 */
+  if (cinematic) {
+    if (!document.hidden) cinematic.elapsed+=dt;
+    const t=Math.min(1,cinematic.elapsed/10);
+    const g=buildingStages[cinematic.level];
+    g.scale.y=Math.max(.01,t*t*(3-2*t));
+
+    const final=cinematic.level===10;
+    const focus=new THREE.Vector3(
+      final?18:8+(cinematic.level-1)*3,
+      final?7:1,
+      final?-18:0
+    );
+    const angle=t*2.3;
+
+    camera.position.copy(focus).add(new THREE.Vector3(
+      Math.sin(angle)*(final?30:16),
+      final?18:10,
+      Math.cos(angle)*(final?30:16)
+    ));
+    camera.lookAt(focus);
+
+    chapterOverlay.textContent=
+      `第 ${cinematic.level} 章完成：${cinematic.title}\n`+
+      `擴建中 ${Math.floor(t*100)}%｜${expansionNames[cinematic.level-1]}`;
+
+    if (t>=1) {
+      g.scale.y=1;
+      cinematic=null;
+      chapterOverlay.classList.add('hidden');
+      hud();
+      save();
+      toast('擴建完成！牆面保留，新區域已開放。');
+    }
+  } else if (introAnimating) {
+    if (!document.hidden) introTime+=dt;
+    camera.position.set(Math.sin(introTime*.15)*12,7,16);
+    camera.lookAt(0,1,0);
+    if (introTime>17) begin();
+  } else {
+    const focus=player.position.clone().add(new THREE.Vector3(0,.8,0));
+    const desired=focus.clone().add(new THREE.Vector3(
+      Math.sin(yaw)*15*Math.cos(pitch),
+      15*Math.sin(pitch),
+      Math.cos(yaw)*15*Math.cos(pitch)
+    ));
+    camera.position.lerp(desired,1-Math.exp(-dt*5));
+    camera.lookAt(focus);
+  }
+
+  renderer.render(scene,camera);
+}
+
+window.addEventListener('resize',()=>{
+  camera.aspect=innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);
+});
+
+$('introNote').textContent=
+  '台灣便利店互動原型。開場語音依裝置支援；手機橫向遊玩。';
+
+hud();
+updateEnvironment(0);
+requestAnimationFrame(frame);
+</script>
+
+<script>
+window.addEventListener('error',function(event) {
+  const note=document.getElementById('introNote');
+  if (note) {
+    note.textContent=
+      '遊戲載入遇到問題。請確認網路與程式碼是否完整；若仍無法開始，請截圖回報。'+
+      (event.message ? ' '+event.message : '');
+  }
+});
+
+setTimeout(function() {
+  if (!document.querySelector('canvas')) {
+    const note=document.getElementById('introNote');
+    if (note) {
+      note.textContent=
+        '尚未載入3D場景。請保持網路連線，並用 Chrome／Safari 開啟 GitHub Pages 網址。';
+    }
+  }
+},10000);
+</script>
+</body>
+</html>
