@@ -5,215 +5,46 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>7-10 seven ten｜創業第一天</title>
 <style>
-  * {
-  box-sizing: border-box;
-  touch-action: none;
+*{box-sizing:border-box;touch-action:none}
+body{margin:0;overflow:hidden;background:#101820;color:#fff;font-family:system-ui,sans-serif}
+canvas{display:block}
+button{border:0;border-radius:10px;background:#f2dfb5;color:#142c46;padding:12px 16px;font-weight:700;cursor:pointer}
+.hud{position:fixed;z-index:2;background:#10263bd9;border:1px solid #ffffff25;border-radius:12px;padding:10px 14px;backdrop-filter:blur(8px)}
+#top{left:12px;top:10px;right:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14px}
+.brand{font-size:21px;color:#f2dfb5;font-weight:900}
+#mission{left:12px;top:78px;max-width:390px;font-size:13px;white-space:pre-line;pointer-events:none}
+#hint{bottom:22px;left:50%;transform:translateX(-50%);text-align:center;font-size:13px;max-width:45%;pointer-events:none}
+#actions{position:fixed;z-index:3;right:20px;bottom:24px;display:flex;gap:10px;flex-direction:column}
+#stick{position:fixed;z-index:3;left:34px;bottom:30px;width:114px;height:114px;background:#ffffff20;border:2px solid #ffffff70;border-radius:50%}
+#knob{position:absolute;width:48px;height:48px;left:31px;top:31px;border-radius:50%;background:#f2dfb5b0;pointer-events:none}
+.overlay{position:fixed;inset:0;z-index:8;background:#081424eb;display:flex;justify-content:center;align-items:center;padding:24px}
+.box{max-width:730px;width:100%;max-height:90vh;overflow:auto;touch-action:pan-y;padding:24px;border:1px solid #b6c6d44d;border-radius:18px;background:#112c43}
+.box p{line-height:1.7;color:#c6d3de}
+.box h1{color:#f2dfb5;margin:0 0 12px}
+#introText{font-size:clamp(18px,3vw,29px);line-height:1.65}
+.hidden{display:none!important}
+#catalog .row{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #ffffff20;padding:12px 0;font-size:14px}
+#catalog .row small{display:block;color:#b7cad8;margin-top:4px}
+#shop,#shop *{touch-action:pan-y}
+#shop .box{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+#catalog{touch-action:pan-y}
+input{touch-action:auto;user-select:text}
+#toast{position:fixed;z-index:12;top:44%;left:50%;transform:translate(-50%,-50%);background:#f2dfb5;color:#172e43;padding:14px 22px;border-radius:12px;pointer-events:none;text-align:center}
+#rotate{display:none;position:fixed;bottom:0;left:0;right:0;background:#ad6c21;z-index:15;text-align:center;padding:8px;font-size:12px}
+@media(orientation:portrait){
+  #rotate{display:block}
+  #mission{max-width:80%;top:105px}
+  #top{flex-wrap:wrap}
+  #hint{bottom:165px;max-width:80%;width:80%}
 }
-body {
-  margin: 0;
-  overflow: hidden;
-  background: #101820;
-  color: #fff;
-  font-family: system-ui, sans-serif;
+@media(max-height:480px){
+  #mission{top:67px;font-size:12px;padding:7px 10px}
+  .box{padding:16px}
+  #stick{width:100px;height:100px;bottom:18px}
+  #knob{left:24px;top:24px}
+  #actions{bottom:18px}
 }
-canvas { display: block; }
-button {
-  border: 0;
-  border-radius: 10px;
-  background: #f2dfb5;
-  color: #142c46;
-  padding: 12px 16px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.hud {
-  position: fixed;
-  z-index: 2;
-  background: #10263bd9;
-  border: 1px solid #ffffff25;
-  border-radius: 12px;
-  padding: 10px 14px;
-  backdrop-filter: blur(8px);
-}
-#top {
-  left: 12px;
-  top: 10px;
-  right: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-}
-.brand {
-  font-size: 21px;
-  color: #f2dfb5;
-  font-weight: 900;
-}
-#mission {
-  left: 12px;
-  top: 78px;
-  max-width: 390px;
-  font-size: 13px;
-  white-space: pre-line;
-  pointer-events: none;
-}
-#hint {
-  bottom: 22px;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  font-size: 13px;
-  max-width: 45%;
-  pointer-events: none;
-}
-#actions {
-  position: fixed;
-  z-index: 3;
-  right: 20px;
-  bottom: 24px;
-  display: flex;
-  gap: 10px;
-  flex-direction: column;
-}
-#stick {
-  position: fixed;
-  z-index: 3;
-  left: 34px;
-  bottom: 30px;
-  width: 114px;
-  height: 114px;
-  background: #ffffff20;
-  border: 2px solid #ffffff70;
-  border-radius: 50%;
-}
-#knob {
-  position: absolute;
-  width: 48px;
-  height: 48px;
-  left: 31px;
-  top: 31px;
-  border-radius: 50%;
-  background: #f2dfb5b0;
-  pointer-events: none;
-}
-.overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 8;
-  background: #081424eb;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 24px;
-}
-.box {
-  max-width: 730px;
-  width: 100%;
-  max-height: 90vh;
-  overflow: auto;
-  touch-action: pan-y;
-  padding: 24px;
-  border: 1px solid #b6c6d44d;
-  border-radius: 18px;
-  background: #112c43;
-}
-.box p {
-  line-height: 1.7;
-  color: #c6d3de;
-}
-.box h1 {
-  color: #f2dfb5;
-  margin: 0 0 12px;
-}
-#introText {
-  font-size: clamp(18px, 3vw, 29px);
-  line-height: 1.65;
-}
-.hidden { display: none !important; }
-#catalog .row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  border-top: 1px solid #ffffff20;
-  padding: 12px 0;
-  font-size: 14px;
-}
-#catalog .row small {
-  display: block;
-  color: #b7cad8;
-  margin-top: 4px;
-}
-#shop, #shop *, #catalog {
-  touch-action: pan-y;
-}
-#shop .box {
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-}
-input {
-  touch-action: auto;
-  user-select: text;
-}
-#toast {
-  position: fixed;
-  z-index: 12;
-  top: 44%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #f2dfb5;
-  color: #172e43;
-  padding: 14px 22px;
-  border-radius: 12px;
-  pointer-events: none;
-  text-align: center;
-}
-#rotate {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #ad6c21;
-  z-index: 15;
-  text-align: center;
-  padding: 8px;
-  font-size: 12px;
-}
-@media (orientation: portrait) {
-  #rotate { display: block; }
-  #mission {
-    max-width: 80%;
-    top: 105px;
-  }
-  #top { flex-wrap: wrap; }
-  #hint {
-    bottom: 165px;
-    max-width: 80%;
-    width: 80%;
-  }
-}
-@media (max-height: 480px) {
-  #mission {
-    top: 67px;
-    font-size: 12px;
-    padding: 7px 10px;
-  }
-  .box { padding: 16px; }
-  #stick {
-    width: 100px;
-    height: 100px;
-    bottom: 18px;
-  }
-  #knob {
-    left: 24px;
-    top: 24px;
-  }
-  #actions { bottom: 18px; }
-}
-  </style>
+</style>
 </head>
 <body>
 
@@ -223,13 +54,8 @@ input {
   <button id="openShop">商品／進貨</button>
 </div>
 
-<div id="mission" class="hud">
-  創業第一天：把第一瓶水放上貨架。
-</div>
-
-<div id="hint" class="hud">
-  左側搖桿移動 · 右側空白處拖動視角
-</div>
+<div id="mission" class="hud">創業第一天：把第一瓶水放上貨架。</div>
+<div id="hint" class="hud">左側搖桿移動 · 右側空白處拖動視角</div>
 
 <div id="stick">
   <div id="knob"></div>
@@ -243,10 +69,7 @@ input {
 <div id="naming" class="overlay" style="z-index:10">
   <form id="nameForm" class="box">
     <h1>歡迎來到 seven ten</h1>
-    <p>
-      創業之前，你想取什麼名字？
-      這是老闆的名字，店名仍是 7-10 seven ten。
-    </p>
+    <p>創業之前，你想取什麼名字？這是老闆的名字，店名仍是 7-10 seven ten。</p>
     <input
       id="playerName"
       maxlength="20"
@@ -261,58 +84,44 @@ input {
 </div>
 
 <script>
-document.getElementById('nameForm').addEventListener('submit', function(e) {
+document.getElementById('nameForm').addEventListener('submit',function(e){
   e.preventDefault();
-
-  const input = document.getElementById('playerName');
-  const name = input.value.trim();
-
-  if (!name) {
-    input.setCustomValidity('請輸入名字');
-    input.reportValidity();
+  const name=document.getElementById('playerName').value.trim();
+  if(!name){
+    document.getElementById('playerName').setCustomValidity('請輸入名字');
+    document.getElementById('playerName').reportValidity();
     return;
   }
-
-  window.sevenTenPlayerName = name;
-
-  try {
-    localStorage.setItem('seven-ten-player-name', name);
-  } catch (e) {}
-
+  window.sevenTenPlayerName=name;
+  try{
+    localStorage.setItem('seven-ten-player-name',name);
+  }catch(e){}
   document.getElementById('naming').classList.add('hidden');
-  input.blur();
+  document.getElementById('playerName').blur();
 });
 
-document.getElementById('playerName').addEventListener('input', function() {
+document.getElementById('playerName').addEventListener('input',function(){
   this.setCustomValidity('');
 });
 
-try {
-  document.getElementById('playerName').value =
-    localStorage.getItem('seven-ten-player-name') || '';
-} catch (e) {}
+try{
+  document.getElementById('playerName').value=
+    localStorage.getItem('seven-ten-player-name')||'';
+}catch(e){}
 </script>
 
 <div id="intro" class="overlay">
   <div class="box">
     <div class="brand">7-10 seven ten</div>
-
-    <p id="introText">
-      從親手把第一瓶水放上貨架，到讓自己的商品出現在全台門市，打造屬於你的 7-10 seven ten 集團。
-    </p>
-
+    <p id="introText">從親手把第一瓶水放上貨架，到讓自己的商品出現在全台門市，打造屬於你的 7-10 seven ten 集團。</p>
     <p id="introNote">
-      互動原型 · 台灣巷口便利店<br>
+      第一版互動原型 · 台灣巷口便利店<br>
       按下播放後，會以瀏覽器語音朗讀開場文字（視裝置支援）。
     </p>
-
     <button id="start">播放開場</button>
     <button id="skip">略過，開始營業</button>
-
     <p style="font-size:12px">
-      需連網載入 Three.js。
-      此版本採程式化 3D 場景，非最終寫實美術；
-      尚未包含完整集團玩法。
+      需連網載入 Three.js。此版本採程式化 3D 場景，非最終寫實美術；尚未包含完整集團玩法。
     </p>
   </div>
 </div>
@@ -323,25 +132,20 @@ try {
       <h1 style="font-size:23px">商品圖鑑與訂貨</h1>
       <button id="closeShop">返回</button>
     </div>
-
     <p>
       進貨後會存入後方貨箱，靠近中央貨架按「補貨」上架。
       新品逐件解鎖。此面板開啟時暫停營業。
     </p>
-
     <div id="catalog"></div>
     <button id="reset">清除進度，重新開始</button>
   </div>
 </div>
 
 <div id="toast" class="hidden"></div>
-<div id="rotate">建議將手機橫放遊玩</div>
-<script type="module">
+<div id="rotate">建議將手機橫放遊玩</div><script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
 
-const $ = id => document.getElementById(id);
-const AUTO_KEY = 'seven-ten-v1';
-const MANUAL_KEY = 'seven-ten-manual-v1';
+const $ = s => document.getElementById(s);
 
 const products = [
   {name:'礦泉水',cost:8,price:20,color:0x80d7ed},
@@ -374,282 +178,48 @@ extraNames.forEach((name,j) => products.push({
   fee:60+j*4
 }));
 
-function freshState() {
-  return {
-    cash:600,
-    sales:0,
-    rep:0,
-    unlocked:5,
-    chapter:0,
-    branches:1,
-    staff:false,
-    auto:false,
-    logistics:false,
-    brand:false,
-    departments:false,
-    branchTimer:0,
-    stock:Array(products.length).fill(0),
-    back:products.map((_,i) => i<5 ? 5 : 0),
-    started:false,
-    day:1,
-    seconds:0,
-    playTime:0,
-    chapterStart:0,
-    tasksDone:0,
-    manualRestock:0,
-    regularDone:0,
-    friends:[0,0,0,0],
-    furniture:[],
-    campaignUntil:0,
-    training:0,
-    research:0,
-    quality:0,
-    plan:0,
-    history:[]
-  };
-}
-
-function usableSave(s) {
-  return s &&
-    Number.isFinite(s.cash) &&
-    Number.isFinite(s.sales) &&
-    Array.isArray(s.stock) &&
-    Array.isArray(s.back);
-}
-
-let state = freshState();
-try {
-  const saved = JSON.parse(localStorage.getItem(AUTO_KEY));
-  if (usableSave(saved)) state = {...state,...saved};
-} catch(e) {}
-
-state.stock = products.map((_,i) =>
-  Math.max(0,Number(state.stock[i])||0)
-);
-state.back = products.map((_,i) =>
-  Math.max(0,Number(state.back[i])||0)
-);
-state.chapter = Math.max(0,Math.min(10,Math.floor(state.chapter)||0));
-state.unlocked = Math.max(5,Math.min(40,Math.floor(state.unlocked)||5));
-state.playTime = Math.max(0,Number(state.playTime)||0);
-state.chapterStart = Math.min(
-  state.playTime,
-  Math.max(0,Number(state.chapterStart)||0)
-);
-state.furniture = Array.isArray(state.furniture) ? state.furniture : [];
-state.history = Array.isArray(state.history) ? state.history : [];
-state.friends = Array.isArray(state.friends) ? state.friends : [0,0,0,0];
-
-let loadingSave = false;
-let saveElapsed = 0;
-let saveWarningShown = false;
-let active = false;
-let introAnimating = false;
-let introTime = 0;
-let cinematic = null;
-let floorNow = 0;
-let returnPosition = null;
-let yaw = 0;
-let pitch = 0.74;
-let spawnClock = 3;
-let operationClock = 0;
-let lastAnnouncement = -1;
-let taskNotice = false;
-const keys = {};
-const joy = {x:0,y:0};
-
-function save() {
-  if (loadingSave) return;
-  try {
-    localStorage.setItem(AUTO_KEY,JSON.stringify(state));
-  } catch(e) {
-    if (!saveWarningShown && active) {
-      saveWarningShown = true;
-      toast('無法自動存檔：瀏覽器可能限制本機儲存。');
-    }
-  }
-}
-
-let toastTimer;
-function toast(text) {
-  $('toast').textContent = text;
-  $('toast').classList.remove('hidden');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => {
-    $('toast').classList.add('hidden');
-  },2800);
-}
-
-const uiStyle = document.createElement('style');
-uiStyle.textContent = `
-  .gamePanel,.gamePanel * { touch-action:pan-y; }
-  .gamePanel .box {
-    overflow-y:auto;
-    -webkit-overflow-scrolling:touch;
-    overscroll-behavior:contain;
-  }
-  .gamePanel p { white-space:pre-line; }
-  .gamePanel button { margin:4px;font-size:13px; }
-  button:disabled { opacity:.45;cursor:default; }
-  #actions {
-    z-index:5;
-    right:12px;
-    bottom:18px;
-    width:214px;
-    max-width:38vw;
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:6px;
-  }
-  #actions button { padding:10px 8px;font-size:12px; }
-  #mission {
-    left:12px;
-    right:240px;
-    top:76px;
-    max-width:390px;
-    font-size:11px;
-    max-height:27vh;
-    overflow:hidden;
-    pointer-events:none;
-  }
-  #mission.folded {
-    max-height:30px;
-    white-space:nowrap;
-    text-overflow:ellipsis;
-    padding:7px 10px;
-  }
-  #objectiveToggle {
-    position:fixed;
-    z-index:5;
-    left:12px;
-    top:42%;
-    padding:7px 10px;
-    font-size:12px;
-    background:#17324f;
-    color:#f2dfb5;
-    border:1px solid #f2dfb566;
-  }
-  #worldInfo {
-    position:fixed;
-    left:50%;
-    transform:translateX(-50%);
-    bottom:2px;
-    z-index:3;
-    background:#142b41bb;
-    padding:4px 8px;
-    font-size:10px;
-    max-width:70%;
-    text-align:center;
-    pointer-events:none;
-  }
-  #storyChoices button { display:block;width:100%;margin:10px 0; }
-  #chapterOverlay { white-space:pre-line;pointer-events:none; }
-  @media(max-height:480px) {
-    #top {font-size:11px;padding:6px 10px;}
-    #top button {padding:8px;}
-    #top .brand {font-size:17px;}
-    #mission {top:60px;max-height:25vh;right:235px;}
-    #objectiveToggle {top:38%;}
-    #actions button {padding:8px 6px;font-size:11px;}
-    #hint {bottom:28px;font-size:11px;max-width:35%;}
-  }
-`;
-document.head.append(uiStyle);
-
-function createPanel(id,html) {
-  const div = document.createElement('div');
-  div.id = id;
-  div.className = 'overlay gamePanel hidden';
-  div.innerHTML = '<div class="box">'+html+'</div>';
-  document.body.append(div);
-  return div;
-}
-
-const story = createPanel('story',`
-  <h1 id="storyTitle"></h1>
-  <p id="storyText"></p>
-  <div id="storyChoices"></div>
-  <p id="storyLog"></p>
-  <button id="storyClose">返回經營</button>
-`);
-
-const panel = createPanel('management',`
-  <h1>經營中心</h1>
-  <div id="manageTabs"></div>
-  <div id="manageBody"></div>
-  <button id="manageClose">返回遊戲</button>
-`);
-
-const savePanel = createPanel('savePanel',`
-  <h1>本機存檔</h1>
-  <p id="saveStatus"></p>
-  <button id="manualSave">手動存檔</button>
-  <button id="manualLoad">讀取手動存檔</button>
-  <button id="saveClose">返回</button>
-  <p>自動存檔每數秒執行。手動存檔獨立保留，不會被自動存檔覆蓋。
-僅限同一瀏覽器與網站環境；清除瀏覽器資料可能遺失。</p>
-`);
-savePanel.style.zIndex = '12';
-
-const worldInfo = document.createElement('div');
-worldInfo.id = 'worldInfo';
-document.body.append(worldInfo);
-
-const chapterOverlay = document.createElement('div');
-chapterOverlay.id = 'chapterOverlay';
-chapterOverlay.className = 'hud hidden';
-chapterOverlay.style.cssText =
-  'left:15%;right:15%;bottom:26px;text-align:center;z-index:14';
-document.body.append(chapterOverlay);
-
-function actionButton(text,handler) {
-  const b = document.createElement('button');
-  b.textContent = text;
-  b.onclick = handler;
-  $('actions').prepend(b);
-  return b;
-}
-
-const storyButton = actionButton('劇情／晉級',() => showStory());
-const managementButton = actionButton('經營中心',() => {
-  if (!active || cinematic) return;
-  stopMovement();
-  panel.classList.remove('hidden');
-  renderManage();
-});
-const saveButton = actionButton('存檔／讀檔',() => {
-  if (!active || cinematic) return;
-  stopMovement();
-  savePanel.classList.remove('hidden');
-  showSaveStatus();
-});
-
-const objectiveToggle = document.createElement('button');
-objectiveToggle.id = 'objectiveToggle';
-objectiveToggle.textContent = '展開目標';
-$('mission').classList.add('folded');
-document.body.append(objectiveToggle);
-objectiveToggle.onclick = () => {
-  const folded = $('mission').classList.toggle('folded');
-  objectiveToggle.textContent = folded ? '展開目標' : '收合目標';
+let state = {
+  cash:600,
+  sales:0,
+  rep:0,
+  unlocked:5,
+  chapter:0,
+  branches:1,
+  staff:false,
+  auto:false,
+  logistics:false,
+  brand:false,
+  departments:false,
+  branchTimer:0,
+  stock:Array(products.length).fill(0),
+  back:products.map((_,i) => i<5 ? 5 : 0),
+  started:false,
+  day:1,
+  seconds:0
 };
 
-$('storyClose').onclick = () => story.classList.add('hidden');
-$('manageClose').onclick = () => panel.classList.add('hidden');
-$('saveClose').onclick = () => savePanel.classList.add('hidden');
+try {
+  const saved = JSON.parse(localStorage.getItem('seven-ten-v1'));
+  if (
+    saved &&
+    Array.isArray(saved.stock) &&
+    Array.isArray(saved.back) &&
+    Number.isFinite(saved.cash)
+  ) {
+    state = {...state,...saved};
+  }
+} catch(e) {}
 
-function menusOpen() {
-  return !$('shop').classList.contains('hidden') ||
-    !story.classList.contains('hidden') ||
-    !panel.classList.contains('hidden') ||
-    !savePanel.classList.contains('hidden');
-}
+state.stock = products.map((_,i) => state.stock[i]||0);
+state.back = products.map((_,i) => state.back[i]||0);
 
-function stopMovement() {
-  joy.x = 0;
-  joy.y = 0;
-  for (const k in keys) keys[k] = false;
-  $('knob').style.transform = '';
+let saveElapsed = 0;
+
+function save() {
+  if (window.loadingManualSave) return;
+  try {
+    localStorage.setItem('seven-ten-v1',JSON.stringify(state));
+  } catch(e) {}
 }
 
 const scene = new THREE.Scene();
@@ -665,11 +235,11 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 document.body.prepend(renderer.domElement);
 
 const camera = new THREE.PerspectiveCamera(
-  49,innerWidth/innerHeight,0.1,220
+  49,innerWidth/innerHeight,.1,100
 );
-camera.position.set(0,12,17);
 
 scene.add(new THREE.HemisphereLight(0xe8f3ff,0x6a6857,2.1));
+
 const sun = new THREE.DirectionalLight(0xffeed7,2.8);
 sun.position.set(-9,18,9);
 sun.castShadow = true;
@@ -681,90 +251,62 @@ sun.shadow.camera.bottom = -18;
 scene.add(sun);
 
 function box(w,h,d,color,x,y,z,parent=scene) {
-  const mesh = new THREE.Mesh(
+  const m = new THREE.Mesh(
     new THREE.BoxGeometry(w,h,d),
-    new THREE.MeshStandardMaterial({color,roughness:0.72})
+    new THREE.MeshStandardMaterial({color,roughness:.72})
   );
-  mesh.position.set(x,y,z);
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  parent.add(mesh);
-  return mesh;
+  m.position.set(x,y,z);
+  m.castShadow = true;
+  m.receiveShadow = true;
+  parent.add(m);
+  return m;
 }
 
-function label(text,w,h,x,y,z,bg='#17324f',fg='#f5e8cb') {
-  const canvas = document.createElement('canvas');
-  canvas.width = 1024;
-  canvas.height = 256;
-  const ctx = canvas.getContext('2d');
+function label(
+  text,w,h,x,y,z,
+  bg='#17324f',
+  fg='#f5e8cb'
+) {
+  const c = document.createElement('canvas');
+  c.width = 1024;
+  c.height = 256;
+
+  const ctx = c.getContext('2d');
   ctx.fillStyle = bg;
   ctx.fillRect(0,0,1024,256);
   ctx.fillStyle = fg;
   ctx.font = 'bold 86px sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText(text,512,128,980);
-  const mesh = new THREE.Mesh(
+  ctx.fillText(text,512,128);
+
+  const m = new THREE.Mesh(
     new THREE.PlaneGeometry(w,h),
     new THREE.MeshBasicMaterial({
-      map:new THREE.CanvasTexture(canvas),
+      map:new THREE.CanvasTexture(c),
       side:THREE.DoubleSide
     })
   );
-  mesh.position.set(x,y,z);
-  scene.add(mesh);
-  return mesh;
+  m.position.set(x,y,z);
+  scene.add(m);
+  return m;
 }
 
-function human(color) {
-  const g = new THREE.Group();
-  box(.5,.68,.3,color,0,1.02,0,g);
-  const head = new THREE.Mesh(
-    new THREE.SphereGeometry(.22,12,10),
-    new THREE.MeshStandardMaterial({color:0xcda47f})
-  );
-  head.position.y = 1.63;
-  g.add(head);
-  box(.4,.12,.35,0x34302b,0,1.8,0,g);
-  g.legs = [
-    box(.17,.6,.22,0x303e49,-.14,.4,0,g),
-    box(.17,.6,.22,0x303e49,.14,.4,0,g)
-  ];
-  box(.14,.6,.17,color,-.34,1.01,0,g);
-  box(.14,.6,.17,color,.34,1.01,0,g);
-  scene.add(g);
-  return g;
-}
-
-function disposeObject(g) {
-  g.traverse(o => {
-    if (o.isMesh) {
-      o.geometry.dispose();
-      if (Array.isArray(o.material)) {
-        o.material.forEach(m => m.dispose());
-      } else {
-        o.material.dispose();
-      }
-    }
-  });
-}
-
-box(150,.12,85,0x697474,-20,-.3,0);
 box(70,.2,65,0x697474,0,-.2,0);
 box(25,.18,15,0xb3b2a8,0,-.06,2);
 box(13,.15,11,0xddd9c9,0,.04,0);
 
 for (let x=-6;x<=6;x++) {
-  box(.018,.008,11,0xc5c2b7,x,.122,0);
-}
-for (let z=-5;z<=5;z++) {
-  box(13,.008,.018,0xc5c2b7,0,.122,z);
+  for (let z=-5;z<=5;z++) {
+    box(.018,.008,11,0xc5c2b7,x,.122,0);
+    if (x===0) {
+      box(13,.008,.018,0xc5c2b7,0,.122,z);
+    }
+  }
 }
 
 box(13,3.6,.18,0xe0ded3,0,1.9,-5.5);
 box(.18,3.6,11,0xd0d3cb,-6.5,1.9,0);
-
-/* 保留側牆，只留下通往擴建區的門洞。 */
 box(.18,3.6,7.5,0xd0d3cb,6.5,1.9,-1.75);
 box(.18,3.6,1.5,0xd0d3cb,6.5,1.9,4.75);
 box(.18,.7,2,0xd0d3cb,6.5,3.35,3);
@@ -773,10 +315,10 @@ box(4.7,2.5,.14,0x17324f,-4.15,1.4,5.5);
 box(4.7,2.5,.14,0x17324f,4.15,1.4,5.5);
 box(13,.65,.25,0x17324f,0,3.4,5.5);
 
-label('7-10 seven ten',7,.85,0,3.4,5.65);
-label('7-10 創始店',5,.7,0,2.8,-5.38);
+label('7-10  seven ten',7,.85,0,3.4,5.65);
+label('7-10  創始店',5,.7,0,2.8,-5.38);
 label('新鮮・便利・每一天',3,.5,-4.1,1.7,5.59);
-label('24H 巷口好鄰居',3,.5,4.1,1.7,5.59);
+label('24H  巷口好鄰居',3,.5,4.1,1.7,5.59);
 
 const glassMat = new THREE.MeshStandardMaterial({
   color:0xc2e5ed,
@@ -787,19 +329,23 @@ const glassMat = new THREE.MeshStandardMaterial({
 });
 
 const doors = [];
+
 for (const side of [-1,1]) {
   const g = new THREE.Group();
   g.position.set(side*.85,0,5.5);
   scene.add(g);
+
   const glass = new THREE.Mesh(
     new THREE.BoxGeometry(1.65,2.7,.07),
     glassMat
   );
   glass.position.y = 1.45;
   g.add(glass);
+
   box(.05,2.8,.1,0x9cabb0,side*.8,1.45,0,g);
   box(1.65,.06,.1,0x9cabb0,0,2.8,0,g);
   box(1.65,.09,.1,0xe5d4a9,0,1.3,.04,g);
+
   doors.push(g);
 }
 
@@ -814,33 +360,33 @@ label('收銀 CHECKOUT',2.6,.42,-4.5,1.1,3.72);
 
 box(2.5,2.5,.8,0xb1bec3,4.7,1.4,-4.8);
 label('冷藏飲品',2.2,.35,4.7,2.5,-4.35);
+
 for (let i=0;i<6;i++) {
   box(.21,.48,.2,0x9ecbdb,3.8+i*.34,1.4,-4.32);
 }
+
 box(1.6,.75,1.2,0xa77b4e,-4.7,.5,-3.9);
-label('到貨箱',1.4,.4,-4.7,1,-3.2);
+label('到貨箱',1.4,.4,-4.7,1,-3.2);const shelves=[];
+const goods=[];
 
-const shelves = [];
-const goods = [];
-
-for (let k=0;k<2;k++) {
-  const x = k ? 2 : -1.2;
+for(let k=0;k<2;k++){
+  const x=k?2:-1.2;
   box(1.4,.15,5,0x7b8589,x,.23,-.8);
-  for (const z of [-3.2,1.6]) {
+  for(const z of [-3.2,1.6]){
     box(.08,1.65,.08,0xa6b1b4,x-.65,1,z);
   }
-  for (let level=0;level<3;level++) {
+  for(let level=0;level<3;level++){
     box(1.4,.08,5,0xc9cdd0,x,.65+level*.48,-.8);
   }
   shelves.push(x);
 }
 
-for (let i=0;i<10;i++) {
-  goods[i] = [];
-  const x = shelves[i<5 ? 0 : 1];
-  const z = -2.8+(i%5)*.95;
-  for (let j=0;j<6;j++) {
-    const m = box(
+for(let i=0;i<10;i++){
+  goods[i]=[];
+  const x=shelves[i<5?0:1];
+  const z=-2.8+(i%5)*.95;
+  for(let j=0;j<6;j++){
+    const m=box(
       .27,.3,.27,products[i].color,
       x+(j%3-1)*.39,
       .84+Math.floor(j/3)*.48,
@@ -850,507 +396,158 @@ for (let i=0;i<10;i++) {
   }
 }
 
-function updateGoods() {
-  goods.forEach((arr,i) => {
-    let total = 0;
-    for (let k=i;k<products.length;k+=10) total += state.stock[k];
-    arr.forEach((m,j) => m.visible = total>j);
+function updateGoods(){
+  goods.forEach((arr,i)=>{
+    let total=0;
+    for(let k=i;k<products.length;k+=10){
+      total+=state.stock[k];
+    }
+    arr.forEach((m,j)=>m.visible=total>j);
   });
 }
 
-for (let i=0;i<5;i++) {
+for(let i=0;i<5;i++){
   box(4,5+i%2,4,0x89979b,-13+i*6,2,-14);
   label(
     ['早餐店','機車行','巷口公寓','洗衣店','社區診所'][i],
     3,.5,-13+i*6,2,-11.95
   );
 }
-box(80,.02,5,0x424e53,-10,-.08,11);
-for (let x=-45;x<35;x+=5) {
+
+box(45,.02,5,0x424e53,0,-.08,11);
+for(let x=-20;x<21;x+=5){
   box(2,.02,.12,0xe0d8b5,x,-.055,11);
 }
-for (const x of [-8,8]) {
+for(let x of [-8,8]){
   box(.1,4,.1,0x55616a,x,2,6.6);
   box(.8,.12,.5,0xe7ddaa,x,4,6.6);
 }
 
-const player = human(0x24587a);
-player.position.set(0,.15,3.8);
-const npcs = [];
+function human(color){
+  const g=new THREE.Group();
+  box(.5,.68,.3,color,0,1.02,0,g);
 
-let audio;
-function chime() {
-  try {
-    audio ??= new (window.AudioContext || window.webkitAudioContext)();
-    audio.resume();
-    [660,520].forEach((f,i) => {
-      const oscillator = audio.createOscillator();
-      const gain = audio.createGain();
-      oscillator.frequency.value = f;
-      oscillator.connect(gain);
-      gain.connect(audio.destination);
-      const time = audio.currentTime+i*.16;
-      gain.gain.setValueAtTime(.045,time);
-      gain.gain.exponentialRampToValueAtTime(.001,time+.3);
-      oscillator.start(time);
-      oscillator.stop(time+.32);
-    });
-  } catch(e) {}
-}
-
-const chapterMinutes = [3,5,7,9,11,13,15,17,19,21];
-const chapterSales = [60,160,300,500,760,1080,1460,1900,2400,3000];
-const chapterCash = [400,800,1400,2200,3200,4500,6000,8000,10500,14000];
-
-const chapters = [
-  {
-    title:'第一筆救命收入',
-    text:'首期租金到期。你終於有了第一批客人，現在要選擇如何站穩腳步。',
-    choices:[
-      ['支付租金，穩定開店',1,() => {state.rep+=3;}],
-      ['整理門面並付租金',1.5,() => {state.rep+=8;}]
-    ]
-  },
-  {
-    title:'冰櫃故障危機',
-    text:'冰櫃溫度異常！處理設備後，繼續拓展冷藏商品。',
-    choices:[
-      ['維修冰櫃',1,() => {state.rep+=2;}],
-      ['換成節能冰櫃',1.7,() => {
-        state.efficient=true;
-        state.rep+=5;
-      }]
-    ]
-  },
-  {
-    title:'對街出現競爭店',
-    text:'home mert 我家便利商店推出家庭優惠；helloleave 便利商店以咖啡廣告吸引通勤客。你準備如何回應？',
-    choices:[
-      ['推出社區優惠',1,() => {
-        state.rep+=12;
-        state.strategy='社區優惠';
-      }],
-      ['建立特色商品形象',1.5,() => {
-        state.rep+=7;
-        state.premium=true;
-        state.strategy='特色商品';
-      }]
-    ]
-  },
-  {
-    title:'第一位員工',
-    text:'補貨和收銀已經忙不過來。員工會把貨箱內的庫存自動補上貨架。',
-    choices:[
-      ['聘用補貨員',1,() => {state.staff=true;}],
-      ['聘用資深店員',1.5,() => {
-        state.staff=true;
-        state.fastCheckout=true;
-      }]
-    ]
-  },
-  {
-    title:'第一次企業大訂單',
-    text:'附近辦公室訂購早餐。方案費用包含專案採購，不扣門市庫存；選擇方案後立即交付並結清。',
-    choices:[
-      ['標準訂單：交付收入 $6800',1,() => {
-        state.cash+=6800;
-        state.rep+=5;
-      }],
-      ['加大訂單：交付收入 $7020',280/180,() => {
-        state.cash+=7020;
-        state.rep+=8;
-      }]
-    ]
-  },
-  {
-    title:'第二間店的賭注',
-    text:'新店面空了出來。分店使用經營數值模擬，每20秒結算淨收益，並非額外的獨立3D購物場景。',
-    choices:[
-      ['開住宅分店',1,() => {
-        state.branches++;
-        state.branchRate=45;
-      }],
-      ['開商辦分店',1.5,() => {
-        state.branches++;
-        state.branchRate=65;
-      }]
-    ]
-  },
-  {
-    title:'多店缺貨危機',
-    text:'供應商延遲交貨，你決定建立穩定採購制度。物流會替低庫存商品自動付費訂貨；資金不足就暫停採購。',
-    choices:[
-      ['合作物流配送',1,() => {
-        state.logistics=true;
-        state.auto=true;
-      }],
-      ['設置中央採購倉庫',1.5,() => {
-        state.logistics=true;
-        state.auto=true;
-        state.wholesale=true;
-      }]
-    ]
-  },
-  {
-    title:'自有品牌上市',
-    text:'開始研發 seven ten 商品。完成後解開自有品牌的劇情限制，各商品仍需逐件解鎖。',
-    choices:[
-      ['平價自有品牌',1,() => {
-        state.brand=true;
-        state.wholesale=true;
-      }],
-      ['品質優先品牌',1.4,() => {
-        state.brand=true;
-        state.premium=true;
-        state.rep+=10;
-      }]
-    ]
-  },
-  {
-    title:'跨區擴張與併購',
-    text:'另一區有地方連鎖門市出售。選擇收購整頓，或自己展店，新增分店會持續提供模擬淨收益。',
-    choices:[
-      ['收購並整頓兩間店',1,() => {
-        state.branches+=2;
-        state.rep+=3;
-      }],
-      ['自行建立三間新店',1.5,() => {
-        state.branches+=3;
-        state.rep+=7;
-      }]
-    ]
-  },
-  {
-    title:'集團成立考驗',
-    text:'擴張後遇到資金壓力與食品品質警訊。支付整改費完成批次清查，並建立營運、財務、物流與品管制度。',
-    choices:[
-      ['完成整改與基本部門建置',1,() => {
-        state.departments=true;
-        state.rep+=10;
-      }],
-      ['全面升級品管與管理團隊',850/600,() => {
-        state.departments=true;
-        state.rep+=20;
-        state.branchRate=(state.branchRate||45)+20;
-      }]
-    ]
-  }
-];
-
-chapters.forEach((c,i) => {
-  c.minutes=chapterMinutes[i];
-  c.sales=chapterSales[i];
-  c.cash=chapterCash[i];
-  c.choices=c.choices.map(([name,ratio,effect]) =>
-    [name,Math.round(c.cash*ratio),effect]
+  const head=new THREE.Mesh(
+    new THREE.SphereGeometry(.22,12,10),
+    new THREE.MeshStandardMaterial({color:0xcda47f})
   );
-});
+  head.position.y=1.63;
+  g.add(head);
 
-const expansionNames = [
-  '飲料貨架與休息區',
-  '冷藏設備區',
-  '競爭商圈與商品展示區',
-  '員工工作區',
-  '企業訂單出貨區',
-  '連鎖營運辦公區',
-  '物流倉庫與配送車',
-  '自有品牌與研發區',
-  '跨區營運園區',
-  '五層 seven ten 集團總部'
-];
+  box(.4,.12,.35,0x34302b,0,1.8,0,g);
+  g.legs=[
+    box(.17,.6,.22,0x303e49,-.14,.4,0,g),
+    box(.17,.6,.22,0x303e49,.14,.4,0,g)
+  ];
+  box(.14,.6,.17,color,-.34,1.01,0,g);
+  box(.14,.6,.17,color,.34,1.01,0,g);
 
-const city = new THREE.Group();
-scene.add(city);
-const buildingStages = [];
-const districtStages = [];
-let stageBuilt = 0;
-let rivalsBuilt = false;
-const rivalDoors = [];
-
-function moveLabelToGroup(m,g) {
-  scene.remove(m);
-  g.add(m);
-  return m;
+  scene.add(g);
+  return g;
 }
 
-function makeRivals() {
-  if (rivalsBuilt) return;
-  rivalsBuilt=true;
+const player=human(0x24587a);
+player.position.set(0,.15,3.8);
 
-  for (const [name,x,color] of [
-    ['home mert 我家便利商店',-13,0xca884a],
-    ['helloleave 便利商店',-25,0x4c9c91]
-  ]) {
-    box(9,.2,7,0xd6d5cb,x,.1,19);
-    box(9,3.4,.15,0xced6d4,x,1.8,22);
-    box(.15,3.4,6,0xced6d4,x-4.5,1.8,19);
-    box(.15,3.4,6,0xced6d4,x+4.5,1.8,19);
+let yaw=0,pitch=.74;
+const npcs=[];
+let spawnClock=3;
+let active=false,introAnimating=false,introTime=0;
+const keys={};
+const joy={x:0,y:0};
+let stickPointer=null,lookPointer=null,lastX=0,lastY=0;
+let audio;
 
-    for (const side of [-1,1]) {
-      box(3.5,3,.15,0xced6d4,x+side*2.75,1.6,16);
-    }
-    for (const sx of [-2.5,2.5]) {
-      box(1.1,1.3,2.5,color,x+sx,.8,19);
-      for (let j=0;j<4;j++) {
-        box(.25,.35,.3,0xe2c18a,x+sx,1.65,18.2+j*.5);
-      }
-    }
+function chime(){
+  try{
+    audio??=new (window.AudioContext||window.webkitAudioContext)();
+    audio.resume();
 
-    box(2,1,1,color,x,.7,21);
-    box(9,.7,.25,color,x,3.4,15.9);
+    [660,520].forEach((f,i)=>{
+      const o=audio.createOscillator();
+      const g=audio.createGain();
+      o.frequency.value=f;
+      o.connect(g);
+      g.connect(audio.destination);
 
-    const sign=label(name,8,.65,x,3.4,15.72);
-    sign.rotation.y=Math.PI;
-
-    for (const dx of [-2.7,2.7]) {
-      box(2.5,2,.1,0x7fabb8,x+dx,1.6,15.85);
-    }
-
-    const door=box(1.6,2.5,.12,0x83b5c5,x,1.4,15.8);
-    door.material.transparent=true;
-    door.material.opacity=.35;
-    rivalDoors.push({mesh:door,x,open:0});
-
-    const clerk=human(color);
-    clerk.position.set(x,.15,21.6);
-    clerk.rotation.y=Math.PI;
-  }
-}
-
-function addExpansion(level,animate=false) {
-  if (level<=stageBuilt) return;
-
-  for (let k=stageBuilt+1;k<=level;k++) {
-    const g=new THREE.Group();
-    city.add(g);
-    buildingStages[k]=g;
-    const x=6.5+(k-1)*3;
-
-    box(3,.18,11,0xdad5c4,x+1.5,.04,0,g);
-    box(3,3.4,.14,0xb9c4c8,x+1.5,1.8,-5.5,g);
-    box(3,.25,.2,0x17324f,x+1.5,2.8,5.5,g);
-
-    /* 每個新區都有牆，並保留橫向門洞。 */
-    box(.14,3.4,7.5,0xc7d0cd,x+3,1.8,-1.75,g);
-    box(.14,3.4,1.5,0xc7d0cd,x+3,1.8,4.75,g);
-    box(.14,.6,2,0xc7d0cd,x+3,3.2,3,g);
-    box(3,2.5,.15,0x89a8b1,x+1.5,1.4,5.5,g);
-
-    if (k!==10) {
-      box(1.8,1.1,1.1,k%2?0x41687d:0x9caeae,x+1.5,.72,-3,g);
-      for (let j=0;j<4;j++) {
-        box(
-          .25,.35,.3,
-          [0xe2b66c,0x9cbd79,0xa5cbdb,0xd6947b][j],
-          x+.9+j*.38,1.45,-3,g
-        );
-      }
-      if (k>=4) {
-        box(1.7,.12,.8,0xb68c61,x+1.5,1,-.5,g);
-        box(.5,.4,.1,0x293a49,x+1.5,1.25,-.6,g);
-      }
-    }
-
-    moveLabelToGroup(
-      label(expansionNames[k-1],2.8,.45,x+1.5,2.3,-5.35),g
-    );
-
-    if (k===7) {
-      box(2,1.5,3,0xd9e2e3,x+1.5,.9,7.5,g);
-      box(2,1.2,1,0x244969,x+1.5,.7,9,g);
-    }
-
-    if (k===10) {
-      for (let floor=0;floor<5;floor++) {
-        box(12,.25,10,0xd0d7d9,18,floor*3.3+.3,-18,g);
-        box(12,2.9,.2,0x234763,18,floor*3.3+1.8,-23,g);
-        box(.2,2.9,10,0x718996,12,floor*3.3+1.8,-18,g);
-        box(.2,2.9,10,0x718996,24,floor*3.3+1.8,-18,g);
-        for (let j=0;j<6;j++) {
-          box(1.65,2,.12,0x91b6c9,13+j*2,floor*3.3+1.8,-12.95,g);
-        }
-        moveLabelToGroup(label(
-          ['1F 旗艦門市','2F 營運與人才','3F 商品研發',
-           '4F 物流與品管','5F 集團管理'][floor],
-          9,.6,18,floor*3.3+2.3,-12.8
-        ),g);
-      }
-      moveLabelToGroup(
-        label('7-10 seven ten 集團總部',13,1,18,17.4,-12.8),g
-      );
-    }
-
-    const district=new THREE.Group();
-    city.add(district);
-    districtStages[k]=district;
-    box(9,.12,18,0x9caaa6,-10-k*5,-.08,-2,district);
-    for (let j=0;j<2;j++) {
-      box(3,3+j*2,4,0x7d919b,-10-k*5,1.5+j,-5+j*10,district);
-    }
-
-    g.scale.y=animate&&k===level ? .01 : 1;
-  }
-
-  stageBuilt=level;
-  scene.fog.near=28+level*3;
-  scene.fog.far=65+level*8;
-  if (level>=2) makeRivals();
-}
-
-addExpansion(state.chapter);
-
-function readyForChapter(c) {
-  return state.playTime-state.chapterStart>=c.minutes*60 &&
-    state.sales>=c.sales &&
-    state.cash>=c.cash;
-}
-
-function showStory() {
-  if (!active || cinematic) return;
-  stopMovement();
-  const c=chapters[state.chapter];
-  $('storyTitle').textContent=c
-    ? `第 ${state.chapter+1} 章・${c.title}`
-    : 'seven ten 集團成立';
-  $('storyChoices').replaceChildren();
-
-  if (!c) {
-    $('storyText').textContent=
-      '十個創業轉折已完成！可繼續解鎖40種商品、做小任務、經營分店，並從經營中心進入五層總部。總部與集團玩法目前是簡化版本。';
-  } else {
-    const remaining=Math.max(
-      0,Math.ceil((c.minutes*60-state.playTime+state.chapterStart)/60)
-    );
-    $('storyText').textContent=
-      c.text+
-      `\n本章需營業 ${c.minutes} 分鐘，還需約 ${remaining} 分鐘。`+
-      `\n銷量 ${state.sales}/${c.sales} 件。`+
-      `\n完成後擴建：${expansionNames[state.chapter]}。`;
-
-    c.choices.forEach(([name,cost,effect]) => {
-      const b=document.createElement('button');
-      b.textContent=`${name}｜支付 $${cost}`;
-      b.disabled=!readyForChapter(c)||state.cash<cost;
-
-      b.onclick=() => {
-        if (!readyForChapter(c)||state.cash<cost) return;
-        state.cash-=cost;
-        effect();
-        state.history.push(c.title+'：'+name);
-        state.chapter++;
-        state.chapterStart=state.playTime;
-        state.rep=Math.min(100,state.rep);
-
-        addExpansion(state.chapter,true);
-        cinematic={
-          elapsed:0,
-          level:state.chapter,
-          title:c.title
-        };
-
-        story.classList.add('hidden');
-        chapterOverlay.classList.remove('hidden');
-        stopMovement();
-        save();
-      };
-      $('storyChoices').append(b);
+      const t=audio.currentTime+i*.16;
+      g.gain.setValueAtTime(.045,t);
+      g.gain.exponentialRampToValueAtTime(.001,t+.3);
+      o.start(t);
+      o.stop(t+.32);
     });
-  }
-
-  $('storyLog').textContent=
-    `累計銷售 ${state.sales} 件｜資金 $${state.cash}\n`+
-    state.history.join(' → ');
-  story.classList.remove('hidden');
+  }catch(e){}
 }
 
-function storyHUD() {
-  const c=chapters[state.chapter];
-  let text=`長期經營｜章節 ${state.chapter}/10｜商品 ${state.unlocked}/40\n`;
+let toastTimer;
 
-  if (!state.started) {
-    text+='先靠近中央貨架，按「互動／補貨」。\n';
-  }
-
-  if (c) {
-    text+=`下一章：${c.title}\n`+
-      `營業 ${Math.floor((state.playTime-state.chapterStart)/60)}/${c.minutes} 分鐘`+
-      `・銷量 ${state.sales}/${c.sales}\n`+
-      `資金 $${state.cash}/$${c.cash}\n`+
-      (readyForChapter(c)
-        ? '✓ 可以晉級，按「劇情／晉級」。'
-        : '選單、動畫、總部內不累積章節時間。');
-  } else {
-    text+='🏆 五層總部完工！十章通關。';
-  }
-
-  if (state.chapter>=2) {
-    text+='\n對手正在分走部分客流，提高口碑可減輕影響。';
-  }
-
-  $('mission').textContent=text;
+function toast(t){
+  $('toast').textContent=t;
+  $('toast').classList.remove('hidden');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(
+    ()=>$('toast').classList.add('hidden'),
+    2600
+  );
 }
 
-function hud() {
+function hud(){
   $('stats').textContent=
-    `${window.sevenTenPlayerName||'老闆'}｜第 ${state.day} 天`+
-    `｜$${state.cash}｜銷售 ${state.sales}｜口碑 ${Math.floor(state.rep)}`;
+    `${window.sevenTenPlayerName||'老闆'} ｜ 第 ${state.day} 天 ｜ $${state.cash} ｜ 已售 ${state.sales} 件 ｜ 口碑 ${Math.floor(state.rep)}`;
+
+  const next=products[state.unlocked];
+
+  if(!state.started){
+    $('mission').textContent=
+      '快速模式・客流 ×2｜起步目標：靠近中央貨架，按「互動／補貨」。';
+  }else if(next){
+    const ready=state.sales>=next.goal&&state.cash>=next.fee;
+    const progress=Math.round(
+      Math.min(1,state.sales/next.goal)*100
+    );
+
+    $('mission').textContent=
+      `快速模式・客流 ×2｜商品晉級 ${state.unlocked-5}/5\n下一級：解鎖「${next.name}」\n銷售 ${Math.min(state.sales,next.goal)}/${next.goal} 件（${progress}%）｜資金 $${state.cash}/$${next.fee}\n${ready?'✓ 條件達成！打開「商品／進貨」點選解鎖。':`還需售出 ${Math.max(0,next.goal-state.sales)} 件、累積資金 $${Math.max(0,next.fee-state.cash)}。`}\n本版通關目標：解鎖全部 10 種商品。`;
+  }else{
+    $('mission').textContent=
+      '🏆 商品晉級 5/5・本版通關！\n已解鎖全部 10 種商品，可繼續經營。\n十個劇情轉折與集團篇尚未實作。';
+  }
+
   updateGoods();
   storyHUD();
 }
 
-function gate(i) {
-  return i>=27?8:i>=20?6:i>=16?5:i>=13?4:i>=10?3:0;
-}
-
-function orderCost(i) {
-  return Math.ceil(
-    products[i].cost*5*
-    (state.wholesale?.85:1)*
-    (1-(state.research||0)*.03)
-  );
-}
-
-function renderCatalog() {
-  $('catalog').innerHTML=products.map((p,i) => {
+function renderCatalog(){
+  $('catalog').innerHTML=products.map((p,i)=>{
     const unlocked=i<state.unlocked;
     const next=i===state.unlocked;
-    return `
-      <div class="row">
-        <div>
-          <b>${unlocked?'':'🔒 '}${p.name}</b>
-          <small>${
-            unlocked
-            ? `售價 $${p.price}・架上 ${state.stock[i]}・貨箱 ${state.back[i]}`
-            : `售出 ${p.goal} 件・解鎖費 $${p.fee}・劇情 ${gate(i)} 章`+
-              (next?'':'・先解鎖上一項')
-          }</small>
-        </div>
-        <button data-i="${i}" ${!unlocked&&!next?'disabled':''}>
-          ${unlocked?`進貨5件 $${orderCost(i)}`:'解鎖'}
-        </button>
-      </div>
-    `;
+
+    return `<div class="row"><div><b>${unlocked?'':'🔒 '}${p.name}</b><small>${unlocked?`售價 $${p.price} · 架上 ${state.stock[i]} · 貨箱 ${state.back[i]}`:`售出 ${p.goal} 件商品 · 解鎖費 $${p.fee} · 劇情 ${gate(i)} 章${next?'':' · 須先解鎖上一項'}`}</small></div><button data-i="${i}" ${!unlocked&&!next?'disabled':''}>${unlocked?`進貨 5 件 $${orderCost(i)}`:'解鎖'}</button></div>`;
   }).join('');
 
-  $('catalog').querySelectorAll('button').forEach(b => {
-    b.onclick=() => {
-      const i=Number(b.dataset.i);
+  $('catalog').querySelectorAll('button').forEach(b=>{
+    b.onclick=()=>{
+      const i=+b.dataset.i;
       const p=products[i];
 
-      if (i<state.unlocked) {
-        const cost=orderCost(i);
-        if (state.cash<cost) return toast('資金不足，先販售現有商品。');
-        state.cash-=cost;
+      if(i<state.unlocked){
+        if(state.cash<orderCost(i)){
+          return toast('資金不足，先販售現有商品。');
+        }
+        state.cash-=orderCost(i);
         state.back[i]+=5;
-        toast('已送到貨箱，記得補貨。');
-      } else {
-        if (state.chapter<gate(i)) {
+        toast('已送到貨箱，記得靠近貨架補貨。');
+      }else{
+        if(state.chapter<gate(i)){
           return toast(`請先完成第 ${gate(i)} 章劇情。`);
         }
-        if (i!==state.unlocked||state.sales<p.goal) {
+        if(i!==state.unlocked||state.sales<p.goal){
           return toast(`需要先售出 ${p.goal} 件商品。`);
         }
-        if (state.cash<p.fee) return toast('解鎖資金不足。');
+        if(state.cash<p.fee){
+          return toast('解鎖資金不足。');
+        }
+
         state.cash-=p.fee;
         state.unlocked++;
         toast(`新品解鎖：${p.name}！現在可以進貨。`);
@@ -1363,189 +560,236 @@ function renderCatalog() {
   });
 }
 
-$('openShop').onclick=() => {
-  if (!active||cinematic) return;
-  stopMovement();
+$('openShop').onclick=()=>{
+  if(!active||cinematic)return;
   $('shop').classList.remove('hidden');
+  joy.x=joy.y=0;
   renderCatalog();
 };
-$('closeShop').onclick=() => $('shop').classList.add('hidden');
 
-$('reset').onclick=() => {
-  if (!confirm('清除目前自動進度並重新開始？獨立手動存檔仍會保留。')) return;
-  try {
-    loadingSave=true;
-    localStorage.removeItem(AUTO_KEY);
+$('closeShop').onclick=()=>{
+  $('shop').classList.add('hidden');
+};
+
+$('reset').onclick=()=>{
+  if(confirm('確定清除這個瀏覽器的原型進度？')){
+    try{
+      localStorage.removeItem('seven-ten-v1');
+    }catch(e){}
     location.reload();
-  } catch(e) {
-    loadingSave=false;
-    toast('無法清除本機進度。');
   }
 };
 
-function interact() {
-  if (!active||cinematic||menusOpen()) return;
-  if (floorNow) {
-    tab='總部';
-    panel.classList.remove('hidden');
-    stopMovement();
-    renderManage();
-    return;
-  }
+$('interact').onclick=interact;
+
+function interact(){
+  if(
+    !active||
+    cinematic||
+    !$('story').classList.contains('hidden')||
+    !$('shop').classList.contains('hidden')
+  )return;
 
   const p=player.position;
 
-  if (state.chapter>=2) {
-    for (const [x,name] of [
-      [-13,'home mert 我家便利商店'],
-      [-25,'helloleave 便利商店']
-    ]) {
-      if (Math.abs(p.x-x)<4.1&&p.z>16.2&&p.z<21.6) {
-        return toast(`${name}：可參觀陳列；目前尚未開放購物。`);
+  if(Math.abs(p.x)<3.8&&p.z<3.3&&p.z>-4.5){
+    let n=0;
+
+    for(let i=0;i<state.unlocked;i++){
+      const take=Math.min(state.back[i],15-state.stock[i]);
+      if(take>0){
+        state.back[i]-=take;
+        state.stock[i]+=take;
+        n+=take;
       }
     }
-  }
 
-  if (Math.abs(p.x)<3.8&&p.z<3.3&&p.z>-4.5) {
-    let count=0;
-    for (let i=0;i<state.unlocked;i++) {
-      const take=Math.max(0,Math.min(state.back[i],15-state.stock[i]));
-      state.back[i]-=take;
-      state.stock[i]+=take;
-      count+=take;
-    }
-    if (count) {
-      state.manualRestock+=count;
+    if(n){
+      state.manualRestock=(state.manualRestock||0)+n;
       state.started=true;
-      toast(`已補上 ${count} 件商品！`);
+      toast(`已補上 ${n} 件商品！顧客可以選購了。`);
       save();
       hud();
-    } else {
-      toast('沒有可補的商品。先進貨，或等貨架空出。');
+    }else{
+      toast('目前沒有可補的商品，請先進貨，或等待貨架空出。');
     }
-  } else if (p.distanceTo(new THREE.Vector3(-4.5,.15,2.6))<2) {
-    toast('顧客會自動結帳，收入直接入帳。');
-  } else {
-    toast('請靠近中央貨架補貨。');
+  }else if(
+    p.distanceTo(new THREE.Vector3(-4.5,.15,2.6))<2
+  ){
+    toast('原型使用自動收銀，顧客結帳後收入會入帳。');
+  }else{
+    toast('請走近店內中央貨架再按補貨。');
   }
 }
-$('interact').onclick=interact;
-$('cameraBtn').onclick=() => {yaw=0;pitch=.74;};
 
-function begin() {
-  try {speechSynthesis.cancel();} catch(e) {}
+$('cameraBtn').onclick=()=>{
+  yaw=0;
+  pitch=.74;
+};
+
+function begin(){
+  try{
+    speechSynthesis.cancel();
+  }catch(e){}
+
   introAnimating=false;
   active=true;
   $('intro').classList.add('hidden');
   hud();
-  toast(state.started
-    ? '歡迎回到 seven ten！'
-    : '走到中央貨架，按「互動／補貨」。');
+
+  toast(
+    state.started
+      ?'歡迎回到 seven ten！'
+      :'走到中央貨架旁，補上第一批商品。'
+  );
 }
 
 $('skip').onclick=begin;
-$('start').onclick=() => {
-  if (introAnimating) return begin();
+
+$('start').onclick=()=>{
+  if(introAnimating){
+    begin();
+    return;
+  }
+
   introAnimating=true;
   introTime=0;
   $('start').textContent='進入便利店';
   $('intro').style.background='#08142480';
   $('introNote').textContent='而現在，從這間小店開始。';
-  try {
-    const speech=new SpeechSynthesisUtterance(
-      $('introText').textContent.trim()
+
+  try{
+    const s=new SpeechSynthesisUtterance(
+      $('introText').textContent
     );
-    speech.lang='zh-TW';
-    speech.rate=.9;
-    speechSynthesis.speak(speech);
-  } catch(e) {}
+    s.lang='zh-TW';
+    s.rate=.9;
+    speechSynthesis.speak(s);
+  }catch(e){}
 };
 
-window.addEventListener('keydown',e => {
-  if (e.target instanceof HTMLInputElement||!active||menusOpen()) return;
+window.addEventListener('keydown',e=>{
+  if(e.target instanceof HTMLInputElement||!active)return;
+
   keys[e.code]=true;
-  if (e.code==='KeyE') interact();
-  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code)) {
+  if(e.code==='KeyE')interact();
+
+  if(
+    ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space']
+      .includes(e.code)
+  ){
     e.preventDefault();
   }
 });
-window.addEventListener('keyup',e => {keys[e.code]=false;});
-window.addEventListener('blur',() => {stopMovement();save();});
-document.addEventListener('visibilitychange',() => {
-  if (document.hidden) {stopMovement();save();}
+
+window.addEventListener('keyup',e=>{
+  keys[e.code]=false;
 });
 
-let stickPointer=null;
-let lookPointer=null;
-let lastX=0;
-let lastY=0;
+window.addEventListener('blur',()=>{
+  for(const k in keys)keys[k]=false;
+  joy.x=joy.y=0;
+  save();
+});
 
-function moveStick(e) {
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden)save();
+});
+
+$('stick').addEventListener('pointerdown',e=>{
+  stickPointer=e.pointerId;
+  $('stick').setPointerCapture(e.pointerId);
+  moveStick(e);
+});
+
+$('stick').addEventListener('pointermove',e=>{
+  if(e.pointerId===stickPointer)moveStick(e);
+});
+
+function moveStick(e){
   const r=$('stick').getBoundingClientRect();
   let x=e.clientX-r.left-r.width/2;
   let y=e.clientY-r.top-r.height/2;
-  const length=Math.hypot(x,y);
+  const len=Math.hypot(x,y);
   const max=r.width*.32;
-  if (length>max) {x*=max/length;y*=max/length;}
+
+  if(len>max){
+    x*=max/len;
+    y*=max/len;
+  }
+
   joy.x=x/max;
   joy.y=y/max;
   $('knob').style.transform=`translate(${x}px,${y}px)`;
 }
 
-$('stick').addEventListener('pointerdown',e => {
-  stickPointer=e.pointerId;
-  $('stick').setPointerCapture(e.pointerId);
-  moveStick(e);
-});
-$('stick').addEventListener('pointermove',e => {
-  if (e.pointerId===stickPointer) moveStick(e);
-});
-function stopStick() {
+function stopStick(){
   stickPointer=null;
-  joy.x=0;
-  joy.y=0;
+  joy.x=joy.y=0;
   $('knob').style.transform='';
 }
+
 $('stick').addEventListener('pointerup',stopStick);
 $('stick').addEventListener('pointercancel',stopStick);
 
-renderer.domElement.addEventListener('pointerdown',e => {
+renderer.domElement.addEventListener('pointerdown',e=>{
   lookPointer=e.pointerId;
   lastX=e.clientX;
   lastY=e.clientY;
   renderer.domElement.setPointerCapture(e.pointerId);
 });
-renderer.domElement.addEventListener('pointermove',e => {
-  if (e.pointerId!==lookPointer) return;
-  yaw-=(e.clientX-lastX)*.007;
-  pitch=THREE.MathUtils.clamp(
-    pitch+(e.clientY-lastY)*.005,.18,1.35
-  );
-  lastX=e.clientX;
-  lastY=e.clientY;
-});
-renderer.domElement.addEventListener('pointerup',() => {lookPointer=null;});
-renderer.domElement.addEventListener('pointercancel',() => {lookPointer=null;});
 
-function walk(n,target,dt) {
-  const direction=target.clone().sub(n.g.position);
-  direction.y=0;
-  const length=direction.length();
-  if (length<.09) return true;
-  direction.normalize();
-  n.g.position.addScaledVector(direction,Math.min(length,dt*1.65));
-  n.g.rotation.y=Math.atan2(direction.x,direction.z);
-  n.walk+=dt*7;
-  n.g.legs[0].rotation.x=Math.sin(n.walk)*.32;
-  n.g.legs[1].rotation.x=-Math.sin(n.walk)*.32;
-  return false;
+renderer.domElement.addEventListener('pointermove',e=>{
+  if(e.pointerId===lookPointer){
+    yaw-=(e.clientX-lastX)*.007;
+    pitch=THREE.MathUtils.clamp(
+      pitch+(e.clientY-lastY)*.005,
+      .18,
+      1.35
+    );
+    lastX=e.clientX;
+    lastY=e.clientY;
+  }
+});
+
+renderer.domElement.addEventListener('pointerup',()=>{
+  lookPointer=null;
+});
+
+renderer.domElement.addEventListener('pointercancel',()=>{
+  lookPointer=null;
+});
+
+function valid(x,z,old){
+  if(x< -6.1||x>6.1||z< -5.05||z>8.5)return false;
+
+  if(
+    (old.z-5.5)*(z-5.5)<=0&&
+    (Math.abs(x)>1.25||doorOpen<.75)
+  )return false;
+
+  if(z>5.12&&z<5.85&&Math.abs(x)>1.25)return false;
+
+  if(
+    z<2&&z>-3.6&&
+    shelves.some(s=>Math.abs(x-s)<.98)
+  )return false;
+
+  if(x< -2.7&&z>2&&z<3.95)return false;
+  if(x< -3.7&&z< -3.1)return false;
+  if(x>3.2&&z< -4)return false;
+
+  return true;
 }
 
-function spawn() {
+function spawn(){
   const g=human(
-    [0xa0644e,0x5b826b,0x797799,0xc39e52][Math.floor(Math.random()*4)]
+    [0xa0644e,0x5b826b,0x797799,0xc39e52]
+      [Math.floor(Math.random()*4)]
   );
+
   g.position.set(0,.15,8.3);
+
   npcs.push({
     g,
     stage:'enter',
@@ -1556,98 +800,84 @@ function spawn() {
   });
 }
 
-function hour() {
-  return Math.floor(state.seconds/180*24)%24;
-}
-function rainy() {
-  return state.day%3===0;
-}
-function eventType() {
-  if (state.chapter<2) return -1;
-  return Math.floor(state.playTime/120)%3;
-}
-function marketFactor() {
-  const h=hour();
-  let f=(h>=6&&h<=9||h>=11&&h<=13) ? .8 : h<5 ? 1.35 : 1;
-  if (eventType()===0||eventType()===1) f*=1.15;
-  if (state.campaignUntil>state.playTime) f*=.8;
-  return f;
+function walk(n,target,dt){
+  const d=target.clone().sub(n.g.position);
+  d.y=0;
+  const len=d.length();
+
+  if(len<.09)return true;
+
+  d.normalize();
+  n.g.position.addScaledVector(d,Math.min(len,dt*1.65));
+  n.g.rotation.y=Math.atan2(d.x,d.z);
+  n.walk+=dt*7;
+  n.g.legs[0].rotation.x=Math.sin(n.walk)*.32;
+  n.g.legs[1].rotation.x=-Math.sin(n.walk)*.32;
+
+  return false;
 }
 
-function chooseProduct(ids) {
-  const h=hour();
-  const weights=ids.map(i => {
-    let weight=1;
-    if (rainy()&&i===25) weight=5;
-    if (h>=6&&h<10&&[4,8,9,13,14,16,17].includes(i)) weight=3;
-    if (h>=11&&h<14&&[18,19,30,31].includes(i)) weight=3;
-    return weight;
-  });
-
-  let pick=Math.random()*weights.reduce((a,b)=>a+b,0);
-  for (let j=0;j<ids.length;j++) {
-    pick-=weights[j];
-    if (pick<=0) return ids[j];
-  }
-  return ids[0];
-}
-
-function customers(dt) {
+function customers(dt){
   spawnClock-=dt;
 
-  if (state.started&&spawnClock<=0&&npcs.length<16) {
+  if(state.started&&spawnClock<=0&&npcs.length<16){
     spawn();
     spawnClock=
       (Math.max(3,12-state.rep*.16-state.sales*.035)+Math.random()*2)/2*
-      (state.chapter>=2 ? 1.65-state.rep*.003 : 1)*
+      (state.chapter>=2?(1.65-state.rep*.003):1)*
       marketFactor();
   }
 
-  for (let i=npcs.length-1;i>=0;i--) {
+  for(let i=npcs.length-1;i>=0;i--){
     const n=npcs[i];
 
-    if (n.stage==='enter') {
-      if (n.g.position.z>5.7&&doorOpen<.8) continue;
-      if (walk(n,n.target,dt)) {
+    if(n.stage==='enter'){
+      if(n.g.position.z>5.7&&doorOpen<.8)continue;
+
+      if(walk(n,n.target,dt)){
         n.stage='browse';
         n.target.set(.35,.15,-2+Math.random()*3);
       }
-    } else if (n.stage==='browse') {
-      if (walk(n,n.target,dt)) {
+    }else if(n.stage==='browse'){
+      if(walk(n,n.target,dt)){
         n.timer+=dt;
-        if (n.timer>2) {
-          const available=state.stock
-            .map((value,index)=>value>0?index:-1)
-            .filter(index=>index>=0);
 
-          if (available.length) {
+        if(n.timer>2){
+          const available=state.stock
+            .map((v,j)=>v>0?j:-1)
+            .filter(j=>j>=0);
+
+          if(available.length){
             n.item=chooseProduct(available);
             state.stock[n.item]--;
             n.stage='toCheckout';
             n.target.set(.35,.15,4.3);
             hud();
-          } else {
+          }else{
             n.stage='exit';
             n.target.set(0,.15,4.5);
             state.rep=Math.max(0,state.rep-.2);
           }
         }
       }
-    } else if (n.stage==='toCheckout') {
-      if (walk(n,n.target,dt)) {
+    }else if(n.stage==='toCheckout'){
+      if(walk(n,n.target,dt)){
         n.stage='queue';
         n.timer=0;
       }
-    } else if (n.stage==='queue') {
+    }else if(n.stage==='queue'){
       const queue=npcs.filter(a=>a.stage==='queue');
       const index=queue.indexOf(n);
       const target=new THREE.Vector3(
-        -4.45+Math.min(index,12)*.55,.15,4.3
+        -4.45+Math.min(index,5)*.72,
+        .15,
+        4.3
       );
 
-      if (walk(n,target,dt)&&index===0) {
+      if(walk(n,target,dt)&&index===0){
         n.timer+=dt;
-        if (n.timer>(state.fastCheckout?1:1.3)) {
+
+        if(n.timer>(state.fastCheckout?1:1.3)){
           state.cash+=products[n.item].price+(state.premium?3:0);
           state.sales++;
           state.rep=Math.min(100,state.rep+.8);
@@ -1656,26 +886,818 @@ function customers(dt) {
           hud();
         }
       }
-    } else if (n.stage==='exit') {
-      if (walk(n,n.target,dt)) {
+    }else if(n.stage==='exit'){
+      if(walk(n,n.target,dt)){
         n.stage='outside';
         n.target.set(0,.15,8.4);
       }
-    } else if (n.stage==='outside') {
-      if (n.g.position.z<5.4&&n.g.position.z>4.8&&doorOpen<.8) continue;
-      if (walk(n,n.target,dt)) {
+    }else if(n.stage==='outside'){
+      if(
+        n.g.position.z<5.4&&
+        n.g.position.z>4.8&&
+        doorOpen<.8
+      )continue;
+
+      if(walk(n,n.target,dt)){
         scene.remove(n.g);
-        disposeObject(n.g);
+        n.g.traverse(o=>{
+          if(o.isMesh){
+            o.geometry.dispose();
+            o.material.dispose();
+          }
+        });
         npcs.splice(i,1);
       }
     }
   }
+       }const chapters=[
+  {
+    title:'第一筆救命收入',
+    sales:5,
+    cash:80,
+    text:'首期租金到期。你終於有了第一批客人，現在要選擇如何站穩腳步。',
+    choices:[
+      ['支付租金，穩定開店',80,()=>{
+        state.rep+=3;
+      }],
+      ['整理門面並付租金',120,()=>{
+        state.rep+=8;
+      }]
+    ]
+  },
+  {
+    title:'冰櫃故障危機',
+    sales:12,
+    cash:100,
+    text:'冰櫃溫度異常！必須處理設備，才可以繼續拓展冷藏商品。',
+    choices:[
+      ['維修冰櫃',100,()=>{
+        state.rep+=2;
+      }],
+      ['換成節能冰櫃',170,()=>{
+        state.efficient=true;
+        state.rep+=5;
+      }]
+    ]
+  },
+  {
+    title:'對街出現競爭店',
+    sales:22,
+    cash:100,
+    text:'home mert 我家便利商店推出家庭優惠；helloleave 便利商店以咖啡廣告吸引通勤客。你準備如何回應？',
+    choices:[
+      ['推出社區優惠',100,()=>{
+        state.rep+=12;
+        state.strategy='社區優惠';
+      }],
+      ['建立特色商品形象',150,()=>{
+        state.rep+=7;
+        state.premium=true;
+        state.strategy='特色商品';
+      }]
+    ]
+  },
+  {
+    title:'第一位員工',
+    sales:32,
+    cash:160,
+    text:'補貨和收銀已經忙不過來。聘用第一位員工，讓你開始從店員變成老闆。員工會自動把貨箱內的庫存補上貨架。',
+    choices:[
+      ['聘用補貨員',160,()=>{
+        state.staff=true;
+      }],
+      ['聘用資深店員',240,()=>{
+        state.staff=true;
+        state.fastCheckout=true;
+      }]
+    ]
+  },
+  {
+    title:'第一次企業大訂單',
+    sales:45,
+    cash:180,
+    text:'附近辦公室訂購早餐！方案費用包含專案採購，完成後即交付並結清，不扣門市庫存。',
+    choices:[
+      ['承接標準訂單：成本180／收入400',180,()=>{
+        state.cash+=400;
+        state.rep+=5;
+      }],
+      ['承接加大訂單：成本280／收入620',280,()=>{
+        state.cash+=620;
+        state.rep+=8;
+      }]
+    ]
+  },
+  {
+    title:'第二間店的賭注',
+    sales:60,
+    cash:300,
+    text:'新的店面空了出來。分店以經營數值模擬，每20秒結算淨收益，不提供第二張3D門市場景。',
+    choices:[
+      ['開住宅分店',300,()=>{
+        state.branches++;
+        state.branchRate=45;
+      }],
+      ['開商辦分店',450,()=>{
+        state.branches++;
+        state.branchRate=65;
+      }]
+    ]
+  },
+  {
+    title:'多店缺貨危機',
+    sales:80,
+    cash:240,
+    text:'供應商延遲交貨，你決定建立穩定採購制度。物流會每隔數秒替低庫存商品自動付費訂貨；資金不足就暫停採購。',
+    choices:[
+      ['合作物流配送',240,()=>{
+        state.logistics=true;
+        state.auto=true;
+      }],
+      ['設置中央採購倉庫',360,()=>{
+        state.logistics=true;
+        state.auto=true;
+        state.wholesale=true;
+      }]
+    ]
+  },
+  {
+    title:'自有品牌上市',
+    sales:100,
+    cash:300,
+    text:'供應商漲價，你要研發 seven ten 商品。方案完成後解開自有品牌的劇情限制，各商品仍需逐件解鎖。',
+    choices:[
+      ['平價自有品牌',300,()=>{
+        state.brand=true;
+        state.wholesale=true;
+      }],
+      ['品質優先品牌',420,()=>{
+        state.brand=true;
+        state.premium=true;
+        state.rep+=10;
+      }]
+    ]
+  },
+  {
+    title:'跨區擴張與併購',
+    sales:125,
+    cash:500,
+    text:'另一區有地方連鎖門市出售。選擇收購整頓，或自己展店；新增分店會持續提供模擬淨收益。',
+    choices:[
+      ['收購並整頓兩間店',500,()=>{
+        state.branches+=2;
+        state.rep+=3;
+      }],
+      ['自行建立三間新店',750,()=>{
+        state.branches+=3;
+        state.rep+=7;
+      }]
+    ]
+  },
+  {
+    title:'集團成立考驗',
+    sales:150,
+    cash:600,
+    text:'擴張後遇到資金壓力與食品品質警訊。支付整改費完成批次清查，並建立營運、財務、物流與品管制度。這是集團成立前最後一道考驗。',
+    choices:[
+      ['完成整改與基本部門建置',600,()=>{
+        state.departments=true;
+        state.rep+=10;
+      }],
+      ['全面升級品管與管理團隊',850,()=>{
+        state.departments=true;
+        state.rep+=20;
+        state.branchRate=(state.branchRate||45)+20;
+      }]
+    ]
+  }
+];
+
+const story=document.createElement('div');
+story.id='story';
+story.className='overlay hidden';
+story.innerHTML=
+  '<div class="box">'+
+  '<h1 id="storyTitle"></h1>'+
+  '<p id="storyText"></p>'+
+  '<div id="storyChoices"></div>'+
+  '<p id="storyLog"></p>'+
+  '<button id="storyClose">返回經營</button>'+
+  '</div>';
+document.body.append(story);
+
+const style=document.createElement('style');
+style.textContent=
+  '#story,#story *{touch-action:pan-y}'+
+  '#story .box{overflow-y:auto;-webkit-overflow-scrolling:touch}'+
+  '#storyChoices button{display:block;width:100%;margin:10px 0}'+
+  '#mission{left:12px;right:190px;top:76px;max-width:390px;font-size:11px;max-height:24vh;overflow:hidden;transition:opacity .2s}'+
+  '#mission.folded{max-height:30px;white-space:nowrap;text-overflow:ellipsis;padding:7px 10px}'+
+  '#actions{z-index:5;right:14px;bottom:16px;max-width:170px}'+
+  '#actions button{padding:10px 12px}'+
+  '#objectiveToggle{position:fixed;z-index:5;left:12px;top:44%;padding:7px 10px;font-size:12px;background:#17324f;color:#f2dfb5;border:1px solid #f2dfb566}'+
+  '@media(max-height:480px){#mission{top:66px;right:185px;max-height:23vh}#objectiveToggle{top:39%}}';
+document.head.append(style);
+
+const storyButton=document.createElement('button');
+storyButton.textContent='劇情／晉級';
+$('actions').prepend(storyButton);
+
+const objectiveToggle=document.createElement('button');
+objectiveToggle.id='objectiveToggle';
+objectiveToggle.textContent='展開目標';
+$('mission').classList.add('folded');
+document.body.append(objectiveToggle);
+
+objectiveToggle.onclick=()=>{
+  const folded=$('mission').classList.toggle('folded');
+  objectiveToggle.textContent=folded?'展開目標':'收合目標';
+};
+
+let announced=-1,operationTimer=0;
+
+function storyHUD(){
+  const c=chapters[state.chapter];
+
+  let lines=
+    `快速模式・客流 ×2｜劇情 ${state.chapter}/10｜門市 ${state.branches} 間\n`;
+
+  if(c){
+    lines+=
+      `下一章：${c.title}\n`+
+      `銷售 ${Math.min(state.sales,c.sales)}/${c.sales} 件｜資金 $${state.cash}/$${c.cash}\n`+
+      `${state.sales>=c.sales&&state.cash>=c.cash?'✓ 可晉級！按「劇情／晉級」選方案。':'繼續銷售、補貨與累積資金。'}\n`;
+  }else{
+    lines+='🏆 十章完成！seven ten 集團正式成立。\n';
+  }
+
+  const p=products[state.unlocked];
+
+  lines+=p
+    ?`商品 ${state.unlocked}/40｜下一件：${p.name}（銷售${p.goal}／$${p.fee}）`
+    :'商品 40/40：圖鑑完成！';
+
+  $('mission').textContent=lines;
 }
 
-function newTask() {
+function showStory(){
+  if(!active)return;
+
+  joy.x=joy.y=0;
+  const c=chapters[state.chapter];
+
+  $('storyTitle').textContent=c
+    ?`第 ${state.chapter+1} 章・${c.title}`
+    :'seven ten 集團成立';
+
+  $('storyText').textContent=c
+    ?c.text
+    :'你完成了十個創業轉折！現在可以繼續解鎖40種商品、經營現有門市。完整九大集團自由經營系統與新3D場景仍屬後續開發內容。';
+
+  $('storyChoices').replaceChildren();
+
+  if(c){
+    c.choices.forEach(([label,cost,effect])=>{
+      const b=document.createElement('button');
+      b.textContent=label+` ｜支付 $${cost}`;
+      b.disabled=state.sales<c.sales||state.cash<cost;
+      b.style.opacity=b.disabled?.5:1;
+
+      b.onclick=()=>{
+        if(state.sales<c.sales||state.cash<cost)return;
+
+        state.cash-=cost;
+        effect();
+        state.chapter++;
+        state.rep=Math.min(100,state.rep);
+        state.history??=[];
+        state.history.push(`${c.title}：${label}`);
+
+        save();
+        hud();
+        storyHUD();
+        $('story').classList.add('hidden');
+
+        toast(
+          state.chapter===10
+            ?'🏆 十章通關，seven ten 集團成立！'
+            :`章節完成：${c.title}`
+        );
+      };
+
+      $('storyChoices').append(b);
+    });
+  }
+
+  $('storyLog').textContent=
+    `累計銷售 ${state.sales} 件・可用資金 $${state.cash}\n`+
+    (state.history||[]).join(' → ');
+
+  $('story').classList.remove('hidden');
+}
+
+storyButton.onclick=showStory;
+$('storyClose').onclick=()=>{
+  $('story').classList.add('hidden');
+};
+
+function operations(dt){
+  operationTimer+=dt;
+  state.branchTimer+=dt;
+
+  if(state.branchTimer>=20){
+    state.branchTimer=0;
+    if(state.branches>1){
+      state.cash+=(state.branches-1)*(state.branchRate||45);
+    }
+  }
+
+  if(operationTimer>=4){
+    operationTimer=0;
+
+    for(let i=0;i<state.unlocked;i++){
+      if(state.auto&&state.stock[i]+state.back[i]<3){
+        const cost=orderCost(i);
+
+        if(state.cash>=cost){
+          state.cash-=cost;
+          state.back[i]+=5;
+        }
+      }
+
+      if(
+        state.staff&&
+        !(
+          state.task?.type===1&&
+          state.manualRestock-state.task.baseRestock<state.task.restock
+        )
+      ){
+        const n=Math.min(state.back[i],15-state.stock[i]);
+
+        if(n>0){
+          state.back[i]-=n;
+          state.stock[i]+=n;
+        }
+      }
+    }
+
+    hud();
+  }
+
+  const c=chapters[state.chapter];
+
+  if(
+    c&&
+    state.sales>=c.sales&&
+    state.cash>=c.cash&&
+    announced!==state.chapter
+  ){
+    announced=state.chapter;
+    toast(`新劇情可進行：${c.title}！按「劇情／晉級」。`);
+  }
+
+  storyHUD();
+}
+
+function orderCost(i){
+  return Math.ceil(
+    products[i].cost*5*
+    (state.wholesale?.85:1)*
+    (1-(state.research||0)*.03)
+  );
+}
+
+function gate(i){
+  return i>=27?7:i>=20?6:i>=16?5:i>=13?4:i>=10?3:0;
+}
+
+// V5: long progression, chapter cinematics, expanding district.
+state.playTime??=0;
+state.chapterStart??=state.playTime;
+
+let cinematic=null;
+
+const chapterMinutes=[3,5,7,9,11,13,15,17,19,21];
+const chapterSales=[60,160,300,500,760,1080,1460,1900,2400,3000];
+const chapterCash=[400,800,1400,2200,3200,4500,6000,8000,10500,14000];
+
+chapters.forEach((c,i)=>{
+  const old=c.cash;
+  c.sales=chapterSales[i];
+  c.cash=chapterCash[i];
+  c.minutes=chapterMinutes[i];
+
+  c.choices=c.choices.map(([name,cost,effect])=>[
+    name
+      .replace(/成本180／收入400/,'收入按方案結算')
+      .replace(/成本280／收入620/,'收入按方案結算'),
+    Math.round(cost/old*c.cash),
+    ()=>{
+      effect();
+      if(i===4)state.cash+=c.cash*2;
+    }
+  ]);
+});const expansionNames=[
+  '新增飲料貨架與休息區',
+  '冷藏設備區',
+  '商圈與兩間競爭門市',
+  '員工工作區',
+  '企業訂單出貨區',
+  '連鎖營運辦公區',
+  '物流倉庫與配送車',
+  '自有品牌展示與研發區',
+  '跨區營運園區',
+  '十一層 seven ten 集團總部'
+];
+
+box(150,.12,85,0x697474,-20,-.3,0);
+
+const city=new THREE.Group();
+scene.add(city);
+
+const buildingStages=[];
+const mapStages=[];
+let stageBuilt=0;
+const stageMaterials=[];
+
+function cityLabel(t,w,h,x,y,z){
+  const m=label(t,w,h,x,y,z);
+  scene.remove(m);
+  city.add(m);
+  return m;
+}
+
+function addExpansion(level,animate=false){
+  if(level<=stageBuilt)return;
+
+  for(let k=stageBuilt+1;k<=level;k++){
+    const g=new THREE.Group();
+    city.add(g);
+    buildingStages[k]=g;
+
+    const x=6.5+(k-1)*3;
+
+    box(3,.18,11,0xdad5c4,x+1.5,.04,0,g);
+    box(3,2.5,.14,0xb9c4c8,x+1.5,1.35,-5.5,g);
+    box(3,.25,.2,0x17324f,x+1.5,2.8,5.5,g);
+
+    if(k!==10){
+      box(
+        1.8,1.1,1.1,
+        k%2?0x41687d:0x9caeae,
+        x+1.5,.72,-3,g
+      );
+
+      for(let j=0;j<4;j++){
+        box(
+          .25,.35,.3,
+          [0xe2b66c,0x9cbd79,0xa5cbdb,0xd6947b][j],
+          x+.9+j*.38,1.45,-3,g
+        );
+      }
+
+      if(k>=4){
+        box(1.7,.12,.8,0xb68c61,x+1.5,1,1,g);
+        box(.5,.4,.1,0x293a49,x+1.5,1.25,.9,g);
+      }
+    }
+
+    const sign=label(
+      expansionNames[k-1],
+      2.8,.45,x+1.5,2.3,-5.35
+    );
+    scene.remove(sign);
+    g.add(sign);
+
+    if(k===7){
+      box(2,1.5,3,0xd9e2e3,x+1.5,.9,7,g);
+      box(2,1.2,1,0x244969,x+1.5,.7,9,g);
+    }
+
+    if(k===10){
+      for(let floor=0;floor<5;floor++){
+        box(
+          12,.25,10,0xd0d7d9,
+          18,floor*3.3+.3,-18,g
+        );
+        box(
+          12,2.9,.2,0x234763,
+          18,floor*3.3+1.8,-23,g
+        );
+        box(
+          .2,2.9,10,0x718996,
+          12,floor*3.3+1.8,-18,g
+        );
+
+        for(let j=0;j<6;j++){
+          box(
+            1.65,2,.12,0x91b6c9,
+            13+j*2,floor*3.3+1.8,-12.95,g
+          );
+        }
+
+        const s=label(
+          [
+            '1F 旗艦門市',
+            '2F 營運與人才',
+            '3F 商品研發',
+            '4F 物流與品管',
+            '5F 集團管理'
+          ][floor],
+          9,.6,18,floor*3.3+2.3,-12.8
+        );
+        scene.remove(s);
+        g.add(s);
+      }
+
+      const s=label(
+        '7-10 seven ten 集團總部',
+        13,1,18,17.4,-12.8
+      );
+      scene.remove(s);
+      g.add(s);
+    }
+
+    const district=new THREE.Group();
+    city.add(district);
+    mapStages[k]=district;
+
+    box(
+      9,.12,18,0x9caaa6,
+      -10-k*5,-.08,-2,district
+    );
+
+    for(let j=0;j<2;j++){
+      box(
+        3,3+j*2,4,0x7d919b,
+        -10-k*5,1.5+j,-5+j*10,district
+      );
+    }
+
+    g.scale.y=animate&&k===level?.01:1;
+  }
+
+  stageBuilt=level;
+  scene.fog.far=65+level*8;
+  scene.fog.near=28+level*3;
+
+  if(level>=2)makeRivals();
+}
+
+let rivalsBuilt=false;
+
+function makeRivals(){
+  if(rivalsBuilt)return;
+  rivalsBuilt=true;
+
+  for(const [name,x,color] of [
+    ['home mert 我家便利商店',-13,0xca884a],
+    ['helloleave 便利商店',-25,0x4c9c91]
+  ]){
+    box(9,.2,7,0xd6d5cb,x,.1,17);
+    box(9,3.4,.15,0xced6d4,x,1.8,22);
+    box(.15,3.4,6,0xced6d4,x-4.5,1.8,19);
+    box(.15,3.4,6,0xced6d4,x+4.5,1.8,19);
+
+    for(const side of [-1,1]){
+      box(
+        3.5,3,.15,0xced6d4,
+        x+side*2.75,1.6,16
+      );
+    }
+
+    for(const sx of [-2.5,2.5]){
+      box(1.1,1.3,2.5,color,x+sx,.8,19);
+
+      for(let j=0;j<4;j++){
+        box(
+          .25,.35,.3,0xe2c18a,
+          x+sx,1.65,18.2+j*.5
+        );
+      }
+    }
+
+    box(2,1,1,color,x,.7,21);
+    box(9,.7,.25,color,x,3.4,15.9);
+
+    const rivalSign=cityLabel(
+      name,8,.65,x,3.4,15.72
+    );
+    rivalSign.rotation.y=Math.PI;
+
+    for(const dx of [-2.7,2.7]){
+      box(
+        2.5,2,.1,0x7fabb8,
+        x+dx,1.6,15.85
+      );
+    }
+
+    const rd=box(
+      1.6,2.5,.12,0x83b5c5,
+      x,1.4,15.8
+    );
+    rd.material.transparent=true;
+    rd.material.opacity=.35;
+    rd.userData.rivalDoorX=x;
+  }
+
+  for(let j=0;j<6;j++){
+    const h=human(j%2?0xca884a:0x4c9c91);
+    h.position.set(
+      -13-(j%2)*12+(j%3-1),
+      .15,
+      13+j*.25
+    );
+    h.userData.rival=true;
+  }
+}
+
+addExpansion(state.chapter);
+
+const chapterOverlay=document.createElement('div');
+chapterOverlay.className='hud hidden';
+chapterOverlay.style.cssText=
+  'position:fixed;left:15%;right:15%;bottom:25px;'+
+  'text-align:center;z-index:14';
+document.body.append(chapterOverlay);
+
+function readyForChapter(c){
+  return (
+    state.playTime-state.chapterStart>=c.minutes*60&&
+    state.sales>=c.sales&&
+    state.cash>=c.cash
+  );
+}
+
+const oldShowStory=showStory;
+
+showStory=function(){
+  if(cinematic)return;
+
+  oldShowStory();
+
+  const c=chapters[state.chapter];
+  if(!c)return;
+
+  const remain=Math.max(
+    0,
+    Math.ceil(
+      (c.minutes*60-state.playTime+state.chapterStart)/60
+    )
+  );
+
+  $('storyText').textContent=
+    c.text+
+    `\n本章需實際營業 ${c.minutes} 分鐘，目前還需約 ${remain} 分鐘。完成後擴建：${expansionNames[state.chapter]}。`;
+
+  $('storyChoices').querySelectorAll('button').forEach((b,i)=>{
+    const option=c.choices[i];
+
+    b.textContent=option[0]+` ｜支付 $${option[1]}`;
+    b.disabled=!readyForChapter(c)||state.cash<option[1];
+    b.style.opacity=b.disabled?.5:1;
+
+    b.onclick=()=>{
+      if(!readyForChapter(c)||state.cash<option[1])return;
+
+      state.cash-=option[1];
+      option[2]();
+
+      state.history??=[];
+      state.history.push(c.title+'：'+option[0]);
+      state.chapter++;
+      state.chapterStart=state.playTime;
+      state.rep=Math.min(100,state.rep);
+
+      addExpansion(state.chapter,true);
+
+      cinematic={
+        elapsed:0,
+        level:state.chapter,
+        title:c.title
+      };
+
+      $('story').classList.add('hidden');
+      chapterOverlay.classList.remove('hidden');
+      joy.x=joy.y=0;
+      for(const key in keys)keys[key]=false;
+
+      save();
+    };
+  });
+};
+
+storyButton.onclick=()=>showStory();
+
+const oldStoryHUD=storyHUD;
+
+storyHUD=function(){
+  const c=chapters[state.chapter];
+  const elapsed=state.playTime-state.chapterStart;
+
+  let s=
+    `長期經營｜章節 ${state.chapter}/10｜商品 ${state.unlocked}/40\n`;
+
+  if(c){
+    const m=Math.floor(elapsed/60);
+
+    s+=
+      `下一章：${c.title}\n`+
+      `營業 ${m}/${c.minutes} 分鐘・銷量 ${state.sales}/${c.sales}\n`+
+      `資金 $${state.cash}/$${c.cash}\n`+
+      `${readyForChapter(c)?'✓ 可以晉級，按「劇情／晉級」。':'營業時間只在遊玩時累積，選單／動畫不計時。'}`;
+  }else{
+    s+='🏆 十一層總部完工！十章通關。';
+  }
+
+  if(state.chapter>=2){
+    s+='\n競爭中：兩間對手分走部分客流，提高口碑可減輕影響。';
+  }
+
+  $('mission').textContent=s;
+};
+
+const oldOperations=operations;
+
+operations=function(dt){
+  state.playTime+=dt;
+  announced=state.chapter;
+  oldOperations(dt);
+};
+
+const oldValid=valid;
+
+valid=function(x,z,old){
+  if(state.chapter<1)return oldValid(x,z,old);
+
+  const maxX=6.1+state.chapter*3;
+
+  if(x>6.1&&x<maxX&&z>-5&&z<8.5){
+    if(z<-2.2)return false;
+    return true;
+  }
+
+  if(
+    state.chapter>=1&&
+    (
+      z>8.3||
+      x<-6.3||
+      (state.chapter===10&&z< -5.05)
+    )
+  ){
+    if(
+      x< -13-state.chapter*5||
+      x>maxX||
+      z>27||
+      z<(state.chapter===10?-28:-10)
+    )return false;
+
+    if(
+      state.chapter===10&&
+      x>11&&x<25&&
+      z< -12&&z> -24
+    )return false;
+
+    if(
+      z>15&&z<23&&
+      (Math.abs(x+13)<5||Math.abs(x+25)<5)
+    )return false;
+
+    return true;
+  }
+
+  return oldValid(x,z,old);
+};
+
+// Replace the low right wall with an open passage into added store wings.
+scene.children.forEach(o=>{
+  if(
+    o.isMesh&&
+    o.geometry?.parameters?.width===.18&&
+    o.position.x===6.5
+  ){
+    o.userData.expansionWall=true;
+  }
+});
+
+// V7 management systems; all progress is persisted in the existing save.state.tasksDone??=0;
+state.manualRestock??=0;
+state.regularDone??=0;
+state.friends??=[0,0,0,0];
+state.furniture??=[];
+state.campaignUntil??=0;
+state.training??=0;
+state.research??=0;
+state.quality??=0;
+state.plan??=0;
+let floorNow=0;
+let returnPosition=null;
+
+function newTask(){
   const tier=Math.min(4,Math.floor(state.chapter/2));
+  const type=state.tasksDone%3;
   return {
-    type:state.tasksDone%3,
+    type,
     baseSales:state.sales,
     baseRestock:state.manualRestock,
     baseOrders:state.regularDone,
@@ -1687,128 +1709,201 @@ function newTask() {
     reward:100+tier*45
   };
 }
-state.task ??= newTask();
+state.task??=newTask();
 
-function taskReady() {
+function taskReady(){
   const t=state.task;
-  return state.playTime-t.start>=t.minTime &&
-    state.sales-t.baseSales>=t.target &&
-    (t.type!==1||state.manualRestock-t.baseRestock>=t.restock) &&
-    (t.type!==2||state.regularDone-t.baseOrders>=t.orders);
+  return (
+    state.playTime-t.start>=t.minTime&&
+    state.sales-t.baseSales>=t.target&&
+    (t.type!==1||state.manualRestock-t.baseRestock>=t.restock)&&
+    (t.type!==2||state.regularDone-t.baseOrders>=t.orders)
+  );
 }
 
-function createOrder() {
-  state.order={
-    person:Math.floor(Math.random()*4),
-    item:Math.floor(Math.random()*state.unlocked),
-    qty:3+Math.min(3,Math.floor(state.chapter/3)),
-    created:state.playTime
-  };
+const office=new THREE.Group();
+office.visible=false;
+scene.add(office);
+box(12,.15,10,0xd7d5c8,90,.05,0,office);
+box(12,3,.15,0x829aa8,90,1.6,-5,office);
+
+for(let j=0;j<3;j++){
+  box(1.8,.12,1,0xb58a60,86+j*3,1,-2,office);
+  box(.7,.5,.15,0x273e52,86+j*3,1.3,-2,office);
 }
-if (!state.order || !products[state.order.item]) createOrder();
+
+box(1.6,2.8,.12,0xa3b4bd,94,1.5,-4.8,office);
+
+const officeSign=label('集團總部',8,.7,90,2.6,-4.85);
+scene.remove(officeSign);
+office.add(officeSign);
+
+const floorSigns=[];
+for(let f=1;f<=5;f++){
+  const s=label(
+    [
+      '',
+      '1F 旗艦展示',
+      '2F 營運與人才',
+      '3F 商品研發',
+      '4F 物流與品管',
+      '5F 集團管理'
+    ][f],
+    7,.6,90,2,-4.82
+  );
+  scene.remove(s);
+  office.add(s);
+  s.visible=false;
+  floorSigns[f]=s;
+}
 
 const furnGroup=new THREE.Group();
 scene.add(furnGroup);
 
-function drawFurniture() {
-  while (furnGroup.children.length) {
-    const mesh=furnGroup.children[0];
-    furnGroup.remove(mesh);
-    disposeObject(mesh);
+function drawFurniture(){
+  while(furnGroup.children.length){
+    const m=furnGroup.children.pop();
+    m.parent=null;
+    m.geometry?.dispose();
+    m.material?.dispose();
   }
-  for (const f of state.furniture) {
+  for(const f of state.furniture){
     box(
-      1,f.type===0?1.5:.9,1,
+      1,
+      f.type===0?1.5:.9,
+      1,
       [0x537a94,0xb68c61,0x9ac1b8][f.type],
-      f.x,f.type===0?.9:.6,f.z,furnGroup
+      f.x,
+      f.type===0?.9:.6,
+      f.z,
+      furnGroup
     );
   }
 }
 drawFurniture();
 
-const office=new THREE.Group();
-office.visible=false;
-scene.add(office);
+const panel=document.createElement('div');
+panel.id='management';
+panel.className='overlay hidden';
+panel.innerHTML=
+  '<div class="box">'+
+  '<h1 id="manageTitle">經營中心</h1>'+
+  '<div id="manageTabs"></div>'+
+  '<div id="manageBody"></div>'+
+  '<button id="manageClose">返回遊戲</button>'+
+  '</div>';
+document.body.append(panel);
 
-box(12,.15,10,0xd7d5c8,90,.05,0,office);
-const officeWall=box(12,3,.15,0x829aa8,90,1.6,-5,office);
+const extraStyle=document.createElement('style');
+extraStyle.textContent=
+  '#management,#management *{touch-action:pan-y}'+
+  '#management .box{overflow-y:auto;-webkit-overflow-scrolling:touch}'+
+  '#management button{margin:4px;font-size:13px}'+
+  '#manageBody p{white-space:pre-line}'+
+  '#actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:220px;gap:6px}'+
+  '#mission{right:240px}'+
+  '#worldInfo{position:fixed;left:50%;transform:translateX(-50%);bottom:4px;z-index:3;background:#142b41bb;padding:4px 9px;font-size:11px;pointer-events:none}';
+document.head.append(extraStyle);
 
-for (let j=0;j<3;j++) {
-  box(1.8,.12,1,0xb58a60,86+j*3,1,-2,office);
-  box(.7,.5,.15,0x273e52,86+j*3,1.3,-2,office);
-}
-box(1.6,2.8,.12,0xa3b4bd,94,1.5,-4.8,office);
-moveLabelToGroup(label('集團總部',8,.7,90,2.6,-4.85),office);
-
-const floorNames=[
-  '',
-  '1F 旗艦展示',
-  '2F 營運與人才',
-  '3F 商品研發',
-  '4F 物流與品管',
-  '5F 集團管理'
-];
-const floorSigns=[];
-for (let f=1;f<=5;f++) {
-  const sign=moveLabelToGroup(
-    label(floorNames[f],7,.6,90,2,-4.82),office
-  );
-  sign.visible=false;
-  floorSigns[f]=sign;
-}
-
-function enterFloor(f) {
-  if (f&&state.chapter<10) return;
-
-  if (f&&!floorNow) returnPosition=player.position.clone();
-  floorNow=f;
-  office.visible=Boolean(f);
-  floorSigns.forEach((s,i)=>{if(s)s.visible=i===f;});
-
-  player.position.copy(
-    f ? new THREE.Vector3(90,.15,3)
-      : returnPosition||new THREE.Vector3(0,.15,4)
-  );
-
-  yaw=0;
-  pitch=.74;
-  stopMovement();
-
-  if (f) {
-    officeWall.material.color.setHex(
-      [0,0x527a82,0x788aab,0x79a196,0x9c9383,0x536b82][f]
-    );
-    toast(`已抵達 ${floorNames[f]}，可走動或按互動開啟管理。`);
-  }
-
-  panel.classList.add('hidden');
-  updateEnvironment(0);
-}
+const mb=document.createElement('button');
+mb.textContent='經營中心';
+$('actions').prepend(mb);
 
 let tab='任務';
 
-function renderManage() {
+mb.onclick=()=>{
+  if(!active||cinematic)return;
+  joy.x=joy.y=0;
+  panel.classList.remove('hidden');
+  renderManage();
+};
+
+$('manageClose').onclick=()=>{
+  panel.classList.add('hidden');
+};
+
+const worldInfo=document.createElement('div');
+worldInfo.id='worldInfo';
+document.body.append(worldInfo);
+
+function hour(){
+  return Math.floor(state.seconds/180*24);
+}
+
+function rainy(){
+  return state.day%3===0;
+}
+
+function eventType(){
+  if(state.chapter<2)return -1;
+  return Math.floor(state.playTime/120)%3;
+}
+
+function marketFactor(){
+  const h=hour();
+  let f=(h>=6&&h<=9||h>=11&&h<=13)?.8:h<5?1.35:1;
+  f*=eventType()===2?1:1.15;
+  if(state.campaignUntil>state.playTime)f*=.8;
+  return f;
+}
+
+function chooseProduct(ids){
+  const h=hour();
+  const weights=ids.map(i=>{
+    let w=1;
+    if(rainy()&&i===25)w=5;
+    if(h>=6&&h<10&&[4,8,9,13,14,16,17].includes(i))w=3;
+    if(h>=11&&h<14&&[18,19,30,31].includes(i))w=3;
+    return w;
+  });
+
+  let r=Math.random()*weights.reduce((a,b)=>a+b,0);
+  for(let j=0;j<ids.length;j++){
+    r-=weights[j];
+    if(r<=0)return ids[j];
+  }
+  return ids[0];
+}
+
+function createOrder(){
+  const idx=Math.floor(Math.random()*4);
+  const item=Math.floor(Math.random()*state.unlocked);
+  const qty=3+Math.min(3,Math.floor(state.chapter/3));
+  state.order={
+    person:idx,
+    item,
+    qty,
+    created:state.playTime
+  };
+}
+if(!state.order)createOrder();
+
+function renderManage(){
   const body=$('manageBody');
   body.replaceChildren();
   $('manageTabs').replaceChildren();
 
-  for (const name of ['任務','裝潢','競爭','熟客','總部']) {
+  for(const name of ['任務','裝潢','競爭','熟客','總部']){
     const b=document.createElement('button');
     b.textContent=name;
-    b.onclick=()=>{tab=name;renderManage();};
+    b.onclick=()=>{
+      tab=name;
+      renderManage();
+    };
     $('manageTabs').append(b);
   }
 
-  function text(value) {
-    const p=document.createElement('p');
-    p.textContent=value;
-    body.append(p);
+  function p(text){
+    const e=document.createElement('p');
+    e.textContent=text;
+    body.append(e);
   }
 
-  function button(title,fn,disabled=false) {
+  function button(text,fn,disabled=false){
     const b=document.createElement('button');
-    b.textContent=title;
+    b.textContent=text;
     b.disabled=disabled;
+    b.style.opacity=disabled?.45:1;
     b.onclick=()=>{
       fn();
       save();
@@ -1818,25 +1913,26 @@ function renderManage() {
     body.append(b);
   }
 
-  if (tab==='任務') {
+  if(tab==='任務'){
     const t=state.task;
-    text(
+
+    p(
       `第 ${state.tasksDone+1} 個委託｜獎勵 $${t.reward}\n`+
       `銷售：${state.sales-t.baseSales}/${t.target} 件\n`+
       `有效營業：${Math.floor(state.playTime-t.start)}/${t.minTime} 秒`+
-      (t.type===1
-        ? `\n親手補貨：${state.manualRestock-t.baseRestock}/${t.restock} 件`
-        : t.type===2
-          ? `\n熟客訂單：${state.regularDone-t.baseOrders}/${t.orders} 筆`
-          : '\n本次是穩定營業任務。')
+      (
+        t.type===1
+          ?`\n親手補貨：${state.manualRestock-t.baseRestock}/${t.restock} 件`
+          :t.type===2
+            ?`\n熟客訂單：${state.regularDone-t.baseOrders}/${t.orders} 筆`
+            :'\n本次是穩定營業任務。'
+      )
     );
-    text(
-      '無失敗倒數、不扣錢。達標後手動領獎。\n'+
-      '新任務從領獎時重新累積，不能重複使用舊進度。\n'+
-      '親手補貨任務期間，員工暫停自動補貨；完成指定補貨量後恢復。'
-    );
+
+    p('無失敗倒數、不扣錢。每次只接一個任務，達標後手動領獎。新任務從領獎時重新累積，不能重複使用舊進度。補貨任務期間，員工暫停自動補貨，讓你親手完成數量後自動恢復。');
+
     button('領取獎勵',()=>{
-      if (!taskReady()) return;
+      if(!taskReady())return;
       state.cash+=t.reward;
       state.tasksDone++;
       state.task=newTask();
@@ -1844,28 +1940,30 @@ function renderManage() {
     },!taskReady());
   }
 
-  if (tab==='裝潢') {
-    text(
-      '選擇家具放入擴建區安全格位，可以移動或移除。\n'+
-      '目前不支援任意拖曳原有貨架；新增家具採簡化模型。\n'+
-      '購買家具增加少量口碑，移除不退費。'
-    );
+  if(tab==='裝潢'){
+    p('選擇家具，再將它放入擴建區的安全格位。固定保留通道，不阻擋客人；目前不支援任意拖曳舊貨架。新增貨架可提供展示，咖啡台與座位增加少量口碑。');
 
     const slots=Math.min(10,state.chapter);
-    for (let i=0;i<slots;i++) {
-      const existing=state.furniture.find(f=>f.slot===i);
-      text(`擴建格 ${i+1}：${
-        existing?['展示貨架','咖啡台','座位'][existing.type]:'空位'
-      }`);
 
-      if (existing) {
+    for(let i=0;i<slots;i++){
+      const existing=state.furniture.find(f=>f.slot===i);
+
+      p(
+        `擴建格 ${i+1}：${
+          existing
+            ?['展示貨架','咖啡台','座位'][existing.type]
+            :'空位'
+        }`
+      );
+
+      if(existing){
         button('移除（不退費）',()=>{
           state.furniture=state.furniture.filter(f=>f.slot!==i);
           drawFurniture();
         });
 
-        for (let j=0;j<slots;j++) {
-          if (!state.furniture.some(f=>f.slot===j)) {
+        for(let j=0;j<slots;j++){
+          if(!state.furniture.some(f=>f.slot===j)){
             button(`移到格 ${j+1}`,()=>{
               existing.slot=j;
               existing.x=8+j*3;
@@ -1873,53 +1971,60 @@ function renderManage() {
             });
           }
         }
-      } else {
-        for (let type=0;type<3;type++) {
-          const cost=[100,180,120][type];
+      }else{
+        for(let t=0;t<3;t++){
           button(
-            `放置${['展示貨架','咖啡台','座位'][type]} $${cost}`,
+            `放置${['展示貨架','咖啡台','座位'][t]} $${[100,180,120][t]}`,
             ()=>{
-              if (state.cash<cost) return;
+              const cost=[100,180,120][t];
+              if(state.cash<cost)return;
               state.cash-=cost;
               state.furniture.push({
-                slot:i,type,x:8+i*3,z:1
+                slot:i,
+                type:t,
+                x:8+i*3,
+                z:1
               });
               state.rep=Math.min(100,state.rep+2);
               drawFurniture();
             },
-            state.cash<cost
+            state.cash<[100,180,120][t]
           );
         }
       }
     }
-    if (!slots) text('完成第一章擴建後開放擺設。');
+
+    if(!slots)p('完成第一章擴建後開放擺設。');
   }
 
-  if (tab==='競爭') {
-    text(state.chapter<2
-      ? '進入第三章後，兩間競爭門市開始活動。'
-      : [
-        'home mert：家庭會員促銷，客流競爭加劇。',
-        'helloleave：咖啡早餐活動，客流競爭加劇。',
-        '對手促銷休息期。'
-      ][eventType()]
+  if(tab==='競爭'){
+    p(
+      state.chapter<2
+        ?'進入第三章後，競爭門市開始活動。'
+        :[
+          'home mert：家庭會員促銷，客流競爭加劇。',
+          'helloleave：咖啡早餐活動，客流競爭加劇。',
+          '對手促銷休息期。'
+        ][eventType()]
     );
 
-    text(
-      '市場活動每120秒輪替。\n'+
-      `你的促銷剩餘 ${Math.max(
-        0,Math.ceil(state.campaignUntil-state.playTime)
-      )} 秒。\n策略：備足商品、提高口碑、培養熟客。`
+    p(
+      `市場活動每120秒輪替。你的促銷剩餘 ${
+        Math.max(0,Math.ceil(state.campaignUntil-state.playTime))
+      } 秒。\n策略：備足商品、培養熟客、提高口碑。`
     );
 
     button('社區促銷 $120／持續90秒',()=>{
-      if (state.cash<120||state.campaignUntil>state.playTime) return;
       state.cash-=120;
       state.campaignUntil=state.playTime+90;
-    },state.cash<120||state.campaignUntil>state.playTime||state.chapter<2);
+    },
+      state.cash<120||
+      state.campaignUntil>state.playTime||
+      state.chapter<2
+    );
   }
 
-  if (tab==='熟客') {
+  if(tab==='熟客'){
     const o=state.order;
     const names=[
       '早班上班族・小林',
@@ -1927,87 +2032,108 @@ function renderManage() {
       '夜班護理師・雅婷',
       '附近居民・陳阿姨'
     ];
-    const available=state.stock[o.item]+state.back[o.item];
-    const bonus=30+state.friends[o.person]*2;
 
-    text(
-      `${names[o.person]} 想買 ${products[o.item].name} ×${o.qty}\n`+
-      `友好度 ${state.friends[o.person]}｜現有庫存 ${available} 件\n`+
-      `交貨收入 $${products[o.item].price*o.qty}，服務獎金 $${bonus}。`
+    p(
+      names[o.person]+
+      ` 想買 ${products[o.item].name} ×${o.qty}\n`+
+      `友好度 ${state.friends[o.person]}｜貨架＋貨箱 ${state.stock[o.item]+state.back[o.item]} 件\n`+
+      `交貨收入 $${products[o.item].price*o.qty}，服務獎金 $${30+state.friends[o.person]*2}。`
     );
-    text(
-      '訂單無期限，備齊商品後才能交貨，交貨會扣庫存。\n'+
-      '下一位熟客在營業60秒後提出新訂單。'
-    );
+
+    p('訂單無期限，必須備齊實際商品後交付；交付扣庫存。下一位熟客在營業60秒後提出新訂單。');
 
     button('交付訂單',()=>{
-      if (
-        state.playTime<o.created ||
+      if(
+        state.playTime<o.created||
         state.stock[o.item]+state.back[o.item]<o.qty
-      ) return;
+      )return;
 
-      let remaining=o.qty;
-      const shelfTake=Math.min(remaining,state.stock[o.item]);
-      state.stock[o.item]-=shelfTake;
-      remaining-=shelfTake;
-      state.back[o.item]-=remaining;
+      let n=o.qty;
+      const a=Math.min(n,state.stock[o.item]);
+      state.stock[o.item]-=a;
+      n-=a;
+      state.back[o.item]-=n;
 
-      state.cash+=products[o.item].price*o.qty+bonus;
+      state.cash+=
+        products[o.item].price*o.qty+
+        30+
+        state.friends[o.person]*2;
+
       state.sales+=o.qty;
       state.regularDone++;
-      state.friends[o.person]=Math.min(20,state.friends[o.person]+1);
+      state.friends[o.person]=Math.min(
+        20,state.friends[o.person]+1
+      );
       state.rep=Math.min(100,state.rep+1);
 
       createOrder();
       state.order.created=state.playTime+60;
-    },state.playTime<o.created||available<o.qty);
+    },
+      state.playTime<o.created||
+      state.stock[o.item]+state.back[o.item]<o.qty
+    );
 
-    if (state.playTime<o.created) {
-      text(`下一位抵達還需 ${Math.ceil(o.created-state.playTime)} 秒。`);
+    if(state.playTime<o.created){
+      p(`下一位抵達還需 ${Math.ceil(o.created-state.playTime)} 秒。`);
     }
   }
 
-  if (tab==='總部') {
-    text(state.chapter<10
-      ? '第十章完成後開放五層總部。'
-      : '選擇樓層進入簡化3D室內場景。\n各層共用布局，以配色、標示和管理功能區分；不是完整電梯動畫。\n總部內暫停街區營業。'
+  if(tab==='總部'){
+    p(
+      state.chapter<10
+        ?'第十章完成後開放十一層總部。'
+        :'可搭電梯進入不同樓層的簡化3D室內場景。辦公室內暫停街區營業；各樓層用這裡的管理按鈕執行工作。'
     );
 
-    for (let f=1;f<=5;f++) {
-      button(floorNames[f],()=>enterFloor(f),state.chapter<10);
+    for(let f=1;f<=5;f++){
+      button(
+        [
+          '',
+          '1F 旗艦門市',
+          '2F 營運與人才',
+          '3F 商品研發',
+          '4F 物流與品管',
+          '5F 集團管理'
+        ][f],
+        ()=>enterFloor(f),
+        state.chapter<10
+      );
     }
 
-    if (floorNow) button('離開總部回街區',()=>enterFloor(0));
-    text(`目前樓層：${floorNow||'街區'}`);
-
-    if (floorNow===1) {
-      text('旗艦展示：查看品牌成果。實際顧客購物仍在街區創始店運行。');
+    if(floorNow){
+      button('離開總部回街區',()=>enterFloor(0));
     }
-    if (floorNow===2) {
-      text('每次培訓提高分店每期淨收益 $5。');
+
+    p(`目前樓層：${floorNow||'街區'}`);
+
+    if(floorNow===1){
+      p('旗艦展示：檢視商品圖鑑與品牌成果。實際顧客購物仍在街區創始店運行。');
+    }
+
+    if(floorNow===2){
       button(`培訓店長 $500（${state.training}/3）`,()=>{
         state.cash-=500;
         state.training++;
         state.branchRate=(state.branchRate||45)+5;
       },state.cash<500||state.training>=3);
     }
-    if (floorNow===3) {
-      text('每次研發效率升級降低基礎訂貨成本3%。');
+
+    if(floorNow===3){
       button(`研發效率 $600（${state.research}/3）`,()=>{
         state.cash-=600;
         state.research++;
       },state.cash<600||state.research>=3);
     }
-    if (floorNow===4) {
-      text('簡化品管升級：每次增加5點口碑。');
+
+    if(floorNow===4){
       button(`品管升級 $450（${state.quality}/3）`,()=>{
         state.cash-=450;
         state.quality++;
         state.rep=Math.min(100,state.rep+5);
       },state.cash<450||state.quality>=3);
     }
-    if (floorNow===5) {
-      text('每次新增一間提供模擬淨收益的分店。');
+
+    if(floorNow===5){
       button(`區域展店 $2000（${state.plan}/3）`,()=>{
         state.cash-=2000;
         state.plan++;
@@ -2017,20 +2143,92 @@ function renderManage() {
   }
 }
 
+function enterFloor(f){
+  if(f&&!floorNow)returnPosition=player.position.clone();
+
+  floorNow=f;
+  office.visible=!!f;
+
+  floorSigns.forEach((s,i)=>{
+    if(s)s.visible=i===f;
+  });
+
+  rain.visible=false;
+  player.position.copy(
+    f
+      ?new THREE.Vector3(90,.15,3)
+      :returnPosition||new THREE.Vector3(0,.15,4)
+  );
+
+  yaw=0;
+  pitch=.74;
+
+  if(f){
+    office.children
+      .filter(m=>m.material?.color)
+      .forEach(m=>{
+        if(
+          m.geometry?.parameters?.width===12&&
+          m.position.y>1
+        ){
+          m.material.color.setHex(
+            [
+              0,
+              0x527a82,
+              0x788aab,
+              0x79a196,
+              0x9c9383,
+              0x536b82
+            ][f]
+          );
+        }
+      });
+
+    toast(`已抵達 ${f} 樓，關閉選單後可走動。`);
+  }
+
+  panel.classList.add('hidden');
+}
+
+const v7Valid=valid;
+valid=function(x,z,old){
+  if(floorNow){
+    return x>84.5&&x<95.5&&z>-1&&z<4.5;
+  }
+  if(state.furniture.some(f=>
+    Math.abs(x-f.x)<.8&&Math.abs(z-f.z)<.8
+  ))return false;
+
+  return v7Valid(x,z,old);
+};
+
+const v7Operations=operations;
+operations=function(dt){
+  v7Operations(dt);
+  updateEnvironment(dt);
+};
+
 const rainGeo=new THREE.BufferGeometry();
 const rainPos=new Float32Array(180*3);
 
-for (let i=0;i<180;i++) {
+for(let i=0;i<180;i++){
   rainPos[i*3]=Math.random()*65-30;
   rainPos[i*3+1]=Math.random()*12;
   rainPos[i*3+2]=Math.random()*20+7;
 }
-rainGeo.setAttribute('position',new THREE.BufferAttribute(rainPos,3));
+
+rainGeo.setAttribute(
+  'position',
+  new THREE.BufferAttribute(rainPos,3)
+);
 
 const rain=new THREE.Points(
   rainGeo,
   new THREE.PointsMaterial({
-    color:0xc7e6f2,size:.08,transparent:true,opacity:.65
+    color:0xc7e6f2,
+    size:.08,
+    transparent:true,
+    opacity:.65
   })
 );
 scene.add(rain);
@@ -2039,11 +2237,9 @@ const storeLight=new THREE.PointLight(0xffedcc,35,22);
 storeLight.position.set(0,4,0);
 scene.add(storeLight);
 
-const officeLight=new THREE.PointLight(0xffedcc,35,20);
-officeLight.position.set(90,4,0);
-scene.add(officeLight);
+let taskNotice=false;
 
-function updateEnvironment(dt) {
+function updateEnvironment(dt){
   const h=hour();
   const night=h<6||h>=19;
 
@@ -2054,376 +2250,4093 @@ function updateEnvironment(dt) {
   scene.fog.color.copy(scene.background);
   rain.visible=rainy()&&!floorNow;
 
-  if (rain.visible) {
-    for (let i=0;i<180;i++) {
+  if(rain.visible){
+    for(let i=0;i<180;i++){
       rainPos[i*3+1]-=dt*8;
-      if (rainPos[i*3+1]<0) rainPos[i*3+1]=12;
+      if(rainPos[i*3+1]<0)rainPos[i*3+1]=12;
     }
     rainGeo.attributes.position.needsUpdate=true;
   }
 
   worldInfo.textContent=
     `${String(h).padStart(2,'0')}:00｜${rainy()?'下雨':night?'夜晚':'晴天'}｜`+
-    (floorNow
-      ? `${floorNames[floorNow]}・街區營業暫停`
-      : taskReady()
-        ? '任務完成：到經營中心領獎'
-        : '經營中心：任務／裝潢／熟客／總部');
+    `${taskReady()?'任務完成：到經營中心領獎':'經營中心：任務／裝潢／熟客／總部'}`;
 
-  if (taskReady()&&!taskNotice) {
+  if(taskReady()&&!taskNotice){
     taskNotice=true;
     toast('小任務完成！到經營中心領取獎金。');
   }
-  if (!taskReady()) taskNotice=false;
+
+  if(!taskReady())taskNotice=false;
 }
+updateEnvironment(0);
 
-function operations(dt) {
-  state.playTime+=dt;
-  state.branchTimer+=dt;
-  operationClock+=dt;
+// V8 retained walls, rival interiors, explicit save controls.
+const extensionWalls=new THREE.Group();
+scene.add(extensionWalls);
+let wallStage=-1;
 
-  if (state.branchTimer>=20) {
-    state.branchTimer-=20;
-    if (state.branches>1) {
-      state.cash+=(state.branches-1)*(state.branchRate||45);
+function rebuildWalls(){
+  if(wallStage===state.chapter)return;
+
+  while(extensionWalls.children.length){
+    const m=extensionWalls.children[0];
+    extensionWalls.remove(m);
+    m.geometry.dispose();
+    m.material.dispose();
+  }
+
+  wallStage=state.chapter;
+
+  for(let k=0;k<state.chapter;k++){
+    const x=6.5+k*3;
+
+    for(const z of [-1.75,4.75]){
+      box(
+        .14,3.4,z<0?7.5:1.5,
+        0xc7d0cd,x+3,1.8,z,extensionWalls
+      );
     }
+
+    box(.14,.6,2,0xc7d0cd,x+3,3.2,3,extensionWalls);
+    box(3,2.5,.15,0x89a8b1,x+1.5,1.4,5.5,extensionWalls);
   }
-
-  if (operationClock>=4) {
-    operationClock=0;
-
-    const manualTaskPending=state.task.type===1 &&
-      state.manualRestock-state.task.baseRestock<state.task.restock;
-
-    for (let i=0;i<state.unlocked;i++) {
-      if (state.auto&&state.stock[i]+state.back[i]<3) {
-        const cost=orderCost(i);
-        if (state.cash>=cost) {
-          state.cash-=cost;
-          state.back[i]+=5;
-        }
-      }
-
-      if (state.staff&&!manualTaskPending) {
-        const count=Math.max(0,Math.min(state.back[i],15-state.stock[i]));
-        state.back[i]-=count;
-        state.stock[i]+=count;
-      }
-    }
-    hud();
-  }
-
-  const c=chapters[state.chapter];
-  if (c&&readyForChapter(c)&&lastAnnouncement!==state.chapter) {
-    lastAnnouncement=state.chapter;
-    toast(`可以進行新劇情：${c.title}！`);
-  }
-
-  storyHUD();
-  updateEnvironment(dt);
 }
+rebuildWalls();
 
-function valid(x,z,old) {
-  if (floorNow) {
-    return x>84.5&&x<95.5&&z>-1&&z<4.5;
+const v8Valid=valid;
+
+valid=function(x,z,old){
+  if(floorNow)return v8Valid(x,z,old);
+
+  for(let k=0;k<=state.chapter;k++){
+    const wallX=6.5+k*3;
+    if(
+      Math.abs(x-wallX)<.35&&
+      z>-5.6&&z<5.6&&
+      (z<2.35||z>3.65)
+    )return false;
   }
 
-  const level=state.chapter;
-  const maxX=6.1+level*3;
-  const minX=level ? -13-level*5 : -6.1;
-  const minZ=level===10 ? -28 : level ? -10 : -5.05;
-  const maxZ=level ? 27 : 8.5;
+  if(
+    x>6.5&&
+    x<6.5+state.chapter*3&&
+    z>5.15&&z<5.85
+  )return false;
 
-  if (x<minX||x>maxX||z<minZ||z>maxZ) return false;
+  if(state.chapter>=2){
+    for(const cx of [-13,-25]){
+      const inRange=
+        Math.abs(x-cx)<4.9&&z>15.3&&z<22.5;
 
-  /* 對手門市：從正門進入，不能穿過外牆或貨架。 */
-  if (level>=2) {
-    for (const cx of [-13,-25]) {
-      const nearBuilding=Math.abs(x-cx)<4.9&&z>15.3&&z<22.5;
+      if(inRange){
+        if(Math.abs(x-cx)>4.05||z>21.55)return false;
+        if(z<16.5&&Math.abs(x-cx)>.65)return false;
 
-      if (nearBuilding) {
-        if (Math.abs(x-cx)>4.05||z>21.55) return false;
-        if (z<16.5&&Math.abs(x-cx)>.65) return false;
-        if (z>=16.5&&old.z<16.5&&Math.abs(old.x-cx)>.75) return false;
-        if (z>17.3&&z<20.7&&Math.abs(Math.abs(x-cx)-2.5)<.9) return false;
-        if (z>20.2&&Math.abs(x-cx)<1.3) return false;
+        if(
+          z>=16.5&&
+          old.z<16.5&&
+          Math.abs(old.x-cx)>.75
+        )return false;
+
+        if(
+          z>17.3&&z<20.7&&
+          Math.abs(Math.abs(x-cx)-2.5)<.9
+        )return false;
+
+        if(z>20.2&&Math.abs(x-cx)<1.3)return false;
+
         return true;
       }
     }
   }
 
-  if (level===10&&x>11.6&&x<24.4&&z<-12.5&&z>-23.5) {
-    return false;
-  }
+  if(
+    state.chapter>0&&
+    x>5.9&&x<6.6&&
+    z>2.35&&z<3.65
+  )return true;
 
-  /* 原門市左牆與後牆。 */
-  if (Math.abs(x+6.5)<.35&&z>-5.8&&z<5.8) return false;
-  if (Math.abs(z+5.5)<.35&&x>-6.8&&x<6.8+level*3) return false;
+  return v8Valid(x,z,old);
+};
 
-  /* 擴建區側牆均保留，只能走門洞。 */
-  for (let k=0;k<=level;k++) {
-    const wallX=6.5+k*3;
-    if (
-      Math.abs(x-wallX)<.35&&z>-5.6&&z<5.6&&
-      (z<2.35||z>3.65)
-    ) return false;
-  }
+const saveButton=document.createElement('button');
+saveButton.textContent='存檔／讀檔';
+$('actions').prepend(saveButton);
 
-  /* 門市正面：原店正門可進出，擴建區正面不可穿牆。 */
-  if (z>5.12&&z<5.85&&x>-6.8&&x<6.8+level*3) {
-    if (Math.abs(x)>1.25||doorOpen<.75) return false;
-  }
+const savePanel=document.createElement('div');
+savePanel.className='overlay hidden';
+savePanel.style.zIndex='12';
+savePanel.innerHTML=
+  '<div class="box">'+
+  '<h1>本機存檔</h1>'+
+  '<p id="saveStatus"></p>'+
+  '<button id="manualSave">手動存檔</button>'+
+  '<button id="manualLoad">讀取手動存檔</button>'+
+  '<button id="saveClose">返回</button>'+
+  '<p>自動存檔仍每數秒執行。手動存檔獨立保留，不會被自動存檔覆蓋。僅限同一瀏覽器與網站環境；清除瀏覽器資料可能遺失。</p>'+
+  '</div>';
+document.body.append(savePanel);
 
-  if ((old.z-5.5)*(z-5.5)<=0&&x>-6.5&&x<6.5) {
-    if (Math.abs(x)>1.25||doorOpen<.75) return false;
-  }
+savePanel.querySelectorAll('*').forEach(e=>{
+  e.style.touchAction='pan-y';
+});
 
-  /* 原店固定設備。 */
-  if (x>-6.5&&x<6.5&&z<5.5&&z>-5.5) {
-    if (z<2&&z>-3.6&&shelves.some(s=>Math.abs(x-s)<.98)) return false;
-    if (x<-2.7&&z>2&&z<3.95) return false;
-    if (x<-3.7&&z<-3.1) return false;
-    if (x>3.2&&z<-4) return false;
-  }
-
-  if (x>6.5&&x<6.5+level*3&&z<5.5&&z>-5.5) {
-    if (z<-2.2) return false;
-    for (let k=4;k<=level;k++) {
-      if (Math.abs(x-(8+(k-1)*3))<1.05&&Math.abs(z+.5)<.7) return false;
-    }
-  }
-
-  if (state.furniture.some(f=>
-    Math.abs(x-f.x)<.8&&Math.abs(z-f.z)<.8
-  )) return false;
-
-  return true;
-}
-
-function showSaveStatus() {
-  try {
-    const s=JSON.parse(localStorage.getItem(MANUAL_KEY));
-    $('saveStatus').textContent=s&&usableSave(s.state)
-      ? `上次手動存檔：${s.time}\n章節 ${s.state.chapter}/10｜資金 $${s.state.cash}`
-      : '尚無有效的手動存檔。';
-  } catch(e) {
-    $('saveStatus').textContent='無法讀取本機存檔，瀏覽器可能限制儲存。';
+function showSaveStatus(){
+  try{
+    const s=JSON.parse(
+      localStorage.getItem('seven-ten-manual-v1')
+    );
+    $('saveStatus').textContent=s
+      ?`上次手動存檔：${s.time}｜章節 ${s.state.chapter}/10｜資金 $${s.state.cash}`
+      :'尚無手動存檔。';
+  }catch(e){
+    $('saveStatus').textContent=
+      '無法讀取本機存檔，瀏覽器可能限制儲存。';
   }
 }
+
+saveButton.onclick=()=>{
+  if(!active||cinematic)return;
+  savePanel.classList.remove('hidden');
+  joy.x=joy.y=0;
+  showSaveStatus();
+};
+
+$('saveClose').onclick=()=>{
+  savePanel.classList.add('hidden');
+};
 
 $('manualSave').onclick=()=>{
-  try {
-    localStorage.setItem(MANUAL_KEY,JSON.stringify({
-      version:1,
-      time:new Date().toLocaleString('zh-TW'),
-      name:window.sevenTenPlayerName,
-      state
-    }));
+  try{
+    localStorage.setItem(
+      'seven-ten-manual-v1',
+      JSON.stringify({
+        version:1,
+        time:new Date().toLocaleString('zh-TW'),
+        name:window.sevenTenPlayerName,
+        state
+      })
+    );
     showSaveStatus();
     toast('手動存檔成功。');
-  } catch(e) {
-    toast('存檔失敗：空間不足或瀏覽器禁止儲存。');
+  }catch(e){
+    toast('存檔失敗：儲存空間不足或瀏覽器禁止儲存。');
   }
 };
 
 $('manualLoad').onclick=()=>{
-  try {
-    const raw=localStorage.getItem(MANUAL_KEY);
-    if (!raw) return toast('沒有手動存檔。');
-    const saved=JSON.parse(raw);
-    if (!usableSave(saved.state)) throw new Error('Invalid save');
-    if (!confirm('讀檔會取代目前進度，確定繼續？')) return;
+  try{
+    const raw=localStorage.getItem('seven-ten-manual-v1');
+    if(!raw)return toast('沒有可讀取的手動存檔。');
 
-    loadingSave=true;
-    localStorage.setItem(AUTO_KEY,JSON.stringify(saved.state));
-    if (saved.name) {
-      localStorage.setItem('seven-ten-player-name',saved.name);
+    const s=JSON.parse(raw);
+
+    if(
+      !s.state||
+      !Array.isArray(s.state.stock)||
+      !Number.isFinite(s.state.cash)
+    )throw Error('invalid');
+
+    if(!confirm('讀檔會取代目前進度，確定繼續？'))return;
+
+    window.loadingManualSave=true;
+
+    localStorage.setItem(
+      'seven-ten-v1',
+      JSON.stringify(s.state)
+    );
+
+    if(s.name){
+      localStorage.setItem('seven-ten-player-name',s.name);
     }
+
     location.reload();
-  } catch(e) {
-    loadingSave=false;
-    toast('讀檔失敗，請檢查瀏覽器儲存權限。');
+  }catch(e){
+    toast('讀檔失敗，原進度未主動重設。');
+  }
+};/* V9 integrated campaign. Existing prototype systems retained underneath. */
+
+state.v9??={
+  manual:0,
+  dined:0,
+  team:0,
+  promoSales:0,
+  enterprise:false,
+  transfer:false,
+  researchSold:0,
+  check:false,
+  workers:[],
+  stores:[],
+  notifications:[],
+  rewards:[],
+  goal:0,
+  serviceCount:0,
+  upgrades:0
+};
+
+const v=state.v9;
+
+v.tables??=Array.from({length:20},()=>({
+  status:'free',
+  timer:0
+}));
+v.services??=[];
+v.training??=0;
+v.specialty??='一般';
+v.stockResearch??=false;
+v.goodsMade??=0;
+v.offer??=0;
+v.checklist??=[];
+
+let scannedCustomer=null;
+let locationStore=-1;
+let scanStage=0;
+let elevatorTime=0;
+let travelTarget=0;
+let businessTick=0;
+let featureTab='目標';
+let upgrading=false;
+let tablePeople=[];
+
+const roomNames=[
+  '1F 創始便利店',
+  '2F 用餐休息區',
+  '3F 員工培訓',
+  '4F 咖啡與甜點',
+  '5F 鮮食作業',
+  '6F 分店營運',
+  '7F 物流管理',
+  '8F 商品研發',
+  '9F 品牌合作',
+  '10F 財務管理',
+  '11F 集團總部'
+];
+
+const tower=new THREE.Group();
+scene.add(tower);
+let towerLevels=0;
+
+function extendTower(){
+  for(let f=towerLevels;f<=state.chapter;f++){
+    const g=new THREE.Group();
+    tower.add(g);
+
+    box(13,.23,11,0xcbd4d4,0,4+f*3.3,0,g);
+
+    if(f>0){
+      box(13,2.9,.16,0xd4dcd8,0,2.3+f*3.3,-5.5,g);
+      box(.16,2.9,11,0x8499a6,-6.5,2.3+f*3.3,0,g);
+      box(.16,2.9,11,0x8499a6,6.5,2.3+f*3.3,0,g);
+
+      for(let j=0;j<6;j++){
+        box(
+          1.7,2,.13,0x8bb0c2,
+          -5.4+j*2.15,2.3+f*3.3,5.5,g
+        );
+      }
+
+      const s=label(
+        roomNames[f],10,.55,
+        0,3.3+f*3.3,5.65
+      );
+      scene.remove(s);
+      g.add(s);
+    }
+
+    g.userData.level=f;
+  }
+
+  towerLevels=state.chapter+1;
+}
+
+// Remove former horizontal expansion and remote office from view.
+city.visible=false;
+extensionWalls.visible=false;
+office.visible=false;
+furnGroup.visible=false;
+extendTower();
+
+const room=new THREE.Group();
+scene.add(room);
+room.visible=false;
+
+const roomColliders=[];
+const roomLabels=[];
+
+function clearRoom(){
+  for(const h of tablePeople){
+    scene.remove(h);
+    disposeObjectV9(h);
+  }
+  tablePeople=[];
+
+  while(room.children.length){
+    const o=room.children[0];
+    room.remove(o);
+    disposeObjectV9(o);
+  }
+
+  roomColliders.length=0;
+}
+
+function disposeObjectV9(o){
+  o.traverse(m=>{
+    if(m.isMesh){
+      m.geometry.dispose();
+      m.material.map?.dispose();
+      m.material.dispose();
+    }
+  });
+}
+
+function roomBox(w,h,d,c,x,y,z,solid=true){
+  const m=box(w,h,d,c,90+x,y,z,room);
+
+  if(solid){
+    roomColliders.push({
+      x:90+x,
+      z,
+      w:w/2+.25,
+      d:d/2+.25
+    });
+  }
+
+  return m;
+}
+
+function roomLabel(t,x,y,z){
+  const m=label(t,6,.5,90+x,y,z);
+  scene.remove(m);
+  room.add(m);
+  return m;
+}
+
+function buildRoom(){
+  clearRoom();
+  room.visible=!!floorNow||locationStore>=0;
+  if(!room.visible)return;
+
+  roomBox(14,.15,12,0xddd7c5,0,.05,0,false);
+  roomBox(14,3,.15,0x8fa7ad,0,1.6,-6,false);
+  roomBox(.15,3,12,0x8fa7ad,-7,1.6,0,false);
+  roomBox(.15,3,12,0x8fa7ad,7,1.6,0,false);
+
+  roomLabel(
+    locationStore>=0
+      ?v.stores[locationStore].name
+      :roomNames[floorNow],
+    0,2.6,-5.85
+  );
+
+  roomBox(1.8,2.7,.12,0x36556a,5,1.5,5.8,false);
+
+  if(floorNow===1&&locationStore<0){
+    for(let t=0;t<10;t++){
+      const x=-4.8+(t%5)*2.4;
+      const z=-2.7+Math.floor(t/5)*4;
+
+      roomBox(1.1,.12,1,0xa87b4c,x,.9,z);
+
+      for(let s=0;s<2;s++){
+        roomBox(
+          .4,.5,.4,0x526b79,
+          x,.35,z+(s?-.85:.85),false
+        );
+      }
+    }
+
+    roomLabel('十組桌椅・20個座位',0,2,-5.8);
+    updateDiners();
+  }else if(locationStore>=0){
+    for(const x of [-3,1]){
+      roomBox(1,1.6,5,0x8f9da2,x,1,-1);
+
+      for(let i=0;i<8;i++){
+        roomBox(
+          .25,.3,.3,
+          products[i%state.unlocked].color,
+          x+(i%2?-.2:.2),
+          1.95,
+          -3+Math.floor(i/2),
+          false
+        );
+      }
+    }
+
+    roomBox(2.5,1.1,1,0x183b59,-4,.7,3);
+    roomLabel('seven ten 單層分店',0,2,-5.8);
+  }else{
+    const colors=[
+      0x547e97,
+      0xb58456,
+      0x80a697,
+      0x576d95
+    ];
+
+    for(let j=0;j<3+(floorNow%3);j++){
+      const x=-4+(j%3)*4;
+      const z=-3+Math.floor(j/3)*3;
+
+      roomBox(2,.12,1,colors[floorNow%4],x,1,z);
+      roomBox(.7,.5,.2,0x243c50,x,1.3,z,false);
+    }
+
+    if(floorNow===3){
+      for(let j=0;j<3;j++){
+        roomBox(
+          .6,.8,.7,0xb1b6b2,
+          -4+j*3,1.5,-3,false
+        );
+      }
+    }
+
+    if(floorNow===6){
+      for(let j=0;j<4;j++){
+        roomBox(1,.8,1,0xb38b57,-5+j*3,.5,2);
+      }
+    }
+
+    if(floorNow===10){
+      roomLabel('集團目標與成就展示',0,2,-5.8);
+    }
+  }
+}
+
+function updateDiners(){
+  if(floorNow!==1||locationStore>=0)return;
+
+  for(const h of tablePeople){
+    scene.remove(h);
+    disposeObjectV9(h);
+  }
+  tablePeople=[];
+
+  for(let i=0;i<20;i++){
+    const seat=v.tables[i];
+    const t=Math.floor(i/2);
+    const x=90-4.8+(t%5)*2.4;
+    const z=-2.7+Math.floor(t/5)*4+(i%2?-.85:.85);
+
+    if(seat.status==='eating'){
+      const h=human(i%2?0x799173:0xc09a68);
+      h.position.set(x,-.25,z);
+      h.rotation.y=i%2?0:Math.PI;
+      h.legs.forEach(l=>l.rotation.x=-1.1);
+      tablePeople.push(h);
+    }else if(seat.status==='dirty'){
+      const h=new THREE.Group();
+      box(
+        .3,.12,.3,0xebd7b4,
+        x,.99,z+(i%2?.85:-.85),h
+      );
+      scene.add(h);
+      tablePeople.push(h);
+    }
+  }
+}
+
+const feature=document.createElement('div');
+feature.className='overlay gamePanel hidden';
+feature.id='nextVersion';
+feature.innerHTML=
+  '<div class="box">'+
+  '<h1 id="featureTitle">seven ten 經營手機</h1>'+
+  '<div id="featureTabs"></div>'+
+  '<div id="featureBody"></div>'+
+  '<button id="featureClose">返回</button>'+
+  '</div>';
+document.body.append(feature);
+
+const fs=document.createElement('style');
+fs.textContent=
+  '#nextVersion,#nextVersion *{touch-action:pan-y}'+
+  '#nextVersion p{white-space:pre-line}'+
+  '#nextVersion button{margin:4px;padding:10px}'+
+  '#nextVersion .box{overflow-y:auto;-webkit-overflow-scrolling:touch}'+
+  '#actions{max-width:245px;width:245px}'+
+  '#mission{right:265px}'+
+  '#worldInfo{max-width:40%;white-space:nowrap;overflow:hidden}';
+document.head.append(fs);
+
+$('featureClose').onclick=()=>{
+  feature.classList.add('hidden');
+};
+
+function openFeature(tab='目標'){
+  if(!active||cinematic||elevatorTime)return;
+
+  featureTab=tab;
+  joy.x=joy.y=0;
+  for(const k in keys)keys[k]=false;
+
+  feature.classList.remove('hidden');
+  renderFeature();
+}
+
+const phoneBtn=document.createElement('button');
+phoneBtn.textContent='手機／門市';
+phoneBtn.onclick=()=>openFeature('通知');
+$('actions').prepend(phoneBtn);
+
+storyButton.onclick=()=>openFeature('目標');
+mb.onclick=()=>openFeature('任務');
+
+const liftBtn=document.createElement('button');
+liftBtn.textContent='電梯／傳送';
+liftBtn.onclick=()=>openFeature('地圖');
+$('actions').prepend(liftBtn);
+
+function notify(key,text){
+  const old=v.notifications.find(n=>n.key===key);
+  if(old){
+    old.text=text;
+    return;
+  }
+
+  v.notifications.unshift({key,text});
+  v.notifications=v.notifications.slice(0,20);
+  toast(text);
+}
+
+function workerLevel(w){
+  return Math.min(
+    10,
+    1+Math.floor(Math.sqrt(w.xp/10))
+  );
+}
+
+function gain(w,xp){
+  const before=workerLevel(w);
+  w.xp+=xp;
+  const level=workerLevel(w);
+
+  if(level>before){
+    notify(
+      'level'+w.id,
+      `${w.name}升到${level}級${level>=5?'，可以擔任店長':''}`
+    );
+  }
+}
+
+function workerAt(store,role){
+  return v.workers.find(w=>
+    w.store===store&&
+    w.role===role&&
+    !w.training
+  );
+}
+
+function storeReady(s,index){
+  return (
+    v.workers.some(w=>
+      w.store===index&&
+      w.role==='店長'&&
+      workerLevel(w)>=5
+    )&&
+    v.workers.some(w=>
+      w.store===index&&
+      w.role!=='店長'&&
+      !w.training
+    )
+  );
+}
+
+const objectives=[
+  ()=>v.manual>=10,
+  ()=>v.repaired&&v.dined>=5,
+  ()=>v.promotion&&v.promoSales>=15,
+  ()=>v.workers.length>=2&&v.team>=20,
+  ()=>v.enterprise,
+  ()=>(
+    v.stores.length>=1&&
+    storeReady(v.stores[0],0)&&
+    v.stores[0].stock.some(n=>n>0)
+  ),
+  ()=>v.transfer,
+  ()=>v.stockResearch&&v.researchSold>=10,
+  ()=>(
+    v.stores.length>=3&&
+    v.stores.slice(0,3).every((s,i)=>
+      storeReady(s,i)&&s.specialty!=='一般'
+    )
+  ),
+  ()=>v.checklist.length>=3
+];
+
+const objectiveTexts=[
+  ()=>`親手結帳 ${v.manual}/10 位`,
+  ()=>`冰櫃修復 ${v.repaired?'✓':'未完成'}・內用 ${v.dined}/5 位`,
+  ()=>`促銷 ${v.promotion?'✓':'未開始'}・促銷服務 ${v.promoSales}/15 位`,
+  ()=>`員工 ${v.workers.length}/2 人・團隊工作 ${v.team}/20 次`,
+  ()=>`交付企業訂單 ${v.enterprise?'✓':'未完成'}`,
+  ()=>`第一間分店、五級店長、一位員工與庫存`,
+  ()=>`完成一次跨店調貨 ${v.transfer?'✓':'未完成'}`,
+  ()=>`研發 ${v.stockResearch?'✓':'未完成'}・自有商品銷售 ${v.researchSold}/10 件`,
+  ()=>`三間分店配置店長、員工與專精`,
+  ()=>`營運整改 ${v.checklist.length}/3 項`
+];
+
+const buildFees=[
+  100,160,240,350,450,
+  600,750,900,1200,1600
+];
+
+chapters.forEach((c,i)=>{
+  c.title=i===3?'組成第一支團隊':c.title;
+  c.minutes=0;
+  c.cash=buildFees[i];
+});
+
+readyForChapter=function(){
+  return (
+    state.chapter<10&&
+    objectives[state.chapter]()&&
+    state.cash>=buildFees[state.chapter]
+  );
+};
+
+storyHUD=function(){
+  const c=state.chapter;
+  $('mission').textContent=c<10
+    ?`章節 ${c}/10｜${c+1}樓｜商品 ${state.unlocked}/40\n${chapters[c].title}\n${objectiveTexts[c]()}\n擴建費 $${state.cash}/$${buildFees[c]} ${readyForChapter()?'✓可晉級':''}`
+    :`🏆11層集團成立｜分店 ${v.stores.length}/6｜自由經營`;
+};
+
+showStory=()=>openFeature('目標');
+
+function advanceChapter(){
+  if(!readyForChapter())return;
+
+  state.cash-=buildFees[state.chapter];
+  const title=chapters[state.chapter].title;
+  state.chapter++;
+
+  if(state.chapter>=2)makeRivals();
+
+  state.history.push(title);
+  feature.classList.add('hidden');
+  extendTower();
+
+  const newFloor=tower.children[tower.children.length-1];
+  newFloor.scale.y=.01;
+
+  cinematic={
+    elapsed:0,
+    level:state.chapter,
+    title,
+    v9:true
+  };
+
+  chapterOverlay.classList.remove('hidden');
+  upgrading=true;
+  save();
+}
+
+function warp(store,floor){
+  if(elevatorTime)return;
+
+  locationStore=store;
+  travelTarget=floor;
+  feature.classList.add('hidden');
+  joy.x=joy.y=0;
+  for(const k in keys)keys[k]=false;
+
+  elevatorTime=2.4;
+  chapterOverlay.classList.remove('hidden');
+  chapterOverlay.textContent=store>=0
+    ?'門市傳送中…'
+    :'電梯門關閉・移動中…';
+}
+
+function sellCustomer(n,manual){
+  if(n.item<0)return;
+
+  state.cash+=products[n.item].price+(state.premium?3:0);
+  state.sales++;
+
+  if(manual)v.manual++;
+  if(v.promotion)v.promoSales++;
+  if(v.stockResearch&&n.item>=27)v.researchSold++;
+
+  state.rep=Math.min(100,state.rep+.4);
+  n.item=-1;
+  n.stage='exit';
+  n.target.set(0,.15,4.5);
+
+  if(state.chapter>=1&&Math.random()<.55){
+    const seat=v.tables.find(t=>t.status==='free');
+
+    if(seat){
+      seat.status='eating';
+      seat.timer=18+Math.random()*12;
+      v.dined++;
+      if(floorNow===1)updateDiners();
+    }
+  }
+
+  hud();
+}
+
+customers=function(dt){
+  spawnClock-=dt;
+
+  if(state.started&&spawnClock<=0&&npcs.length<16){
+    spawn();
+    spawnClock=
+      (Math.max(3,12-state.rep*.12)+Math.random()*2)/2*
+      marketFactor();
+  }
+
+  const cashier=workerAt(-1,'收銀');
+
+  for(let i=npcs.length-1;i>=0;i--){
+    const n=npcs[i];
+
+    if(n.stage==='enter'){
+      if(n.g.position.z>5.7&&doorOpen<.8)continue;
+
+      if(walk(n,n.target,dt)){
+        n.stage='browse';
+        n.target.set(.35,.15,-2+Math.random()*3);
+      }
+    }else if(n.stage==='browse'){
+      if(walk(n,n.target,dt)){
+        n.timer+=dt;
+
+        if(n.timer>2){
+          const available=state.stock
+            .map((x,j)=>x>0?j:-1)
+            .filter(j=>j>=0);
+
+          if(available.length){
+            n.item=chooseProduct(available);
+            state.stock[n.item]--;
+            n.stage='toCheckout';
+            n.target.set(.35,.15,4.3);
+          }else{
+            n.stage='exit';
+            n.target.set(0,.15,4.5);
+          }
+        }
+      }
+    }else if(n.stage==='toCheckout'){
+      if(walk(n,n.target,dt)){
+        n.stage='queue';
+        n.timer=0;
+        n.wait=0;
+      }
+    }else if(n.stage==='queue'){
+      const index=npcs
+        .filter(a=>a.stage==='queue')
+        .indexOf(n);
+
+      const target=new THREE.Vector3(
+        -4.45+Math.min(index,12)*.6,
+        .15,
+        4.3
+      );
+
+      n.wait=(n.wait||0)+dt;
+
+      if(walk(n,target,dt)&&index===0&&cashier){
+        n.timer+=dt;
+
+        if(
+          n.timer>
+          Math.max(1,5-workerLevel(cashier)*.35)/STAFF_RATE
+        ){
+          sellCustomer(n,false);
+          gain(cashier,4);
+          v.team++;
+        }
+      }
+
+      if(n.stage==='queue'&&n.wait>150){
+        if(n.item>=0)state.stock[n.item]++;
+        n.item=-1;
+        n.stage='exit';
+        n.target.set(0,.15,4.5);
+        state.rep=Math.max(0,state.rep-.5);
+      }
+    }else if(n.stage==='exit'){
+      if(walk(n,n.target,dt)){
+        n.stage='outside';
+        n.target.set(0,.15,8.4);
+      }
+    }else if(n.stage==='outside'){
+      if(
+        n.g.position.z<5.4&&
+        n.g.position.z>4.8&&
+        doorOpen<.8
+      )continue;
+
+      if(walk(n,n.target,dt)){
+        scene.remove(n.g);
+        disposeObjectV9(n.g);
+        npcs.splice(i,1);
+      }
+    }
   }
 };
 
-let last=performance.now();
-let walkTime=0;
+const legacyInteract=interact;
 
-function frame(now) {
+interact=function(){
+  if(
+    !active||
+    cinematic||
+    elevatorTime||
+    !feature.classList.contains('hidden')
+  )return;
+
+  if(locationStore>=0){
+    if(
+      Math.hypot(
+        player.position.x-86,
+        player.position.z-3
+      )>2.5
+    ){
+      return toast('請走近分店收銀台，或用手機管理。');
+    }
+
+    openFeature('分店');
+    return;
+  }
+
+  if(floorNow===1){
+    let found=-1;
+    let dist=2.2;
+
+    for(let i=0;i<20;i++){
+      const t=Math.floor(i/2);
+      const x=90-4.8+(t%5)*2.4;
+      const z=-2.7+Math.floor(t/5)*4;
+      const d=Math.hypot(
+        player.position.x-x,
+        player.position.z-z
+      );
+
+      if(
+        v.tables[i].status==='dirty'&&
+        v.tables[i].left10&&
+        d<dist
+      ){
+        found=i;
+        dist=d;
+      }
+    }
+
+    if(found>=0){
+      v.tables[found].status='free';
+      v.clean=(v.clean||0)+1;
+      updateDiners();
+      toast('桌面清潔完成');
+      save();
+    }else{
+      openFeature('地圖');
+    }
+
+    return;
+  }
+
+  if(floorNow>1){
+    openFeature(
+      floorNow===2?'員工':
+      floorNow===6?'物流':
+      floorNow===7?'研發':
+      floorNow===10?'集團':
+      '服務'
+    );
+    return;
+  }
+
+  if(
+    player.position.distanceTo(
+      new THREE.Vector3(-4.5,.15,3)
+    )<2.5
+  ){
+    openFeature('收銀');
+    return;
+  }
+
+  legacyInteract();
+};
+
+$('interact').onclick=()=>interact();function renderFeature(){
+  const body=$('featureBody');
+  body.replaceChildren();
+  $('featureTabs').replaceChildren();
+
+  for(const name of [
+    '目標','收銀','員工','地圖','分店','物流','服務',
+    '研發','通知','監視器','集團','任務','裝潢','熟客'
+  ]){
+    const b=document.createElement('button');
+    b.textContent=name;
+    b.onclick=()=>{
+      featureTab=name;
+      renderFeature();
+    };
+    $('featureTabs').append(b);
+  }
+
+  function txt(t){
+    const p=document.createElement('p');
+    p.textContent=t;
+    body.append(p);
+  }
+
+  function btn(t,f,disabled=false){
+    const b=document.createElement('button');
+    b.textContent=t;
+    b.disabled=disabled;
+    b.onclick=()=>{
+      f();
+      save();
+      hud();
+      renderFeature();
+    };
+    body.append(b);
+  }
+
+  function pay(n,f){
+    if(state.cash<n)return toast('資金不足');
+    state.cash-=n;
+    f();
+  }
+
+  if(featureTab==='目標'){
+    txt(
+      state.chapter<10
+        ?`${chapters[state.chapter].title}\n${objectiveTexts[state.chapter]()}\n擴建費 $${buildFees[state.chapter]}；無最低營業時間。`
+        :'主線完成！前往集團頁選擇長期目標。'
+    );
+
+    if(state.chapter===1){
+      btn(
+        '維修冰櫃 $80',
+        ()=>pay(80,()=>v.repaired=true),
+        v.repaired
+      );
+    }
+
+    if(state.chapter===2){
+      btn('推出社區促銷 $60',()=>pay(60,()=>{
+        v.promotion=true;
+        state.campaignUntil=state.playTime+120;
+      }),v.promotion);
+    }
+
+    if(state.chapter===4){
+      txt('企業訂單：礦泉水3件＋吐司3件，交貨收入$200。');
+
+      btn('交付企業訂單',()=>{
+        if(
+          state.stock[0]+state.back[0]<3||
+          state.stock[4]+state.back[4]<3
+        )return toast('庫存不足');
+
+        takeStock(0,3);
+        takeStock(4,3);
+        state.cash+=200;
+        v.enterprise=true;
+      },v.enterprise);
+    }
+
+    if(state.chapter===9){
+      for(const [key,cost] of [
+        ['品管清查',150],
+        ['員工工作安全',150],
+        ['帳務審核',150]
+      ]){
+        btn(
+          `${key} $${cost}`,
+          ()=>pay(cost,()=>v.checklist.push(key)),
+          v.checklist.includes(key)
+        );
+      }
+    }
+
+    btn(
+      '達標・開始蓋新樓層',
+      advanceChapter,
+      !readyForChapter()
+    );
+  }
+
+  if(featureTab==='收銀'){
+    if(locationStore>=0){
+      txt('分店收銀請使用「分店」頁，現階段採簡化隊列。');
+    }else{
+      const n=npcs.find(n=>n.stage==='queue');
+
+      txt(
+        n
+          ?`顧客商品：${products[n.item]?.name}\n等待 ${Math.floor(n.wait||0)}／150秒\n${scanStage?'已掃描，請收款':'先掃描再收款'}`
+          :'目前沒有排隊顧客'
+      );
+
+      const near=
+        !floorNow&&
+        player.position.distanceTo(
+          new THREE.Vector3(-4.5,.15,3)
+        )<2.5;
+
+      btn('掃描商品',()=>{
+        scannedCustomer=n;
+        scanStage=1;
+      },!n||!near||!!scanStage);
+
+      btn('收款並交貨',()=>{
+        if(n&&scannedCustomer===n){
+          sellCustomer(n,true);
+          scanStage=0;
+          scannedCustomer=null;
+          toast('收款成功');
+        }
+      },!n||!near||!scanStage);
+
+      if(!near)txt('請先走到一樓收銀台旁。');
+    }
+  }
+
+  if(featureTab==='員工'){
+    txt(
+      '員工最高10級，5級可指派店長。培訓每次+60經驗，需20秒營業時間；這不是章節等待限制。\n薪資：每遊戲日每人$15。'
+    );
+
+    btn('招募員工 $120',()=>pay(120,()=>{
+      v.workers.push({
+        id:Date.now()+Math.random(),
+        name:'員工'+(v.workers.length+1),
+        xp:0,
+        store:-1,
+        role:'收銀',
+        training:0
+      });
+    }),state.chapter<1||v.workers.length>=24);
+
+    for(const w of v.workers){
+      txt(
+        `${w.name}・${workerLevel(w)}級・經驗${w.xp}\n`+
+        `${w.store<0?'創始店':v.stores[w.store]?.name}／${w.role}${w.training?'・培訓中':''}`
+      );
+
+      for(const role of ['收銀','補貨','清潔','服務','店長']){
+        btn(role,()=>{
+          if(
+            role==='店長'&&
+            v.workers.some(a=>
+              a!==w&&
+              a.store===w.store&&
+              a.role==='店長'
+            )
+          )return toast('此店已有店長');
+
+          w.role=role;
+        },role==='店長'&&workerLevel(w)<5);
+      }
+
+      btn('培訓 $60',()=>pay(60,()=>{
+        w.training=20;
+      }),
+        state.chapter<2||
+        workerLevel(w)>=10||
+        w.training>0
+      );
+
+      btn('調回創始店',()=>{
+        w.store=-1;
+        w.role='收銀';
+      });
+
+      v.stores.forEach((s,i)=>{
+        btn('調任'+s.name,()=>{
+          w.store=i;
+          w.role='收銀';
+        });
+      });
+    }
+  }
+
+  if(featureTab==='地圖'){
+    txt('創始店有11層；分店只有一樓。電梯／傳送後可走動。');
+
+    for(let f=0;f<=state.chapter;f++){
+      btn(roomNames[f],()=>warp(-1,f));
+    }
+
+    const names=[
+      '社區店','商辦店','校園店',
+      '車站店','觀光店','郊區店'
+    ];
+
+    for(let i=0;i<6;i++){
+      const s=v.stores[i];
+
+      if(s){
+        btn('傳送 '+s.name,()=>warp(i,0));
+      }else if(i===v.stores.length){
+        btn(
+          `開設${names[i]} $${300+i*200}`,
+          ()=>pay(300+i*200,()=>{
+            v.stores.push({
+              name:names[i],
+              stock:Array(40).fill(0),
+              specialty:'一般',
+              cash:0,
+              spent:0,
+              sales:0,
+              queue:0,
+              clock:0,
+              ready:false
+            });
+            state.branches=v.stores.length+1;
+            notify('branch'+i,names[i]+'開設成功');
+          }),
+          state.chapter<5
+        );
+      }else{
+        txt(names[i]+'：先開設前一間分店');
+      }
+    }
+  }
+
+  if(featureTab==='分店'){
+    if(locationStore<0){
+      txt('先從地圖傳送到分店，再親自收銀或補貨。');
+    }
+
+    v.stores.forEach((s,i)=>{
+      txt(
+        `${s.name}｜${s.specialty}\n`+
+        `營收$${s.cash}／訂貨支出$${s.spent}／銷量${s.sales}\n`+
+        `隊列${s.queue}｜${storeReady(s,i)?'店長帶隊營業':'需玩家到場或配置店長＋員工'}`
+      );
+
+      for(const sp of [
+        '一般','早餐','鮮食','社區服務','觀光'
+      ]){
+        btn(
+          sp+(s.specialty==='一般'?'（首次免費）':' $80'),
+          ()=>{
+            if(sp===s.specialty)return;
+            pay(s.specialty==='一般'?0:80,()=>{
+              s.specialty=sp;
+            });
+          }
+        );
+      }
+
+      const sel=document.createElement('select');
+
+      for(let j=0;j<state.unlocked;j++){
+        const o=document.createElement('option');
+        o.value=j;
+        o.textContent=`${products[j].name}｜庫存${s.stock[j]}`;
+        sel.append(o);
+      }
+
+      body.append(sel);
+
+      btn('選定商品進貨5件',()=>{
+        const j=+sel.value;
+        const c=orderCost(j);
+
+        pay(c,()=>{
+          s.stock[j]+=5;
+          s.spent+=c;
+        });
+      });
+
+      btn('掃描隊首商品',()=>{
+        s.ready=true;
+      },
+        locationStore!==i||
+        s.queue<1||
+        Math.hypot(
+          player.position.x-86,
+          player.position.z-3
+        )>2.5
+      );
+
+      btn(
+        '收款',
+        ()=>branchSale(s,i,true),
+        locationStore!==i||!s.ready||s.queue<1
+      );
+    });
+  }
+
+  if(featureTab==='物流'){
+    txt('由創始店實際庫存調出5件到指定分店。不會憑空新增商品。');
+
+    const sel=document.createElement('select');
+
+    for(let j=0;j<state.unlocked;j++){
+      const o=document.createElement('option');
+      o.value=j;
+      o.textContent=products[j].name;
+      sel.append(o);
+    }
+
+    body.append(sel);
+
+    v.stores.forEach(s=>{
+      btn('調5件到'+s.name,()=>{
+        const j=+sel.value;
+
+        if(state.stock[j]+state.back[j]<5){
+          return toast('創始店庫存不足');
+        }
+
+        takeStock(j,5);
+        s.stock[j]+=5;
+        v.transfer=true;
+      },state.chapter<6);
+    });
+  }
+
+  if(featureTab==='服務'){
+    txt('設備逐項開放；服務訂單以按鈕操作原型實作。每次完成有收入，員工可自動處理。');
+
+    [
+      '微波食品',
+      '現煮咖啡',
+      '包裹取貨',
+      '影印服務',
+      '預購取貨'
+    ].forEach((name,i)=>{
+      if(!v.services.includes(i)){
+        btn(
+          `購買${name}設備 $${100+i*60}`,
+          ()=>pay(100+i*60,()=>v.services.push(i)),
+          state.chapter<i
+        );
+      }else{
+        btn(
+          `處理${name}訂單：成本$5／收入$15`,
+          ()=>{
+            if(state.playTime<v.offer){
+              return toast('尚未有新服務訂單');
+            }
+
+            pay(5,()=>{
+              state.cash+=15;
+              v.serviceCount++;
+              v.offer=state.playTime+15;
+            });
+          },
+          state.playTime<v.offer
+        );
+      }
+    });
+  }
+
+  if(featureTab==='研發'){
+    txt('先完成研發，再以自有商品試賣。研究後仍需在商品圖鑑逐件解鎖、訂貨。');
+
+    btn('自有品牌研發 $160',()=>pay(160,()=>{
+      v.stockResearch=true;
+      state.brand=true;
+      v.researchTrial=10;
+      state.back[27]=(state.back[27]||0)+10;
+    }),state.chapter<7||v.stockResearch);
+
+    txt(`自有商品已售 ${v.researchSold} 件`);
+  }
+
+  if(featureTab==='通知'){
+    txt(
+      v.notifications.length
+        ?v.notifications.map(n=>'• '+n.text).join('\n')
+        :'暫無通知'
+    );
+
+    btn('清除已讀',()=>v.notifications=[]);
+    btn('打開門市地圖',()=>featureTab='地圖');
+    btn('查看員工',()=>featureTab='員工');
+  }
+
+  if(featureTab==='監視器'){
+    txt(
+      `創始店：顧客${npcs.length}／排隊${npcs.filter(n=>n.stage==='queue').length}\n`+
+      `二樓：內用${v.tables.filter(t=>t.status==='eating').length}／髒座位${v.tables.filter(t=>t.status==='dirty').length}`
+    );
+
+    v.stores.forEach((s,i)=>{
+      txt(
+        `${s.name} [入口 → 貨架 → 收銀]\n`+
+        `排隊${s.queue}・員工${v.workers.filter(w=>w.store===i).length}・銷量${s.sales}`
+      );
+      btn('傳送巡店',()=>warp(i,0));
+    });
+
+    txt('目前是資料看板，不是即時監視器影像。');
+  }
+
+  if(featureTab==='集團'){
+    txt(
+      state.chapter<10
+        ?'主線完成後可領集團獎盃，進度已提前累積。'
+        :'自由經營：展店、員工、商品、訂單與競爭持續運作。'
+    );
+
+    const goals=[
+      ['全區展店',v.stores.length,6],
+      [
+        '十級店長團隊',
+        v.workers.filter(w=>
+          workerLevel(w)===10&&w.role==='店長'
+        ).length,
+        6
+      ],
+      ['商品收藏家',state.unlocked,40],
+      ['人氣自有品牌',v.researchSold,100],
+      ['優質服務',v.serviceCount+(v.clean||0),100],
+      [
+        '幸福企業',
+        v.workers.filter(w=>workerLevel(w)>=5).length,
+        8
+      ]
+    ];
+
+    goals.forEach(([name,n,total],i)=>{
+      txt(`${name}：${n}/${total}${v.rewards.includes(i)?' 🏆已領':''}`);
+
+      btn('追蹤目標',()=>v.goal=i);
+
+      btn('領取展示獎盃',()=>{
+        if(!v.rewards.includes(i))v.rewards.push(i);
+      },
+        state.chapter<10||
+        n<total||
+        v.rewards.includes(i)
+      );
+    });
+
+    txt('目前獎勵是成就紀錄；專屬制服、招牌與裝潢模型尚待製作。');
+
+    btn('企業再訂單：交水10＋吐司10，收入$500',()=>{
+      if(
+        state.stock[0]+state.back[0]<10||
+        state.stock[4]+state.back[4]<10
+      )return toast('庫存不足');
+
+      takeStock(0,10);
+      takeStock(4,10);
+      state.cash+=500;
+    },state.chapter<10);
+  }
+
+  if(['任務','裝潢','熟客'].includes(featureTab)){
+    txt('此項沿用原型頁面；裝潢目前只適用原型安全格位，新樓層拖曳配置尚未完成。');
+
+    btn('開啟'+featureTab,()=>{
+      tab=featureTab;
+      feature.classList.add('hidden');
+      panel.classList.remove('hidden');
+      renderManage();
+    });
+  }
+}
+
+function takeStock(i,n){
+  const a=Math.min(n,state.stock[i]);
+  state.stock[i]-=a;
+  state.back[i]-=n-a;
+}
+
+function branchSale(s,index,manual=false){
+  const ids=s.stock
+    .map((n,i)=>n>0?i:-1)
+    .filter(i=>i>=0);
+
+  if(!ids.length||s.queue<1)return;
+
+  let item=ids[Math.floor(Math.random()*ids.length)];
+
+  if(s.specialty==='早餐'){
+    item=ids.find(i=>[4,8,9,13,14,16,17].includes(i))??item;
+  }else if(s.specialty==='鮮食'){
+    item=ids.find(i=>[18,19,30,31].includes(i))??item;
+  }else if(s.specialty==='社區服務'){
+    item=ids.find(i=>i>=23&&i<=26)??item;
+  }else if(s.specialty==='觀光'){
+    item=ids.find(i=>i>=32)??item;
+  }
+
+  s.stock[item]--;
+  s.queue--;
+  s.ready=false;
+  s.cash+=products[item].price;
+  s.sales++;
+  state.cash+=products[item].price;
+  state.sales++;
+
+  if(item>=27&&v.stockResearch)v.researchSold++;
+
+  if(manual){
+    v.manual++;
+  }else{
+    const w=workerAt(index,'收銀')||workerAt(index,'店長');
+    if(w)gain(w,4);
+  }
+
+  hud();
+}
+
+function tickBusiness(dt){
+  businessTick+=dt;
+
+  for(const w of v.workers){
+    if(w.training){
+      w.training=Math.max(0,w.training-dt);
+
+      if(!w.training){
+        gain(w,60);
+        notify('train'+w.id,w.name+'培訓完成');
+      }
+    }
+  }
+
+  let changed=false;
+
+  for(const t of v.tables){
+    if(t.status==='eating'){
+      t.timer-=dt;
+      if(t.timer<=0){
+        t.status='dirty';
+        changed=true;
+      }
+    }
+  }
+
+  if(changed&&floorNow===1)updateDiners();
+
+  if(businessTick<4/STAFF_RATE)return;
+  businessTick=0;
+
+  const cleaner=workerAt(-1,'清潔');
+
+  if(cleaner){
+    const t=v.tables.find(t=>
+      t.status==='dirty'&&t.left10
+    );
+
+    if(t){
+      t.status='free';
+      gain(cleaner,4);
+      v.team++;
+      if(floorNow===1)updateDiners();
+    }
+  }
+
+  const stocker=workerAt(-1,'補貨');
+
+  if(stocker){
+    for(let i=0;i<state.unlocked;i++){
+      const n=Math.min(
+        state.back[i],
+        Math.max(0,15-state.stock[i]),
+        2+workerLevel(stocker)
+      );
+
+      if(n){
+        state.back[i]-=n;
+        state.stock[i]+=n;
+        gain(stocker,1);
+        v.team++;
+        break;
+      }
+    }
+  }
+
+  const service=workerAt(-1,'服務');
+
+  if(
+    service&&
+    v.services.length&&
+    state.playTime>=v.offer&&
+    state.cash>=5
+  ){
+    state.cash+=10;
+    v.serviceCount++;
+    v.offer=state.playTime+15/STAFF_RATE;
+    gain(service,3);
+    v.team++;
+  }
+
+  for(let i=0;i<v.stores.length;i++){
+    const s=v.stores[i];
+    const running=locationStore===i||storeReady(s,i);
+
+    if(!running)continue;
+    if(i===locationStore)continue;
+
+    if(s.stock.some(n=>n>0)){
+      s.clock=(s.clock||0)+4/STAFF_RATE;
+
+      if(s.clock>=4){
+        s.clock-=4;
+        s.queue=Math.min(8,s.queue+1);
+      }
+    }else{
+      notify('stock'+i,s.name+'缺貨，請進貨或調貨');
+    }
+
+    if(storeReady(s,i))branchSale(s,i);
+
+    if(s.queue>=5){
+      notify('queue'+i,s.name+'排隊過長，請支援');
+    }
+  }
+
+  if(npcs.filter(n=>n.stage==='queue').length>=5){
+    notify('mainQueue','創始店排隊過長');
+  }
+
+  state.staff=false;
+  state.auto=false;
+  hud();
+}
+
+// Main loop helpers: keep background businesses running while visiting other floors.
+function v9Cinematic(dt){
+  if(elevatorTime){
+    elevatorTime=Math.max(0,elevatorTime-dt);
+
+    chapterOverlay.textContent=elevatorTime>1.2
+      ?'電梯／傳送：關門中…'
+      :'抵達目的地・開門中…';
+
+    if(!elevatorTime){
+      floorNow=travelTarget;
+      buildRoom();
+
+      player.position.set(
+        (floorNow||locationStore>=0)?90:0,
+        .15,
+        (floorNow||locationStore>=0)?4:3.8
+      );
+
+      chapterOverlay.classList.add('hidden');
+
+      camera.position.copy(player.position).add(
+        new THREE.Vector3(0,10,11)
+      );
+    }
+
+    return true;
+  }
+
+  if(cinematic?.v9){
+    cinematic.elapsed+=dt;
+
+    const t=Math.min(1,cinematic.elapsed/8);
+    const g=tower.children[tower.children.length-1];
+    g.scale.y=Math.max(.01,t);
+
+    const h=4+state.chapter*3.3;
+
+    camera.position.set(
+      Math.sin(t*2)*26,
+      h+12,
+      Math.cos(t*2)*26
+    );
+    camera.lookAt(0,h*.6,0);
+
+    chapterOverlay.textContent=
+      `第${state.chapter}章完成：${cinematic.title}\n`+
+      `${state.chapter+1}樓施工 ${Math.floor(t*100)}%`;
+
+    if(t>=1){
+      g.scale.y=1;
+      cinematic=null;
+      upgrading=false;
+      chapterOverlay.classList.add('hidden');
+      save();
+      hud();
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
+const skipBuild=document.createElement('button');
+skipBuild.textContent='略過施工';
+skipBuild.style.cssText=
+  'position:fixed;right:20px;top:40%;z-index:15;display:none';
+
+skipBuild.onclick=()=>{
+  if(cinematic?.v9)cinematic.elapsed=8;
+};
+document.body.append(skipBuild);
+
+const oldV9Valid=valid;
+
+valid=function(x,z,old){
+  if(floorNow||locationStore>=0){
+    if(x<83.5||x>96.5||z<-5.5||z>5.5)return false;
+
+    return !roomColliders.some(c=>
+      Math.abs(x-c.x)<c.w&&
+      Math.abs(z-c.z)<c.d
+    );
+  }
+
+  if(x>6.1&&z<5.7&&z>-5.7)return false;
+
+  return oldV9Valid(x,z,old);
+};
+
+// Prevent nonserializable NPC references in saved state.
+const v9Save=save;
+
+save=function(){
+  const ref=scannedCustomer;
+  scannedCustomer=null;
+  v9Save();
+  if(ref)scannedCustomer=ref;
+};/* V10 interactive presentation layer */
+v.decor??={};
+v.uniform??=0;
+v.signStyle??=0;
+v.packageStyle??=0;
+
+const sceneExtras=new THREE.Group();
+scene.add(sceneExtras);
+
+let branchActors=[];
+let dinerActors=new Map();
+let serviceJob=null;
+let extraTimer=0;
+let doorPanels=[];
+let monitorCanvas=null;
+let branchSpawn=0;
+let serviceModel=null;
+let liftProgress=0;
+let liftMoving=false;
+let liftDestination=null;
+
+function cleanExtra(){
+  for(const n of branchActors){
+    if(n.item>=0){
+      v.stores[n.store].stock[n.item]++;
+      n.item=-1;
+    }
+    scene.remove(n.g);
+    disposeObjectV9(n.g);
+  }
+  branchActors=[];
+
+  for(const n of dinerActors.values()){
+    scene.remove(n.g);
+    disposeObjectV9(n.g);
+  }
+  dinerActors.clear();
+
+  while(sceneExtras.children.length){
+    const n=sceneExtras.children[0];
+    sceneExtras.remove(n);
+    disposeObjectV9(n);
+  }
+
+  doorPanels=[];
+  serviceModel=null;
+}
+
+function furniture10(type,x,z,rot=0){
+  const g=new THREE.Group();
+  g.position.set(x,0,z);
+  g.rotation.y=rot;
+  sceneExtras.add(g);
+
+  if(type==='盆栽'){
+    box(.5,.55,.5,0xa47752,0,.4,0,g);
+
+    const leaves=new THREE.Mesh(
+      new THREE.SphereGeometry(.42,10,8),
+      new THREE.MeshStandardMaterial({color:0x54845a})
+    );
+    leaves.position.y=1.05;
+    g.add(leaves);
+  }else if(type==='燈具'){
+    box(.08,2.3,.08,0x4e6069,0,1.2,0,g);
+    box(.65,.2,.65,0xffe8a4,0,2.35,0,g);
+  }else{
+    box(
+      1.2,.15,.7,
+      type==='展示櫃'?0x7e9fb1:0xab8058,
+      0,.9,0,g
+    );
+
+    for(const a of [-.45,.45]){
+      box(.08,.85,.08,0x687782,a,.45,0,g);
+    }
+
+    if(type==='展示櫃'){
+      for(let j=0;j<3;j++){
+        box(.2,.25,.2,0xe8c181,j*.3-.3,1.1,0,g);
+      }
+    }
+  }
+
+  return g;
+}
+
+function addDoor10(x,z,rotation=0){
+  for(const side of [-1,1]){
+    const g=new THREE.Group();
+    g.position.set(x,0,z);
+    g.rotation.y=rotation;
+    sceneExtras.add(g);
+
+    const m=box(
+      .85,2.7,.08,0xaebfc6,
+      side*.45,1.45,0,g
+    );
+
+    doorPanels.push({
+      m,
+      side,
+      open:1,
+      group:g,
+      baseX:x,
+      baseZ:z
+    });
+  }
+
+  box(.15,3,.2,0x31495b,x-1,1.6,z,sceneExtras);
+  box(.15,3,.2,0x31495b,x+1,1.6,z,sceneExtras);
+}
+
+const build10=buildRoom;
+
+buildRoom=function(){
+  cleanExtra();
+  build10();
+
+  for(const n of tablePeople){
+    scene.remove(n);
+    disposeObjectV9(n);
+  }
+  tablePeople=[];
+
+  if(!floorNow&&locationStore<0){
+    addDoor10(4,-2.7);
+    return;
+  }
+
+  addDoor10(95,5.75);
+
+  if(locationStore>=0){
+    const counter=label(
+      v.stores[locationStore].name,
+      7,.7,90,3,5.9
+    );
+    scene.remove(counter);
+    sceneExtras.add(counter);
+
+    v.stores[locationStore].queue=0;
+    v.stores[locationStore].ready=false;
+    branchSpawn=1;
+  }else if(floorNow===1){
+    box(.8,1,.8,0x3d795d,96,.6,-4,sceneExtras);
+    box(.8,1,.8,0x476c8b,96,.6,-2.8,sceneExtras);
+
+    const sign=label(
+      '回收／垃圾／餐具',
+      2,.45,95.7,1.6,-4
+    );
+    scene.remove(sign);
+    sceneExtras.add(sign);
+  }else if(floorNow===3){
+    for(let j=0;j<3;j++){
+      box(
+        .7,.8,.6,0x637884,
+        86+j*4,1.5,-3,sceneExtras
+      );
+      box(
+        .25,.35,.25,0xe9e2d3,
+        86+j*4,1.3,-2.5,sceneExtras
+      );
+    }
+  }else if(floorNow===4){
+    for(let j=0;j<4;j++){
+      box(
+        .6,.2,.4,0xe5c690,
+        86+j*2,1.2,-2,sceneExtras
+      );
+    }
+  }else if(floorNow===7){
+    box(2,.12,1,0x91bda9,90,1.2,1,sceneExtras);
+
+    for(let j=0;j<5;j++){
+      box(
+        .2,.4,.2,0xaec9d2,
+        89+j*.4,1.5,1,sceneExtras
+      );
+    }
+  }else if(floorNow===10){
+    for(let i=0;i<v.rewards.length;i++){
+      const x=85+i*1.8;
+
+      box(.7,.8,.7,0x35495a,x,.5,1,sceneExtras);
+      box(.35,.5,.35,0xe4b750,x,1.2,1,sceneExtras);
+
+      const ball=new THREE.Mesh(
+        new THREE.SphereGeometry(.24,12,10),
+        new THREE.MeshStandardMaterial({
+          color:0xe8c968,
+          metalness:.65,
+          roughness:.25
+        })
+      );
+      ball.position.set(x,1.65,1);
+      sceneExtras.add(ball);
+    }
+  }
+
+  const key=locationStore>=0
+    ?'s'+locationStore
+    :'f'+floorNow;
+
+  for(const f of v.decor[key]||[]){
+    furniture10(f.type,f.x,f.z,f.rot);
+  }
+};
+
+updateDiners=function(){};
+
+const baseWarp10=warp;
+
+warp=function(store,floor){
+  if(elevatorTime||liftMoving)return;
+
+  liftMoving=true;
+  liftProgress=0;
+  liftDestination={store,floor};
+  feature.classList.add('hidden');
+  joy.x=joy.y=0;
+
+  for(const k in keys)keys[k]=false;
+
+  elevatorTime=4;
+  chapterOverlay.classList.remove('hidden');
+};
+
+const cin10=v9Cinematic;
+
+v9Cinematic=function(dt){
+  if(liftMoving){
+    liftProgress+=dt;
+    elevatorTime=Math.max(.01,4-liftProgress);
+    const t=liftProgress;
+
+    for(const d of doorPanels){
+      const opening=t<1
+        ?1-t
+        :t<2.7
+          ?0
+          :Math.min(1,(t-2.7)/1.3);
+
+      d.m.position.x=d.side*(.45+opening*.9);
+    }
+
+    chapterOverlay.textContent=t<1
+      ?'電梯門關閉'
+      :t<2.7
+        ?'電梯移動中…'
+        :'抵達・電梯門開啟';
+
+    if(t>=2&&!liftDestination.switched){
+      locationStore=liftDestination.store;
+      floorNow=liftDestination.floor;
+      buildRoom();
+
+      player.position.set(
+        (floorNow||locationStore>=0)?95:4,
+        .15,
+        (floorNow||locationStore>=0)?4.4:-1.7
+      );
+
+      liftDestination.switched=true;
+    }
+
+    const inside=floorNow||locationStore>=0;
+
+    camera.position.set(
+      inside?95:4,
+      2.2,
+      inside?1.6:1
+    );
+    camera.lookAt(
+      inside?95:4,
+      1.4,
+      inside?5.75:-2.7
+    );
+
+    if(t>=4){
+      liftMoving=false;
+      elevatorTime=0;
+      chapterOverlay.classList.add('hidden');
+      save();
+    }
+
+    return true;
+  }
+
+  return cin10(dt);
+};
+
+// Dining trips: paid shoppers walk to the lift, travel, walk to a seat, sit, eat, leave.
+const sell10=sellCustomer;
+
+sellCustomer=function(n,manual){
+  const free=v.tables.findIndex(t=>t.status==='free');
+  const before=v.dined;
+
+  sell10(n,manual);
+
+  if(v.dined>before&&free>=0){
+    const t=v.tables[free];
+
+    t.status='toLift';
+    t.left10=false;
+    t.timer=0;
+    t.route=0;
+    t.x=95;
+    t.z=4.6;
+
+    n.seat10=free;
+    n.stage='diningLift';
+    n.target.set(4,.15,-1.6);
+
+    n.path10=[
+      new THREE.Vector3(4,.15,4.5),
+      new THREE.Vector3(4,.15,-1.6)
+    ];
+    n.pathIndex10=0;
+  }
+};
+
+const customers10=customers;
+
+customers=function(dt){
+  customers10(dt);
+
+  for(const n of npcs){
+    if(n.stage==='diningLift'){
+      const p=n.path10[n.pathIndex10];
+
+      if(walk(n,p,dt)){
+        n.pathIndex10++;
+
+        if(n.pathIndex10>=n.path10.length){
+          const t=v.tables[n.seat10];
+          t.status='travel';
+          t.timer=2;
+          n.stage='diningHidden';
+          n.g.visible=false;
+        }
+      }
+    }else if(n.stage==='diningReturn'){
+      n.g.visible=!floorNow&&locationStore<0;
+
+      if(walk(n,n.target,dt)){
+        n.stage='exit';
+        n.target.set(0,.15,4.5);
+      }
+    }
+  }
+
+  for(const n of npcs){
+    n.g.visible=
+      n.stage!=='diningHidden'&&
+      !floorNow&&
+      locationStore<0;
+  }
+};
+
+function seatPosition10(i){
+  const t=Math.floor(i/2);
+
+  return {
+    x:90-4.8+(t%5)*2.4,
+    z:-2.7+Math.floor(t/5)*4+(i%2?-.85:.85)
+  };
+}
+
+function moveSeat10(t,x,z,dt){
+  const dx=x-t.x;
+  const dz=z-t.z;
+  const len=Math.hypot(dx,dz);
+
+  if(len<.08)return true;
+
+  const speed=Math.min(len,dt*1.4);
+  t.x+=dx/len*speed;
+  t.z+=dz/len*speed;
+
+  return false;
+}
+
+function diningTick10(dt){
+  for(let i=0;i<20;i++){
+    const t=v.tables[i];
+    const pos=seatPosition10(i);
+
+    if(
+      t.status==='toLift'&&
+      !npcs.some(n=>n.seat10===i)
+    ){
+      t.status='travel';
+      t.timer=2;
+    }
+
+    if(t.status==='travel'){
+      t.timer-=dt;
+
+      if(t.timer<=0){
+        t.status='walking';
+        t.x=95;
+        t.z=4.6;
+        t.route=0;
+      }
+    }else if(t.status==='walking'){
+      const paths=[
+        {x:pos.x,z:4.4},
+        {x:pos.x,z:pos.z}
+      ];
+
+      if(moveSeat10(t,paths[t.route].x,paths[t.route].z,dt)){
+        t.route++;
+
+        if(t.route===paths.length){
+          t.status='eating';
+          t.timer=20;
+        }
+      }
+    }else if(t.status==='dirty'&&!t.left10){
+      t.status='leaving';
+      t.x=pos.x;
+      t.z=pos.z;
+      t.route=0;
+    }else if(t.status==='leaving'){
+      const paths=[
+        {x:pos.x,z:4.4},
+        {x:95,z:4.4}
+      ];
+
+      if(moveSeat10(t,paths[t.route].x,paths[t.route].z,dt)){
+        t.route++;
+
+        if(t.route===2){
+          t.status='dirty';
+          t.left10=true;
+
+          const n=npcs.find(n=>
+            n.seat10===i&&n.stage==='diningHidden'
+          );
+
+          if(n){
+            n.stage='diningReturn';
+            n.g.position.set(4,.15,-1.6);
+            n.target.set(4,.15,4.5);
+          }
+        }
+      }
+    }else if(t.status==='free'){
+      t.left10=false;
+    }
+
+    const visible=
+      floorNow===1&&
+      locationStore<0&&
+      ['walking','eating','leaving','dirty'].includes(t.status);
+
+    let actor=dinerActors.get(i);
+
+    if(!visible){
+      if(actor){
+        if(actor.trash){
+          sceneExtras.remove(actor.trash);
+          disposeObjectV9(actor.trash);
+        }
+
+        scene.remove(actor.g);
+        disposeObjectV9(actor.g);
+        dinerActors.delete(i);
+      }
+      continue;
+    }
+
+    if(!actor){
+      actor={
+        g:human(i%2?0xc08e64:0x6b8d7b),
+        kind:''
+      };
+      dinerActors.set(i,actor);
+    }
+
+    if(actor.kind!==t.status){
+      actor.kind=t.status;
+    }
+
+    if(t.status==='dirty'){
+      actor.g.visible=false;
+
+      if(!actor.trash){
+        const g=new THREE.Group();
+
+        box(
+          .28,.12,.28,0xe5caa7,
+          pos.x,.99,
+          pos.z+(i%2?.85:-.85),
+          g
+        );
+
+        sceneExtras.add(g);
+        actor.trash=g;
+      }
+    }else{
+      actor.g.visible=true;
+
+      actor.g.position.set(
+        t.x??pos.x,
+        t.status==='eating'?-.25:.15,
+        t.z??pos.z
+      );
+
+      actor.g.rotation.y=i%2?0:Math.PI;
+
+      actor.g.legs.forEach((l,j)=>{
+        l.rotation.x=t.status==='eating'
+          ?-1.1
+          :Math.sin(state.playTime*7+j*Math.PI)*.3;
+      });
+    }
+
+    if(t.status!=='dirty'&&actor.trash){
+      sceneExtras.remove(actor.trash);
+      disposeObjectV9(actor.trash);
+      actor.trash=null;
+    }
+  }
+}
+
+function spawnBranch10(){
+  if(locationStore<0)return;
+
+  const s=v.stores[locationStore];
+
+  if(
+    !s.stock.some(n=>n>0)||
+    branchActors.length>=12
+  )return;
+
+  const g=human(
+    [0xab795b,0x7698a3,0x819477]
+      [Math.floor(Math.random()*3)]
+  );
+
+  g.position.set(95,.15,5.2);
+
+  branchActors.push({
+    g,
+    stage:'enter',
+    item:-1,
+    timer:0,
+    walk:0,
+    target:new THREE.Vector3(94,.15,3.8),
+    store:locationStore
+  });
+}
+
+function branchTick10(dt){
+  if(locationStore<0)return;
+
+  const s=v.stores[locationStore];
+  branchSpawn-=dt;
+
+  if(branchSpawn<=0){
+    spawnBranch10();
+    branchSpawn=5*marketFactor();
+  }
+
+  for(let i=branchActors.length-1;i>=0;i--){
+    const n=branchActors[i];
+
+    if(n.stage==='enter'){
+      if(walk(n,n.target,dt)){
+        n.stage='browse';
+        n.target.set(93,.15,-1);
+      }
+    }else if(n.stage==='browse'){
+      if(walk(n,n.target,dt)){
+        n.timer+=dt;
+
+        if(n.timer>2){
+          const ids=s.stock
+            .map((v,i)=>v>0?i:-1)
+            .filter(i=>i>=0);
+
+          if(ids.length){
+            n.item=chooseProduct(ids);
+            s.stock[n.item]--;
+
+            const bag=box(
+              .2,.3,.2,
+              products[n.item].color,
+              .4,.9,0,n.g
+            );
+
+            n.stage='queuePath';
+            n.target.set(93,.15,4.3);
+          }else{
+            n.stage='exit';
+            n.target.set(95,.15,5.2);
+          }
+        }
+      }
+    }else if(n.stage==='queuePath'){
+      if(walk(n,n.target,dt)){
+        n.stage='queue';
+        n.timer=0;
+      }
+    }else if(n.stage==='queue'){
+      const queue=branchActors.filter(a=>a.stage==='queue');
+      const idx=queue.indexOf(n);
+
+      const at=walk(
+        n,
+        new THREE.Vector3(86+idx*.55,.15,4.3),
+        dt
+      );
+
+      n.timer+=dt;
+
+      const cashier=workerAt(locationStore,'收銀');
+
+      n.serviceTime=(idx===0&&at&&cashier)
+        ?(n.serviceTime||0)+dt
+        :0;
+
+      if(
+        idx===0&&
+        at&&
+        cashier&&
+        n.serviceTime>
+          Math.max(2,7-workerLevel(cashier)*.4)/STAFF_RATE
+      ){
+        finishBranch10(n,false);
+        gain(cashier,4);
+      }else if(n.timer>150){
+        if(n.item>=0)s.stock[n.item]++;
+        n.item=-1;
+        n.stage='exit';
+        n.target.set(95,.15,5.2);
+      }
+    }else if(n.stage==='exit'){
+      if(walk(n,n.target,dt)){
+        scene.remove(n.g);
+        disposeObjectV9(n.g);
+        branchActors.splice(i,1);
+      }
+    }
+  }
+
+  s.queue=branchActors.filter(n=>n.stage==='queue').length;
+}
+
+function finishBranch10(n,manual){
+  if(n.item<0)return;
+
+  const s=v.stores[n.store];
+  const item=n.item;
+  const value=products[item].price;
+
+  s.cash+=value;
+  s.sales++;
+  state.cash+=value;
+  state.sales++;
+
+  if(v.stockResearch&&item>=27)v.researchSold++;
+  if(manual)v.manual++;
+
+  n.item=-1;
+  n.stage='exit';
+  n.target.set(95,.15,5.2);
+  s.ready=false;
+
+  hud();
+}
+
+const branchSale10=branchSale;
+
+branchSale=function(s,i,manual=false){
+  if(i===locationStore){
+    if(manual){
+      const n=branchActors.find(n=>n.stage==='queue');
+      if(n&&s.ready)finishBranch10(n,true);
+    }
+    return;
+  }
+
+  branchSale10(s,i,manual);
+};
+
+// Reserve picked goods on scene changes, so customers cannot remove stock by travelling.const warp10=warp;
+
+warp=function(store,floor){
+  for(const n of branchActors){
+    if(n.item>=0){
+      v.stores[n.store].stock[n.item]++;
+      n.item=-1;
+    }
+  }
+
+  if(locationStore>=0){
+    v.stores[locationStore].queue=0;
+  }
+
+  warp10(store,floor);
+};
+
+const svcOverlay=document.createElement('div');
+svcOverlay.className='overlay hidden';
+svcOverlay.id='serviceWork';
+svcOverlay.innerHTML=
+  '<div class="box">'+
+  '<h1 id="svcTitle"></h1>'+
+  '<div id="svcVisual" style="height:80px;background:#203b50;border-radius:12px;padding:20px;font-size:26px;text-align:center"></div>'+
+  '<p id="svcText"></p>'+
+  '<button id="svcNext">操作</button>'+
+  '<button id="svcCancel">取消</button>'+
+  '</div>';
+document.body.append(svcOverlay);
+
+svcOverlay.querySelectorAll('*').forEach(e=>{
+  e.style.touchAction='pan-y';
+});
+
+const serviceSteps=[
+  ['放入餐點','關門並啟動微波','取出交付'],
+  ['選擇杯型','放杯並開始萃取','加蓋交付'],
+  ['核對取貨編號','找到對應包裹','確認交付'],
+  ['確認影印份數','補紙並開始列印','整理交付'],
+  ['核對預購編號','備齊商品','確認交付']
+];
+
+function startService10(i){
+  if(state.cash<5||state.playTime<v.offer){
+    return toast('等待新訂單或資金不足');
+  }
+
+  state.cash-=5;
+
+  serviceJob={
+    i,
+    step:0,
+    progress:0,
+    running:false
+  };
+
+  feature.classList.add('hidden');
+  svcOverlay.classList.remove('hidden');
+  renderService10();
+}
+
+function renderService10(){
+  const j=serviceJob;
+  if(!j)return;
+
+  $('svcTitle').textContent=[
+    '微波食品',
+    '現煮咖啡',
+    '包裹取貨',
+    '影印服務',
+    '預購取貨'
+  ][j.i];
+
+  $('svcText').textContent=
+    `步驟 ${j.step+1}/3：${serviceSteps[j.i][j.step]}${j.i===2?'｜取貨編號 ST-1024':''}`;
+
+  $('svcVisual').textContent=[
+    '▣ 微波爐',
+    '☕ 咖啡機',
+    '▤ 包裹架',
+    '▧ 影印機',
+    '▣ 預購櫃'
+  ][j.i];
+
+  $('svcNext').textContent=serviceSteps[j.i][j.step];
+  $('svcNext').disabled=j.running;
+}
+
+$('svcNext').onclick=()=>{
+  if(!serviceJob||serviceJob.running)return;
+
+  serviceJob.running=true;
+  serviceJob.progress=0;
+  renderService10();
+};
+
+$('svcCancel').onclick=()=>{
+  if(serviceJob)state.cash+=5;
+  serviceJob=null;
+  svcOverlay.classList.add('hidden');
+  save();
+};
+
+function serviceTick10(dt){
+  if(!serviceJob?.running)return;
+
+  serviceJob.progress+=dt;
+  const t=Math.min(1,serviceJob.progress/1.5);
+
+  $('svcVisual').style.background=
+    `linear-gradient(90deg,#597c64 ${t*100}%,#203b50 ${t*100}%)`;
+
+  if(t>=1){
+    serviceJob.running=false;
+    serviceJob.step++;
+
+    if(serviceJob.step>=3){
+      state.cash+=15;
+      v.serviceCount++;
+      v.offer=state.playTime+15;
+      serviceJob=null;
+      svcOverlay.classList.add('hidden');
+      toast('服務完成，收入已入帳');
+      save();
+      hud();
+    }else{
+      renderService10();
+    }
+  }
+}
+
+const rf10=renderFeature;
+
+renderFeature=function(){
+  rf10();
+
+  const body=$('featureBody');
+  const tabs=$('featureTabs');
+
+  function text(t){
+    const p=document.createElement('p');
+    p.textContent=t;
+    body.append(p);
+  }
+
+  function btn(t,f,disabled=false){
+    const b=document.createElement('button');
+    b.textContent=t;
+    b.disabled=disabled;
+
+    b.onclick=()=>{
+      f();
+      save();
+      renderFeature();
+    };
+
+    body.append(b);
+  }
+
+  if(featureTab==='服務'){
+    body.replaceChildren();
+
+    text('服務採三步驟操作與進度動畫；各項成本$5，完成收入$15。不是寫實機器模擬。');
+
+    for(let i=0;i<5;i++){
+      const name=[
+        '微波食品','咖啡','包裹','影印','預購'
+      ][i];
+
+      if(v.services.includes(i)){
+        btn(
+          '開始'+name,
+          ()=>startService10(i),
+          !!serviceJob||state.playTime<v.offer
+        );
+      }else{
+        btn(
+          `購買${name}設備 $${100+i*60}`,
+          ()=>{
+            if(state.cash<100+i*60)return;
+            state.cash-=100+i*60;
+            v.services.push(i);
+          },
+          state.chapter<i
+        );
+      }
+    }
+  }
+
+  if(featureTab==='裝潢'){
+    body.replaceChildren();
+
+    const key=locationStore>=0
+      ?'s'+locationStore
+      :'f'+floorNow;
+
+    v.decor[key]??=[];
+
+    text('目前房間可用安全格位擺設，保留動線；選擇放置、旋轉、移動或移除。仍不是手指自由拖曳。');
+
+    if(!floorNow&&locationStore<0){
+      text('請先進入樓層或分店再擺設。');
+      return;
+    }
+
+    const slots=[
+      {x:84,z:4.9},
+      {x:87,z:4.9},
+      {x:90,z:4.9},
+      {x:84,z:-4.8},
+      {x:90,z:-4.8}
+    ];
+
+    slots.forEach((p,i)=>{
+      const f=v.decor[key].find(f=>f.slot===i);
+
+      text(`格位${i+1}：${f?.type||'空位'}`);
+
+      if(f){
+        btn('旋轉',()=>{
+          f.rot=(f.rot||0)+Math.PI/2;
+          buildRoom();
+        });
+
+        btn('移除',()=>{
+          v.decor[key]=v.decor[key].filter(a=>a!==f);
+          buildRoom();
+        });
+
+        slots.forEach((q,j)=>{
+          if(!v.decor[key].some(a=>a.slot===j)){
+            btn('移到'+(j+1),()=>{
+              Object.assign(f,q,{slot:j});
+              buildRoom();
+            });
+          }
+        });
+      }else{
+        for(const type of ['盆栽','燈具','展示櫃']){
+          btn(type+' $80',()=>{
+            if(state.cash<80)return;
+
+            state.cash-=80;
+            v.decor[key].push({
+              type,
+              slot:i,
+              ...p,
+              rot:0
+            });
+            buildRoom();
+          },state.cash<80);
+        }
+      }
+    });
+  }
+
+  if(featureTab==='監視器'){
+    body.replaceChildren();
+    text('即時示意監視器：由顧客位置、排隊和庫存繪製；不是攝影機影像。');
+
+    monitorCanvas=document.createElement('canvas');
+    monitorCanvas.width=640;
+    monitorCanvas.height=360;
+    monitorCanvas.style.cssText=
+      'width:100%;height:auto;background:#132b3c;touch-action:pan-y';
+
+    body.append(monitorCanvas);
+    paintMonitor10();
+  }
+
+  if(featureTab==='集團'){
+    text('已領成就可套用制服、招牌與商品展示配色；11樓展示獎盃模型。');
+
+    for(let i=0;i<v.rewards.length;i++){
+      const r=v.rewards[i];
+
+      btn('套用獎勵款式 '+(r+1),()=>{
+        v.uniform=r+1;
+        v.signStyle=r+1;
+        v.packageStyle=r+1;
+        applyRewards10();
+
+        if(floorNow===10)buildRoom();
+      });
+    }
+  }
+};
+
+let rewardSign10=null;
+
+function applyRewards10(){
+  if(rewardSign10){
+    scene.remove(rewardSign10);
+    disposeObjectV9(rewardSign10);
+  }
+
+  rewardSign10=label(
+    '7-10 seven ten',
+    7,.85,0,3.4,5.68,
+    [
+      '#17324f',
+      '#684a87',
+      '#946028',
+      '#287363',
+      '#8a3947',
+      '#315c89',
+      '#607534'
+    ][v.signStyle%7]
+  );
+
+  const colors=[
+    0x24587a,
+    0x9b6fbb,
+    0xc88d48,
+    0x4b998a,
+    0xae5c62,
+    0x4c79a3,
+    0x728950
+  ];
+
+  player.children.forEach(o=>{
+    if(
+      o.isMesh&&
+      o.geometry?.parameters?.height===.68
+    ){
+      o.material.color.setHex(
+        colors[v.uniform%colors.length]
+      );
+    }
+  });
+
+  goods.forEach((arr,i)=>{
+    arr.forEach(m=>{
+      m.material.color.setHex(
+        v.packageStyle
+          ?colors[(i+v.packageStyle)%colors.length]
+          :products[i].color
+      );
+    });
+  });
+
+  const title=document.querySelector('#top .brand');
+
+  title.style.color=[
+    '#f2dfb5',
+    '#ccb0ef',
+    '#ffd28c',
+    '#8cddc8',
+    '#e4a5ac',
+    '#9bbfe5',
+    '#d2dfaa'
+  ][v.signStyle%7];
+}
+
+function paintMonitor10(){
+  if(!monitorCanvas||!monitorCanvas.isConnected)return;
+
+  const c=monitorCanvas.getContext('2d');
+  c.fillStyle='#132b3c';
+  c.fillRect(0,0,640,360);
+  c.font='14px sans-serif';
+
+  for(let i=-1;i<v.stores.length;i++){
+    const cell=i+1;
+    const x=(cell%3)*210;
+    const y=Math.floor(cell/3)*115;
+
+    c.strokeStyle='#94aaba';
+    c.strokeRect(x+5,y+5,200,105);
+
+    c.fillStyle='#f2dfb5';
+    c.fillText(
+      i<0?'創始店':v.stores[i].name,
+      x+12,y+24
+    );
+
+    c.fillStyle='#667f8d';
+    c.fillRect(x+45,y+36,25,45);
+    c.fillRect(x+105,y+36,25,45);
+
+    const people=i<0
+      ?npcs
+      :locationStore===i
+        ?branchActors
+        :null;
+
+    const count=people
+      ?people.length
+      :v.stores[i].queue;
+
+    for(let n=0;n<count;n++){
+      c.fillStyle='#8fe1ba';
+      c.beginPath();
+
+      let px=x+20+(n%8)*21;
+      let py=y+90;
+
+      if(people){
+        px=x+100+
+          (people[n].g.position.x-(i<0?0:90))*10;
+        py=y+60+people[n].g.position.z*5;
+      }
+
+      c.arc(px,py,3,0,Math.PI*2);
+      c.fill();
+    }
+
+    c.fillStyle='#d5e1e7';
+    c.fillText(
+      '隊列 '+
+      (
+        i<0
+          ?npcs.filter(n=>n.stage==='queue').length
+          :v.stores[i].queue
+      ),
+      x+140,y+24
+    );
+  }
+}
+
+const valid10=valid;
+
+valid=function(x,z,old){
+  if(floorNow||locationStore>=0){
+    const key=locationStore>=0
+      ?'s'+locationStore
+      :'f'+floorNow;
+
+    if((v.decor[key]||[]).some(f=>
+      Math.abs(x-f.x)<.65&&
+      Math.abs(z-f.z)<.65
+    ))return false;
+  }
+
+  return valid10(x,z,old);
+};
+
+const interact10=interact;
+
+interact=function(){
+  if(serviceJob||liftMoving)return;
+
+  if(
+    (floorNow||locationStore>=0)&&
+    Math.hypot(
+      player.position.x-95,
+      player.position.z-5
+    )<2
+  ){
+    openFeature('地圖');
+    return;
+  }
+
+  if(
+    !floorNow&&
+    locationStore<0&&
+    Math.hypot(
+      player.position.x-4,
+      player.position.z+2
+    )<2
+  ){
+    openFeature('地圖');
+    return;
+  }
+
+  interact10();
+};
+
+$('interact').onclick=()=>interact();
+
+// Save reserved merchandise as stock; active NPCs are not persisted.
+const save10=save;
+
+save=function(){
+  const holds=[];
+
+  for(const n of branchActors){
+    if(n.item>=0){
+      v.stores[n.store].stock[n.item]++;
+      holds.push(n);
+    }
+  }
+
+  save10();
+
+  for(const n of holds){
+    v.stores[n.store].stock[n.item]--;
+  }
+};
+
+function extraTick10(dt,paused){
+  if(!document.hidden)serviceTick10(dt);
+
+  if(!paused){
+    diningTick10(dt);
+    branchTick10(dt);
+  }
+
+  if(
+    featureTab==='監視器'&&
+    !feature.classList.contains('hidden')
+  ){
+    paintMonitor10();
+  }
+
+  for(const d of doorPanels){
+    if(liftMoving)continue;
+
+    const near=
+      Math.hypot(
+        player.position.x-d.baseX,
+        player.position.z-d.baseZ
+      )<2.5||
+      branchActors.some(n=>
+        Math.hypot(
+          n.g.position.x-d.baseX,
+          n.g.position.z-d.baseZ
+        )<2
+      );
+
+    d.open=THREE.MathUtils.damp(
+      d.open,near?1:0,5,dt
+    );
+    d.m.position.x=d.side*(.45+d.open*.9);
+  }
+
+  for(const [i,n] of dinerActors){
+    if(v.tables[i].status==='free'&&n.trash){
+      sceneExtras.remove(n.trash);
+      disposeObjectV9(n.trash);
+      n.trash=null;
+    }
+  }
+}
+
+applyRewards10();
+buildRoom();/* V11 repair: one floor router, actionable stations, branch stock guards. */
+const STAFF_RATE=5;
+
+// Validate older saved branch records before any customer accesses inventory.
+v.stores.forEach((s,i)=>{
+  s.name??=[
+    '社區店',
+    '商辦店',
+    '校園店',
+    '車站店',
+    '觀光店',
+    '郊區店'
+  ][i];
+
+  s.stock=products.map((_,j)=>
+    Math.max(0,Number(s.stock?.[j])||0)
+  );
+
+  s.specialty??='一般';
+  s.cash=Number(s.cash)||0;
+  s.spent=Number(s.spent)||0;
+  s.sales=Number(s.sales)||0;
+  s.queue=0;
+  s.ready=false;
+});
+
+const oldManage11=renderManage;
+
+renderManage=function(){
+  if(tab==='總部'){
+    panel.classList.add('hidden');
+    openFeature('地圖');
+    return;
+  }
+  oldManage11();
+};
+
+enterFloor=function(f){
+  panel.classList.add('hidden');
+  warp(-1,Math.max(0,Math.min(state.chapter,f-1)));
+};
+
+const diagnostic=document.createElement('div');
+diagnostic.style.cssText=
+  'display:none;position:fixed;z-index:100;'+
+  'left:4%;right:4%;top:15%;'+
+  'background:#672b34;color:white;padding:18px;'+
+  'border-radius:12px;white-space:pre-wrap;touch-action:pan-y';
+document.body.append(diagnostic);
+
+function report11(message){
+  diagnostic.style.display='block';
+  diagnostic.textContent=
+    '執行錯誤（請截圖回報）：\n'+
+    message+
+    '\n請勿清除存檔。';
+}
+
+window.addEventListener('error',e=>{
+  report11(e.message+' @'+e.lineno);
+});
+
+window.addEventListener('unhandledrejection',e=>{
+  report11(String(e.reason?.stack||e.reason));
+});
+
+let stations11=[];
+
+function addStation11(
+  name,x,z,target,
+  color=0x668e9b
+){
+  const g=new THREE.Group();
+  sceneExtras.add(g);
+
+  box(1.05,.9,.65,color,x,.55,z,g);
+  box(.7,.4,.12,0x1b3449,x,1.15,z,g);
+
+  const sign=label(name,1.8,.32,x,1.65,z+.38);
+  scene.remove(sign);
+  g.add(sign);
+
+  stations11.push({name,x,z,target});
+}
+
+const room11=buildRoom;
+
+buildRoom=function(){
+  stations11=[];
+  room11();
+
+  if(!floorNow&&locationStore<0)return;
+
+  const definitions=locationStore>=0
+    ?[
+      ['進貨終端','分店'],
+      ['服務櫃台','服務'],
+      ['員工排班','員工'],
+      ['庫存調貨','物流']
+    ]
+    :[
+      [],
+      [
+        ['清潔工具','clean'],
+        ['內用監視器','監視器'],
+        ['餐具服務台','服務']
+      ],
+      [
+        ['招募櫃台','員工'],
+        ['培訓終端','員工'],
+        ['排班看板','員工'],
+        ['員工資料','員工']
+      ],
+      [
+        ['咖啡機','服務'],
+        ['微波爐','服務'],
+        ['點餐終端','服務'],
+        ['甜點訂貨','商品']
+      ],
+      [
+        ['鮮食備料台','商品'],
+        ['企業訂單台','目標'],
+        ['預購服務','服務'],
+        ['冷藏庫存','物流']
+      ],
+      [
+        ['門市地圖','地圖'],
+        ['店長調派','員工'],
+        ['分店專精','分店'],
+        ['監視器','監視器']
+      ],
+      [
+        ['調貨終端','物流'],
+        ['倉庫訂貨','商品'],
+        ['配送通知','通知'],
+        ['分店庫存','分店']
+      ],
+      [
+        ['配方研究','研發'],
+        ['商品圖鑑','商品'],
+        ['試賣報告','研發'],
+        ['品牌展示','集團']
+      ],
+      [
+        ['促銷企劃','competition'],
+        ['企業合作','目標'],
+        ['熟客中心','熟客'],
+        ['品牌成就','集團']
+      ],
+      [
+        ['財務報表','分店'],
+        ['展店評估','地圖'],
+        ['營運檢查','目標'],
+        ['調派人力','員工']
+      ],
+      [
+        ['集團目標','集團'],
+        ['門市總覽','監視器'],
+        ['成就展示','集團'],
+        ['十一層導覽','地圖']
+      ]
+    ][floorNow];
+
+  definitions.forEach(([name,target],i)=>{
+    addStation11(
+      name,
+      84+i*3.4,
+      -4.7,
+      target,
+      [
+        0x628d9d,
+        0x8f9971,
+        0x9d8566,
+        0x877b9d
+      ][i%4]
+    );
+  });
+
+  if(locationStore>=0){
+    roomBox(
+      2,2,.7,0xa5bdc5,
+      -5,1.2,-3,false
+    );
+    roomBox(
+      1.5,.7,1,0xb48e60,
+      4,.5,-3,false
+    );
+
+    const s=v.stores[locationStore];
+
+    if(!s.stock.some(n=>n>0)){
+      notify(
+        'empty'+locationStore,
+        s.name+
+        '尚未進貨：用「商品／進貨」選擇商品進貨後，顧客才會購物。'
+      );
+    }
+  }
+};
+
+const interact11=interact;
+
+interact=function(){
+  if(liftMoving||serviceJob)return;
+
+  const n=stations11.find(n=>
+    Math.hypot(
+      player.position.x-n.x,
+      player.position.z-n.z
+    )<2
+  );
+
+  if(n){
+    if(n.target==='商品'){
+      $('openShop').onclick();
+      return;
+    }
+
+    if(n.target==='clean'){
+      const t=v.tables.find(t=>
+        t.status==='dirty'&&t.left10
+      );
+
+      if(t){
+        t.status='free';
+        v.clean=(v.clean||0)+1;
+        save();
+        toast('已清潔一個座位');
+      }else{
+        toast('沒有需要清潔的座位');
+      }
+
+      return;
+    }
+
+    if(n.target==='competition'){
+      tab='競爭';
+      panel.classList.remove('hidden');
+      renderManage();
+      return;
+    }
+
+    openFeature(n.target);
+    return;
+  }
+
+  interact11();
+};
+
+$('interact').onclick=()=>interact();
+
+const shop11=$('openShop').onclick;
+
+$('openShop').onclick=()=>{
+  if(locationStore>=0){
+    openFeature('分店');
+    return;
+  }
+  shop11();
+};
+
+// Close all management panels when a destination is chosen;
+// otherwise the simulation stays paused.
+const travel11=warp;
+
+warp=function(store,floor){
+  if(store>=v.stores.length||floor>state.chapter)return;
+
+  panel.classList.add('hidden');
+  $('shop').classList.add('hidden');
+  story.classList.add('hidden');
+  savePanel.classList.add('hidden');
+  feature.classList.add('hidden');
+
+  travel11(store,floor);
+};
+
+const oldFinish11=finishBranch10;
+
+finishBranch10=function(n,manual){
+  oldFinish11(n,manual);
+
+  if(locationStore>=0){
+    v.stores[locationStore].queue=
+      branchActors.filter(a=>a.stage==='queue').length;
+  }
+};
+
+const feature11=renderFeature;
+
+renderFeature=function(){
+  feature11();
+
+  if(featureTab==='地圖'||featureTab==='集團'){
+    const p=document.createElement('p');
+
+    p.textContent=state.chapter>=10
+      ?'十章完成：1F～11F 全部解鎖，11F 為集團總部。'
+      :'總部共11層，每完成一章增加一層。';
+
+    $('featureBody').prepend(p);
+  }
+
+  if(featureTab==='員工'){
+    const p=document.createElement('p');
+    p.textContent=
+      '員工工作速度 ×5（不加速客人、薪資日或章節時間）。';
+    $('featureBody').prepend(p);
+  }
+
+  if(featureTab==='分店'&&locationStore>=0){
+    const s=v.stores[locationStore];
+    const p=document.createElement('p');
+
+    p.textContent=
+      `目前在${s.name}：顧客${branchActors.length}位，`+
+      `排隊${branchActors.filter(n=>n.stage==='queue').length}位。`+
+      '進貨後關閉選單，顧客才會繼續進店。';
+
+    $('featureBody').prepend(p);
+
+    const b=document.createElement('button');
+    b.textContent='返回門市・繼續營業';
+    b.onclick=()=>feature.classList.add('hidden');
+    $('featureBody').prepend(b);
+  }
+};
+
+// Reset is isolated from unload autosave.
+$('reset').onclick=()=>{
+  if(!confirm('清除自動進度重新開始？手動存檔仍保留。')){
+    return;
+  }
+
+  try{
+    window.loadingManualSave=true;
+    localStorage.removeItem('seven-ten-v1');
+    location.reload();
+  }catch(e){
+    window.loadingManualSave=false;
+    toast('重設失敗');
+  }
+};
+
+buildRoom();/* V12 staff visuals and beginner-friendly campaign */
+const easierFees=[40,60,80,100,120,160,200,240,300,400];
+buildFees.splice(0,10,...easierFees);
+chapters.forEach((c,i)=>c.cash=buildFees[i]);
+
+objectives.splice(
+  0,10,
+  ()=>v.manual>=5,
+  ()=>v.repaired&&v.dined>=2,
+  ()=>v.promotion&&v.promoSales>=5,
+  ()=>v.workers.length>=1&&v.team>=5,
+  ()=>v.enterprise,
+  ()=>v.stores.length>=1&&v.stores[0].stock.some(n=>n>0),
+  ()=>v.transfer,
+  ()=>v.stockResearch&&v.researchSold>=3,
+  ()=>(
+    v.stores.length>=2&&
+    v.stores.slice(0,2).every(s=>s.specialty!=='一般')
+  ),
+  ()=>v.checklist.length>=1
+);
+
+objectiveTexts.splice(
+  0,10,
+  ()=>`親手結帳 ${Math.min(v.manual,5)}/5 位`,
+  ()=>`冰櫃 ${v.repaired?'已修復':'待修復'}・內用 ${Math.min(v.dined,2)}/2 位`,
+  ()=>`促銷 ${v.promotion?'已開始':'待開始'}・服務 ${Math.min(v.promoSales,5)}/5 位`,
+  ()=>`員工 ${Math.min(v.workers.length,1)}/1 人・團隊工作 ${Math.min(v.team,5)}/5 次`,
+  ()=>`小額企業訂單 ${v.enterprise?'完成':'待交付'}`,
+  ()=>`開一間分店並進貨（晉級不再強制店長；離店自動營業仍需五級店長）`,
+  ()=>`跨店調貨 ${v.transfer?'完成':'待完成'}`,
+  ()=>`研發 ${v.stockResearch?'完成':'待完成'}・自有商品售出 ${Math.min(v.researchSold,3)}/3 件`,
+  ()=>`開兩間分店並選擇專精`,
+  ()=>`完成任一營運檢查 ${Math.min(v.checklist.length,1)}/1`
+);
+
+const staffModels12=new Map();
+let staffUIClock12=0;
+
+function staffDestination12(w,index){
+  const main=w.store<0;
+
+  if(main&&w.training){
+    return floorNow===2&&locationStore<0
+      ?new THREE.Vector3(86+(index%3)*3,.15,1)
+      :null;
+  }
+
+  if(
+    main&&
+    w.role==='清潔'&&
+    floorNow===1&&
+    locationStore<0
+  ){
+    const i=v.tables.findIndex(t=>t.status==='dirty');
+    const p=seatPosition10(i<0?0:i);
+    return new THREE.Vector3(p.x+.75,.15,p.z);
+  }
+
+  if(main&&(floorNow||locationStore>=0))return null;
+  if(!main&&w.store!==locationStore)return null;
+
+  const x=main?0:90;
+
+  const places={
+    '收銀':[-4.5,2.1],
+    '補貨':[3.2,-1.8],
+    '清潔':[3.5,3],
+    '服務':[4,-3],
+    '店長':[-4.8,-3]
+  };
+
+  const p=places[w.role]||[3,3];
+
+  return new THREE.Vector3(
+    x+p[0]+(index%2)*.35,
+    .15,
+    p[1]
+  );
+}
+
+function staffTick12(dt,paused){
+  staffUIClock12+=dt;
+  const refresh=staffUIClock12>.5;
+  if(refresh)staffUIClock12=0;
+
+  const live=new Set();
+
+  v.workers.forEach((w,i)=>{
+    const target=staffDestination12(w,i);
+    if(!target)return;
+
+    live.add(w.id);
+    let n=staffModels12.get(w.id);
+
+    if(!n){
+      const color=w.role==='店長'?0x956fa5:0x2b6e85;
+      const g=human(color);
+      g.position.copy(target);
+
+      const c=document.createElement('canvas');
+      c.width=512;
+      c.height=128;
+
+      const tex=new THREE.CanvasTexture(c);
+      const tag=new THREE.Sprite(
+        new THREE.SpriteMaterial({
+          map:tex,
+          depthTest:false
+        })
+      );
+
+      tag.scale.set(2.2,.55,1);
+      tag.position.y=2.25;
+      g.add(tag);
+
+      const prop=box(
+        .38,.35,.3,0xb78a54,
+        .38,.95,0,g
+      );
+      prop.visible=w.role==='補貨';
+
+      n={g,c,tex,tag,prop,walk:0};
+      staffModels12.set(w.id,n);
+    }
+
+    n.g.visible=true;
+    n.prop.visible=w.role==='補貨';
+
+    if(refresh){
+      const ctx=n.c.getContext('2d');
+      ctx.clearRect(0,0,512,128);
+      ctx.fillStyle='#102b42df';
+      ctx.fillRect(0,0,512,128);
+      ctx.fillStyle='#fff0c5';
+      ctx.font='bold 36px sans-serif';
+      ctx.textAlign='center';
+      ctx.fillText(
+        w.name+' Lv.'+workerLevel(w),
+        256,48
+      );
+
+      ctx.font='30px sans-serif';
+      ctx.fillText(
+        w.training?'培訓中':w.role+'・效率×5',
+        256,96
+      );
+
+      n.tex.needsUpdate=true;
+    }
+
+    if(!paused){
+      const d=target.clone().sub(n.g.position);
+
+      if(d.length()>.06){
+        d.normalize();
+
+        n.g.position.addScaledVector(
+          d,
+          Math.min(
+            dt*2.3,
+            target.distanceTo(n.g.position)
+          )
+        );
+
+        n.g.rotation.y=Math.atan2(d.x,d.z);
+        n.walk+=dt*8;
+
+        n.g.legs.forEach((l,j)=>{
+          l.rotation.x=
+            Math.sin(n.walk+j*Math.PI)*.25;
+        });
+      }else{
+        n.g.legs.forEach(l=>l.rotation.x=0);
+        n.g.rotation.y=w.role==='收銀'?0:Math.PI;
+
+        n.g.children
+          .filter(o=>
+            o.isMesh&&
+            o.geometry?.parameters?.width===.14
+          )
+          .forEach((arm,j)=>{
+            arm.rotation.x=
+              Math.sin(state.playTime*7+j)*.22;
+          });
+      }
+    }
+  });
+
+  for(const [id,n] of staffModels12){
+    if(!live.has(id)){
+      scene.remove(n.g);
+      n.tex.dispose();
+      n.tag.material.dispose();
+      disposeObjectV9(n.g);
+      staffModels12.delete(id);
+    }
+  }
+}
+
+// Fix reserved stock loss on both manual and automatic saves.
+function snapshot12(){
+  const data=JSON.parse(JSON.stringify(state));
+
+  for(const n of npcs){
+    if(
+      n.item>=0&&
+      ['toCheckout','queue'].includes(n.stage)
+    ){
+      data.stock[n.item]++;
+    }
+  }
+
+  for(const n of branchActors){
+    if(n.item>=0){
+      data.v9.stores[n.store].stock[n.item]++;
+    }
+  }
+
+  for(const s of data.v9.stores){
+    s.queue=0;
+    s.ready=false;
+  }
+
+  return data;
+}
+
+save=function(){
+  if(window.loadingManualSave)return;
+
+  try{
+    localStorage.setItem(
+      'seven-ten-v1',
+      JSON.stringify(snapshot12())
+    );
+  }catch(e){
+    if(!v.saveWarn12){
+      v.saveWarn12=true;
+      toast('儲存失敗，請檢查瀏覽器儲存空間。');
+    }
+  }
+};
+
+$('manualSave').onclick=()=>{
+  try{
+    localStorage.setItem(
+      'seven-ten-manual-v1',
+      JSON.stringify({
+        version:12,
+        time:new Date().toLocaleString('zh-TW'),
+        name:window.sevenTenPlayerName,
+        state:snapshot12()
+      })
+    );
+
+    showSaveStatus();
+    toast('手動存檔成功');
+  }catch(e){
+    toast('手動存檔失敗');
+  }
+};
+
+// Supply employees and customer arrival are intentionally
+// not given fivefold training or wage timers.
+const tick12=extraTick10;
+
+extraTick10=function(dt,paused){
+  tick12(dt,paused);
+  staffTick12(dt,paused);
+
+  if(
+    scannedCustomer&&
+    scannedCustomer.stage!=='queue'
+  ){
+    scanStage=0;
+    scannedCustomer=null;
+  }
+};
+
+const oldBuild12=buildRoom;
+
+buildRoom=function(){
+  oldBuild12();
+  staffUIClock12=1;
+  staffTick12(0,true);
+};
+
+const feature12=renderFeature;
+
+renderFeature=function(){
+  feature12();
+
+  if(featureTab==='目標'){
+    const p=document.createElement('p');
+    p.textContent=
+      '輕鬆擴建：降低工作目標與費用，不需要等待。';
+    $('featureBody').prepend(p);
+  }
+};
+
+/* V13 research recovery and explicit staff floors */
+for(const w of v.workers){
+  w.floor??=w.role==='清潔'?1:0;
+}
+
+const workerAt13=workerAt;
+
+workerAt=function(store,role){
+  return v.workers.find(w=>
+    w.store===store&&
+    w.role===role&&
+    !w.training&&
+    (
+      store>=0
+        ?true
+        :role==='清潔'
+          ?w.floor===1
+          :(w.floor||0)===0
+    )
+  );
+};
+
+// Recover already-researched saves without granting repeat trial stock.
+if(
+  v.stockResearch&&
+  v.researchTrial===undefined
+){
+  v.researchTrial=10;
+  state.back[27]=(state.back[27]||0)+10;
+}
+
+function stockTrial13(){
+  if(!v.stockResearch)return 0;
+
+  const count=Math.max(
+    0,
+    Math.min(
+      state.back[27]||0,
+      15-(state.stock[27]||0)
+    )
+  );
+
+  state.back[27]-=count;
+  state.stock[27]+=count;
+  state.manualRestock+=count;
+
+  return count;
+}
+
+const interact13=interact;
+
+interact=function(){
+  if(
+    !active||
+    cinematic||
+    elevatorTime||
+    serviceJob||
+    !feature.classList.contains('hidden')||
+    !panel.classList.contains('hidden')||
+    !$('shop').classList.contains('hidden')
+  )return;
+
+  if(
+    locationStore<0&&
+    !floorNow&&
+    Math.abs(player.position.x)<3.8&&
+    player.position.z<3.3&&
+    player.position.z>-4.5
+  ){
+    const n=stockTrial13();
+
+    if(n){
+      toast('已補上自有品牌試賣品 '+n+' 件');
+      save();
+      hud();
+    }
+  }
+
+  interact13();
+};
+
+$('interact').onclick=()=>interact();
+
+const dest13=staffDestination12;
+
+staffDestination12=function(w,index){
+  if(w.store>=0||w.training){
+    return dest13(w,index);
+  }
+
+  const assigned=w.floor||0;
+
+  if(
+    locationStore>=0||
+    floorNow!==assigned
+  )return null;
+
+  if(assigned===1){
+    if(w.role==='清潔'){
+      return dest13(w,index);
+    }
+
+    return new THREE.Vector3(
+      95-(index%3)*.7,
+      .15,
+      2.8
+    );
+  }
+
+  return dest13(w,index);
+};
+
+const tick13=tickBusiness;
+let staffFloorClock13=0;
+
+tickBusiness=function(dt){
+  tick13(dt);
+  staffFloorClock13+=dt;
+
+  if(staffFloorClock13<4/STAFF_RATE)return;
+  staffFloorClock13=0;
+
+  const staff=v.workers.find(w=>
+    w.store===-1&&
+    (w.floor||0)===0&&
+    w.role==='補貨'&&
+    !w.training
+  );
+
+  if(staff&&v.stockResearch){
+    const n=stockTrial13();
+
+    if(n){
+      gain(staff,1);
+      v.team++;
+    }
+  }
+
+  const waiter=v.workers.find(w=>
+    w.store===-1&&
+    w.floor===1&&
+    w.role==='服務'&&
+    !w.training
+  );
+
+  if(waiter){
+    const t=v.tables.find(t=>
+      t.status==='dirty'&&t.left10
+    );
+
+    if(t){
+      t.status='free';
+      v.clean=(v.clean||0)+1;
+      gain(waiter,3);
+      v.team++;
+    }
+  }
+};
+
+const render13=renderFeature;
+
+renderFeature=function(){
+  render13();
+  const body=$('featureBody');
+
+  function line(s){
+    const p=document.createElement('p');
+    p.textContent=s;
+    body.append(p);
+  }
+
+  function button(s,fn,disabled=false){
+    const b=document.createElement('button');
+    b.textContent=s;
+    b.disabled=disabled;
+
+    b.onclick=()=>{
+      fn();
+      save();
+      hud();
+      renderFeature();
+    };
+
+    body.append(b);
+  }
+
+  if(featureTab==='研發'){
+    body.replaceChildren();
+
+    line(
+      '研發在進入第八章（完成七章）開放。費用$160。研發後取得10件自有瓶裝水試賣品，不需要先買完前面所有商品。'
+    );
+
+    line(
+      `目前完成章節 ${state.chapter}/10｜資金 $${state.cash}\n`+
+      `${v.stockResearch?'已完成研發':'尚未完成研發'}｜自有商品已售 ${v.researchSold}/3 件`
+    );
+
+    button(
+      v.stockResearch?'研發已完成':'開始研發 $160',
+      ()=>{
+        if(
+          state.chapter<7||
+          state.cash<160||
+          v.stockResearch
+        )return;
+
+        state.cash-=160;
+        v.stockResearch=true;
+        state.brand=true;
+        v.researchTrial=10;
+        state.back[27]=(state.back[27]||0)+10;
+
+        notify(
+          'research13',
+          '研發完成：請到一樓貨架補上試賣品。'
+        );
+      },
+      state.chapter<7||
+      state.cash<160||
+      v.stockResearch
+    );
+
+    if(state.chapter<7){
+      line('尚未到第八章，按「目標」查看目前章節條件。');
+    }else if(!v.stockResearch&&state.cash<160){
+      line('資金不足，還需要 $'+(160-state.cash)+'。');
+    }
+
+    if(v.stockResearch){
+      line(
+        `試賣品：貨箱 ${state.back[27]||0}／架上 ${state.stock[27]||0}。`+
+        '到創始店中央貨架按互動補貨；一樓補貨員也能處理。'
+      );
+
+      button(
+        '再訂5件試賣品 $'+orderCost(27),
+        ()=>{
+          const c=orderCost(27);
+          if(state.cash<c)return;
+
+          state.cash-=c;
+          state.back[27]+=5;
+        },
+        state.cash<orderCost(27)
+      );
+    }
+  }
+
+  if(featureTab==='員工'){
+    line(
+      '創始店樓層指派：二樓開放後可派員工上樓。二樓服務員協助清理用餐區；收銀與補貨請安排在一樓。'
+    );
+
+    for(const w of v.workers.filter(w=>w.store<0)){
+      line(
+        w.name+
+        '：目前 '+
+        ((w.floor||0)+1)+
+        'F／'+
+        w.role
+      );
+
+      button('派到2F清潔',()=>{
+        w.floor=1;
+        w.role='清潔';
+        staffUIClock12=1;
+      },state.chapter<1);
+
+      button('派到2F服務',()=>{
+        w.floor=1;
+        w.role='服務';
+        staffUIClock12=1;
+      },state.chapter<1);
+
+      button('調回1F收銀',()=>{
+        w.floor=0;
+        w.role='收銀';
+        staffUIClock12=1;
+      });
+
+      button('調回1F補貨',()=>{
+        w.floor=0;
+        w.role='補貨';
+        staffUIClock12=1;
+      });
+    }
+  }
+};let last=performance.now(),walkTime=0;
+
+function frame(now){
   requestAnimationFrame(frame);
 
   const dt=Math.min((now-last)/1000,.05);
   last=now;
 
-  const paused=!active||menusOpen()||Boolean(cinematic)||document.hidden;
+  const paused=
+    !active||
+    !$('shop').classList.contains('hidden')||
+    !$('story').classList.contains('hidden')||
+    !!cinematic||
+    elevatorTime>0||
+    !feature.classList.contains('hidden')||
+    !panel.classList.contains('hidden')||
+    !savePanel.classList.contains('hidden')||
+    !!serviceJob||
+    document.hidden;
 
-  if (!paused) {
-    if (!floorNow) operations(dt);
+  extraTick10(dt,paused);
 
-    let mx=joy.x+
+  skipBuild.style.display=cinematic?.v9
+    ?'block'
+    :'none';
+
+  tower.visible=
+    !!cinematic?.v9||
+    (
+      !floorNow&&
+      locationStore<0&&
+      player.position.z>6.5
+    );
+
+  if(!paused){
+    state.playTime+=dt;
+    tickBusiness(dt);
+    updateEnvironment(dt);
+    storyHUD();
+
+    let mx=
+      joy.x+
       (keys.KeyD||keys.ArrowRight?1:0)-
       (keys.KeyA||keys.ArrowLeft?1:0);
 
-    let mz=joy.y+
+    let mz=
+      joy.y+
       (keys.KeyS||keys.ArrowDown?1:0)-
       (keys.KeyW||keys.ArrowUp?1:0);
 
-    const length=Math.hypot(mx,mz);
-    if (length>1) {mx/=length;mz/=length;}
+    let len=Math.hypot(mx,mz);
 
-    const dx=(mx*Math.cos(yaw)+mz*Math.sin(yaw))*dt*3.4;
-    const dz=(-mx*Math.sin(yaw)+mz*Math.cos(yaw))*dt*3.4;
+    if(len>1){
+      mx/=len;
+      mz/=len;
+    }
+
+    const dx=
+      (mx*Math.cos(yaw)+mz*Math.sin(yaw))*dt*3.4;
+
+    const dz=
+      (-mx*Math.sin(yaw)+mz*Math.cos(yaw))*dt*3.4;
+
     const p=player.position;
 
-    if (valid(p.x+dx,p.z,p)) p.x+=dx;
-    if (valid(p.x,p.z+dz,p)) p.z+=dz;
+    if(valid(p.x+dx,p.z,p)){
+      p.x+=dx;
+    }
 
-    if (length>.05) {
+    if(valid(p.x,p.z+dz,p)){
+      p.z+=dz;
+    }
+
+    if(len>.05){
       player.rotation.y=Math.atan2(dx,dz);
       walkTime+=dt*10;
       player.legs[0].rotation.x=Math.sin(walkTime)*.4;
       player.legs[1].rotation.x=-Math.sin(walkTime)*.4;
-    } else {
-      player.legs.forEach(leg=>leg.rotation.x=0);
+    }else{
+      player.legs.forEach(l=>l.rotation.x=0);
     }
 
-    if (!floorNow) {
-      customers(dt);
-      state.seconds+=dt;
-    }
+    customers(dt);
+    state.seconds+=dt;
 
-    if (state.seconds>=180) {
+    if(state.seconds>=180){
       state.seconds-=180;
       state.day++;
 
       const fee=Math.min(
         state.cash,
-        (state.efficient?30:50)+(state.staff?20:0)
+        (state.efficient?30:50)+v.workers.length*15
       );
+
       state.cash-=fee;
-      toast(`第 ${state.day} 天：營運費 $${fee}（原型不計欠款）。`);
+
+      toast(
+        `第 ${state.day} 天：已支付營運費 $${fee}（原型不計欠款）。`
+      );
+
       hud();
     }
 
     saveElapsed+=dt;
-    if (saveElapsed>4) {
-      saveElapsed=0;
+
+    if(saveElapsed>4){
       save();
+      saveElapsed=0;
     }
   }
 
-  /* 感應門動畫。 */
-  const nearDoor=[player,...npcs.map(n=>n.g)].some(g=>
-    Math.abs(g.position.x)<2&&Math.abs(g.position.z-5.5)<2.3
+  if(!cinematic){
+    rebuildWalls();
+  }
+
+  scene.children.forEach(o=>{
+    if(o.userData.rivalDoorX!==undefined){
+      const x=o.userData.rivalDoorX;
+
+      const nearDoor=
+        Math.abs(player.position.x-x)<2&&
+        Math.abs(player.position.z-16)<2.5;
+
+      o.position.x=THREE.MathUtils.damp(
+        o.position.x,
+        x+(nearDoor?1.7:0),
+        6,
+        dt
+      );
+    }
+  });
+
+  const near=[
+    player,
+    ...npcs.map(n=>n.g)
+  ].some(g=>
+    Math.abs(g.position.x)<2&&
+    Math.abs(g.position.z-5.5)<2.3
   );
 
-  if (nearDoor) doorHold=1.3;
-  else if (!paused) doorHold=Math.max(0,doorHold-dt);
+  if(near){
+    doorHold=1.3;
+  }else if(!paused){
+    doorHold=Math.max(0,doorHold-dt);
+  }
 
   const target=doorHold>0?1:0;
 
-  if (target&&doorOpen<.05&&now-lastChime>3500&&active) {
+  if(
+    target&&
+    doorOpen<.05&&
+    now-lastChime>3500&&
+    active
+  ){
     chime();
     lastChime=now;
   }
 
-  doorOpen=THREE.MathUtils.damp(doorOpen,target,5,dt);
+  doorOpen=THREE.MathUtils.damp(
+    doorOpen,
+    target,
+    5,
+    dt
+  );
+
   doors.forEach((g,i)=>{
     g.position.x=(i?1:-1)*(.85+doorOpen*1.5);
   });
 
-  rivalDoors.forEach(d=>{
-    const near=
-      Math.abs(player.position.x-d.x)<2&&
-      Math.abs(player.position.z-16)<2.5;
-    d.open=THREE.MathUtils.damp(d.open,near?1:0,6,dt);
-    d.mesh.position.x=d.x+d.open*1.7;
+  scene.children.forEach(o=>{
+    if(o.userData.expansionWall){
+      o.visible=true;
+    }
   });
 
-  /* 每章擴建動畫。 */
-  if (cinematic) {
-    if (!document.hidden) cinematic.elapsed+=dt;
+  if(v9Cinematic(document.hidden?0:dt)){
+    // 新版電梯或施工動畫已處理鏡頭。
+  }else if(cinematic){
+    cinematic.elapsed+=document.hidden?0:dt;
+
     const t=Math.min(1,cinematic.elapsed/10);
     const g=buildingStages[cinematic.level];
+
     g.scale.y=Math.max(.01,t*t*(3-2*t));
 
     const final=cinematic.level===10;
+
     const focus=new THREE.Vector3(
       final?18:8+(cinematic.level-1)*3,
       final?7:1,
       final?-18:0
     );
+
     const angle=t*2.3;
 
-    camera.position.copy(focus).add(new THREE.Vector3(
-      Math.sin(angle)*(final?30:16),
-      final?18:10,
-      Math.cos(angle)*(final?30:16)
-    ));
+    camera.position.copy(focus).add(
+      new THREE.Vector3(
+        Math.sin(angle)*(final?30:16),
+        final?18:10,
+        Math.cos(angle)*(final?30:16)
+      )
+    );
+
     camera.lookAt(focus);
 
     chapterOverlay.textContent=
-      `第 ${cinematic.level} 章完成：${cinematic.title}\n`+
-      `擴建中 ${Math.floor(t*100)}%｜${expansionNames[cinematic.level-1]}`;
+      `第 ${cinematic.level} 章完成：${cinematic.title}｜擴建中 ${Math.floor(t*100)}%\n`+
+      expansionNames[cinematic.level-1];
 
-    if (t>=1) {
+    if(t>=1){
       g.scale.y=1;
       cinematic=null;
       chapterOverlay.classList.add('hidden');
       hud();
       save();
-      toast('擴建完成！牆面保留，新區域已開放。');
+      toast('擴建完成！店面與探索範圍已擴大。');
     }
-  } else if (introAnimating) {
-    if (!document.hidden) introTime+=dt;
-    camera.position.set(Math.sin(introTime*.15)*12,7,16);
+  }else if(introAnimating){
+    introTime+=dt;
+
+    camera.position.set(
+      Math.sin(introTime*.15)*12,
+      7,
+      16
+    );
     camera.lookAt(0,1,0);
-    if (introTime>17) begin();
-  } else {
-    const focus=player.position.clone().add(new THREE.Vector3(0,.8,0));
-    const desired=focus.clone().add(new THREE.Vector3(
-      Math.sin(yaw)*15*Math.cos(pitch),
-      15*Math.sin(pitch),
-      Math.cos(yaw)*15*Math.cos(pitch)
-    ));
-    camera.position.lerp(desired,1-Math.exp(-dt*5));
+
+    if(introTime>17){
+      begin();
+    }
+  }else{
+    const focus=player.position.clone().add(
+      new THREE.Vector3(0,.8,0)
+    );
+
+    const desired=focus.clone().add(
+      new THREE.Vector3(
+        Math.sin(yaw)*15*Math.cos(pitch),
+        15*Math.sin(pitch),
+        Math.cos(yaw)*15*Math.cos(pitch)
+      )
+    );
+
+    camera.position.lerp(
+      desired,
+      1-Math.exp(-dt*5)
+    );
     camera.lookAt(focus);
   }
 
   renderer.render(scene,camera);
 }
 
+camera.position.set(0,12,17);
+hud();
+requestAnimationFrame(frame);
+
 window.addEventListener('resize',()=>{
   camera.aspect=innerWidth/innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth,innerHeight);
 });
-
-$('introNote').textContent=
-  '台灣便利店互動原型。開場語音依裝置支援；手機橫向遊玩。';
-
-hud();
-updateEnvironment(0);
-requestAnimationFrame(frame);
 </script>
 
 <script>
-window.addEventListener('error',function(event) {
-  const note=document.getElementById('introNote');
-  if (note) {
-    note.textContent=
-      '遊戲載入遇到問題。請確認網路與程式碼是否完整；若仍無法開始，請截圖回報。'+
-      (event.message ? ' '+event.message : '');
+window.addEventListener('error',function(e){
+  if(
+    e.message&&
+    /script|module|fetch|network/i.test(e.message)
+  ){
+    document.getElementById('introNote').textContent=
+      '3D 模組可能載入失敗，請確認網路連線，並使用支援 WebGL 的瀏覽器開啟。';
   }
 });
 
-setTimeout(function() {
-  if (!document.querySelector('canvas')) {
-    const note=document.getElementById('introNote');
-    if (note) {
-      note.textContent=
-        '尚未載入3D場景。請保持網路連線，並用 Chrome／Safari 開啟 GitHub Pages 網址。';
-    }
+setTimeout(function(){
+  if(!document.querySelector('canvas')){
+    document.getElementById('introNote').textContent=
+      '尚未載入 3D 場景。此檔案需連網取得 Three.js，請用 Safari／Chrome 或靜態網頁主機開啟；部分檔案預覽器不支援。';
   }
 },10000);
 </script>
